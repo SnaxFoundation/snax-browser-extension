@@ -11,7 +11,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
   devtool: 'cheap-module-source-map',
   entry: {
-    index: path.join(paths.appSrc, "index.js"),
+    index: [path.join(paths.appSrc, "index.js"), require.resolve('react-dev-utils/webpackHotDevClient')],
     background: path.join(paths.appSrc, "background.js"),
     contentscript:path.join(paths.appSrc, "contentscript.js")
   },

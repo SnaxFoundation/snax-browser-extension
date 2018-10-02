@@ -1,12 +1,12 @@
 'use strict';
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
+
 process.on('unhandledRejection', err => {
   throw err;
 });
 
 const fs = require('fs');
-const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const { choosePort, createCompiler, prepareUrls } = require('react-dev-utils/WebpackDevServerUtils');
@@ -41,7 +41,7 @@ choosePort(HOST, DEFAULT_PORT)
       if (err) {
         return console.log(err);
       }
-      console.log(chalk.cyan('Starting the development server...\n'));
+      console.log('Starting the development server...\n');
       openBrowser(urls.localUrlForBrowser);
     });
 

@@ -18,7 +18,6 @@ module.exports = {
   output: {
     path: paths.appBuild,
     filename: '[name].bundle.js',
-    publicPath: paths.servedPath
   },
   resolve: {
     modules: ['node_modules'],
