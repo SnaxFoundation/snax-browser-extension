@@ -7,11 +7,18 @@ const paths = require('./paths');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
+const isPackaging = process.argv.includes('--packaging');
+
+const indexEntries = [path.join(paths.appSrc, "index.js")];
+
+if (!isPackaging) {
+  indexEntries.push(require.resolve('react-dev-utils/webpackHotDevClient'));
+}
 
 module.exports = {
   devtool: 'cheap-module-source-map',
   entry: {
-    index: path.join(paths.appSrc, "index.js"),
+    index: indexEntries,
     background: path.join(paths.appSrc, "background.js"),
     contentscript:path.join(paths.appSrc, "contentscript.js")
   },
