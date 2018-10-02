@@ -1,7 +1,7 @@
 export default {
   baseModule: 10,
-  maxWidth: 400,
-  maxHeight: 620,
+  maxWidth: 360,
+  maxHeight: 600,
   borderRadius: 6,
 
   color: {
@@ -48,10 +48,10 @@ export default {
   },
 
   grid: {
-    appPaddingY: 30,
-    appPaddingX: 30,
-    spacingY: 25,
-    spacingX: 20,
+    appPaddingY: 20,
+    appPaddingX: 20,
+    spacingY: 15,
+    spacingX: 10,
   },
 
   mq: {

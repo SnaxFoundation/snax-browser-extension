@@ -12,6 +12,7 @@ const Button = styled(_Button)`
   width: ${buttonSize};
   height: ${buttonSize};
   padding: 0;
+  flex-shrink: 0;
 `;
 
 const IconWrapper = styled.div`

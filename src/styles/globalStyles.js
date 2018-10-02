@@ -12,7 +12,6 @@ export const injectGlobalStyle = () => {
       overflow-x: hidden;
       width: ${constants.maxWidth}px;
       height: ${constants.maxHeight}px;
-      max-width: 100vw;
     }
     
     body {
@@ -23,13 +22,13 @@ export const injectGlobalStyle = () => {
       font-size: ${constants.fontSize.body}px;
       line-height: 1.5;
       position: relative;
-      width: 100%;
       display: flex;
       flex-direction: column;
     }
 
     #root {
       background-color: ${constants.colorBody};
+      width: 100%;
       max-width: 100%;
       display: flex;
       flex-direction: column;
