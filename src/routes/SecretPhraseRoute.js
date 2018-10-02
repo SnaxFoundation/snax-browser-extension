@@ -33,6 +33,7 @@ class SecretPhraseRoute extends Component {
                 type="text"
                 disabled
                 value="wild oranges hat palm summit run keppler strict meadow plum octopus card"
+                rows={3}
               />
               <div className="text-align-right">
                 <Button colorScheme="flat" size="small">
@@ -63,6 +64,10 @@ class SecretPhraseRoute extends Component {
         <ButtonRow>
           <ButtonLink spread to="/wallet">
             I've saved it
+          </ButtonLink>
+
+          <ButtonLink colorScheme="flat" spread to="/">
+            Cancel
           </ButtonLink>
         </ButtonRow>
       </Screen>

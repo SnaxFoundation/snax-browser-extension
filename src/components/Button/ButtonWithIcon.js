@@ -7,7 +7,7 @@ const iconSize = '2em';
 const iconImgSize = '1.4em';
 
 const Content = styled.div`
-    padding-right: 1.75em;
+  padding-left: 0.5em;
 `;
 
 const IconWrapper = styled.div`
@@ -28,12 +28,10 @@ const IconWrapper = styled.div`
 `;
 
 export const ButtonWithIcon = ({ icon, children, ...props }) => (
-    <Button {...props}>
-        <IconWrapper>
-            <Icon>{icon}</Icon>
-        </IconWrapper>
-        <Content>
-            {children}
-        </Content>
-    </Button>
+  <Button {...props}>
+    <IconWrapper>
+      <Icon>{icon}</Icon>
+    </IconWrapper>
+    <Content>{children}</Content>
+  </Button>
 );

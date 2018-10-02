@@ -24,6 +24,7 @@ class ImportRoute extends Component {
               <TextFieldMultiline
                 type="text"
                 placeholder="Enter your 12 word secret phrase to unlock wallet"
+                rows={3}
               />
             </TextFieldWrapper>
           </Row>
@@ -31,6 +32,10 @@ class ImportRoute extends Component {
         <ButtonRow>
           <ButtonLink disabled spread to="/wallet">
             Open wallet
+          </ButtonLink>
+
+          <ButtonLink colorScheme="flat" spread to="/">
+            Cancel
           </ButtonLink>
         </ButtonRow>
       </Screen>
