@@ -10,10 +10,10 @@ module.exports = function(allowedHost) {
   return {
     compress: true,
     clientLogLevel: 'none',
-    contentBase: '/build',
+    contentBase:  paths.appBuild,
     watchContentBase: true,
     hot: true,
-    publicPath: '/build',
+    publicPath:  paths.appBuild,
     quiet: true,
     watchOptions: {
       ignored: ignoredFiles(paths.appSrc),
