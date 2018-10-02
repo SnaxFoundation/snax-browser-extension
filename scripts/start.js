@@ -30,7 +30,7 @@ choosePort(HOST, DEFAULT_PORT)
     
     const appName = require(paths.packageJson).name;
     const urls = prepareUrls(PROTOCOL, HOST, port);
-    const compiler = createCompiler(webpack, config, appName, urls, useYarn);
+    const compiler = createCompiler(webpack, config({}), appName, urls, useYarn);
    
     const serverConfig = createDevServerConfig(
       urls.lanUrlForConfig

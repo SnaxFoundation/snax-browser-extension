@@ -59,8 +59,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "webpack --config ./config/webpack.config.prod.js",
-    "package": "webpack --config ./config/webpack.config.dev.js -- --packaging"
-
+    "package": "webpack --config ./config/webpack.config.dev.js --env.packaging=true"
   },
   "babel": {
     "presets": [
