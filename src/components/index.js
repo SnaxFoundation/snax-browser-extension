@@ -7,5 +7,6 @@ export * from './Icon';
 export * from './layout';
 export * from './Loader';
 export * from './Screen';
+export * from './Tag';
 export * from './TextField';
 export * from './typography';

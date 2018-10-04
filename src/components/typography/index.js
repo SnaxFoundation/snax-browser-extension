@@ -3,3 +3,4 @@ export * from './HeadingSmall';
 export * from './ListUnordered';
 export * from './ParagraphBody';
 export * from './ParagraphCaption';
+export * from './ParagraphError';

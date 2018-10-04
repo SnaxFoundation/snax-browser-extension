@@ -15,6 +15,10 @@ export default {
     info: '#62a3d4',
   },
 
+  brandColor: {
+    twitter: '#1da1f2',
+  },
+
   colorBody: '#e8ebf5',
   colorBorder: '#d2cdc7',
 
@@ -44,7 +48,7 @@ export default {
     heading: 20,
     heading2: 28,
     title: 36,
-    display1: 60,
+    display1: 45,
   },
 
   grid: {

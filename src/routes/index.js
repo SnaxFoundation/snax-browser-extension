@@ -5,6 +5,9 @@ import SecretPhraseRoute from './SecretPhraseRoute';
 import WalletRoute from './WalletRoute';
 import ImportRoute from './ImportRoute';
 import ErrorRoute from './ErrorRoute';
+import PasswordRequestRoute from './PasswordRequestRoute';
+import SignRequestRoute from './SignRequestRoute';
+import TransactionSignRequestRoute from './TransactionSignRequestRoute';
 
 export {
   WelcomeRoute,
@@ -14,4 +17,7 @@ export {
   WalletRoute,
   ImportRoute,
   ErrorRoute,
+  PasswordRequestRoute,
+  SignRequestRoute,
+  TransactionSignRequestRoute,
 };

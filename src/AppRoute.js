@@ -11,6 +11,9 @@ import {
   WalletRoute,
   ImportRoute,
   ErrorRoute,
+  PasswordRequestRoute,
+  SignRequestRoute,
+  TransactionSignRequestRoute,
 } from './routes';
 
 const AppRoute = () => (
@@ -27,6 +30,12 @@ const AppRoute = () => (
         <Route path="/wallet" component={WalletRoute} />
         <Route path="/import-wallet" component={ImportRoute} />
         <Route path="/error" component={ErrorRoute} />
+        <Route path="/password" component={PasswordRequestRoute} />
+        <Route path="/sign-request" component={SignRequestRoute} />
+        <Route
+          path="/transaction-sign-request"
+          component={TransactionSignRequestRoute}
+        />
         <Route path="*" render={() => <Redirect to="/" />} />
       </Switch>
     </App>

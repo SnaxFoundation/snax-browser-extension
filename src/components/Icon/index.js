@@ -3,5 +3,6 @@ export * from './IconArrowBack';
 export * from './IconEyeOpened';
 export * from './IconEyeClosed';
 export * from './IconLogOut';
+export * from './IconTwitter';
 
 export * from './Logo';

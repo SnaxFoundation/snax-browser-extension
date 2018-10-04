@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import constants from '../../styles/style-constants';
 
-export const ParagraphCaption = styled.p`
+export const ParagraphError = styled.p`
   font-size: ${constants.fontSize.small}px;
-  color: ${constants.textColor.medium};
+  color: ${constants.color.error};
   line-height: 1.25;
   margin-top: 0;
 

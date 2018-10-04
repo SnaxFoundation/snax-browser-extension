@@ -16,7 +16,7 @@ class ImportRoute extends Component {
   render() {
     return (
       <Screen>
-        <ScreenTitle>Open wallet</ScreenTitle>
+        <ScreenTitle>Import wallet</ScreenTitle>
         <Content spread centerY>
           <Row>
             <TextFieldWrapper>
@@ -30,8 +30,8 @@ class ImportRoute extends Component {
           </Row>
         </Content>
         <ButtonRow>
-          <ButtonLink disabled spread to="/wallet">
-            Open wallet
+          <ButtonLink disabled spread to="/password">
+            Continue
           </ButtonLink>
 
           <ButtonLink colorScheme="flat" spread to="/">
