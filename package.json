@@ -62,7 +62,8 @@
     "write-file-webpack-plugin": "4.4.1"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --projects src",
+    "integration-test": "jest --projects selenium",
     "start": "node scripts/start.js",
     "build": "webpack --config ./config/webpack.config.prod.js",
     "package": "webpack --config ./config/webpack.config.dev.js --env.packaging=true"
@@ -79,6 +80,11 @@
     "extends": "react-app"
   },
   "jest": {
+    "projects": [
+      "src",
+      "selenium"
+    ],
+
     "collectCoverageFrom": [
       "selenium/**/*.js",
       "src/**/*.js"
