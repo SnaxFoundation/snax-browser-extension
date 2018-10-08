@@ -1,7 +1,7 @@
 export default {
   baseModule: 10,
   maxWidth: 360,
-  maxHeight: 600,
+  maxHeight: 625,
   borderRadius: 6,
 
   color: {

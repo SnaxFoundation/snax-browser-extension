@@ -5,7 +5,7 @@ export const ScreenTitle = styled.h2`
   font-size: ${constants.fontSize.title}px;
   font-weight: ${constants.fontWeight.bold};
   color: ${constants.textColor.body};
-  line-height: 1.25;
+  line-height: 1.15;
   margin: 0;
   margin-bottom: ${constants.grid.spacingY}px;
 `;
