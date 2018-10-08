@@ -2,6 +2,7 @@ import UnknownDomenRoute from './UnknownDomenRoute';
 import WelcomeRoute from './WelcomeRoute';
 import NewWalletRoute from './NewWalletRoute';
 import SecretPhraseRoute from './SecretPhraseRoute';
+import SecretPhraseConfirmRoute from './SecretPhraseConfirmRoute';
 import WalletRoute from './WalletRoute';
 import ImportRoute from './ImportRoute';
 import ErrorRoute from './ErrorRoute';
@@ -14,6 +15,7 @@ export {
   UnknownDomenRoute,
   NewWalletRoute,
   SecretPhraseRoute,
+  SecretPhraseConfirmRoute,
   WalletRoute,
   ImportRoute,
   ErrorRoute,

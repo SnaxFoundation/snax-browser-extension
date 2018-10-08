@@ -62,7 +62,7 @@ class SecretPhraseRoute extends Component {
           </div>
         </Row>
         <ButtonRow>
-          <ButtonLink spread to="/wallet">
+          <ButtonLink spread to="/confirm-phrase">
             I've saved it
           </ButtonLink>
 

@@ -8,6 +8,7 @@ import {
   WelcomeRoute,
   NewWalletRoute,
   SecretPhraseRoute,
+  SecretPhraseConfirmRoute,
   WalletRoute,
   ImportRoute,
   ErrorRoute,
@@ -27,6 +28,7 @@ const AppRoute = () => (
         <Route path="/unknown" component={UnknownDomenRoute} />
         <Route path="/new-wallet" component={NewWalletRoute} />
         <Route path="/secret-phrase" component={SecretPhraseRoute} />
+        <Route path="/confirm-phrase" component={SecretPhraseConfirmRoute} />
         <Route path="/wallet" component={WalletRoute} />
         <Route path="/import-wallet" component={ImportRoute} />
         <Route path="/error" component={ErrorRoute} />
