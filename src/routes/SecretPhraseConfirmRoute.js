@@ -102,9 +102,7 @@ class SecretPhraseConfirmRoute extends Component {
     const mnemonicArray = this.props.mnemonic.split(' ');
     const firstWord = mnemonicArray[this.state.firstValidationNumber - 1];
     const secondWord = mnemonicArray[this.state.secondValidationNumber - 1];
-    
-    return true;
-    //return firstWord === this.state.firstValidationWord && secondWord === this.state.secondValidationWord;
+    return firstWord === this.state.firstValidationWord && secondWord === this.state.secondValidationWord;
   }
   
   handleFirstWordChange = (e) => {
