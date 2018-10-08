@@ -2,7 +2,10 @@ import {Actions} from 'src/context/redux/Actions';
 import {Inject} from 'src/context/steriotypes/Inject';
 import {PasswordHolder} from 'src/services/accounts/PasswordHolder';
 import {WalletManager} from 'src/services/accounts/WalletManager';
-import {UPDATE_MNEMONIC_AND_PUBLIC_KEY} from 'src/store/wallet/WalletConstants';
+import {
+  UPDATE_MNEMONIC,
+  UPDATE_PUBLIC_KEY
+} from 'src/store/wallet/WalletConstants';
 import {Action} from 'src/utils/redux/Action';
 
 @Actions
@@ -14,41 +17,46 @@ export class WalletActions {
   @Inject(WalletManager)
   walletManager;
   
-  @Action(UPDATE_MNEMONIC_AND_PUBLIC_KEY)
-  createWif(password) {
-    this.passwordHolder.setPassword(password);
-    const result = this.walletManager.createWif();
-    
+  @Action(UPDATE_PUBLIC_KEY)
+  createWifFromCandidate(mnemonic) {
+    const result = this.walletManager.recoverWifByMnemonic(mnemonic);
+    console.log(result);
     return {
-      mnemonic: result.mnemonic,
       publicKey: result.wallet.publicKey,
     };
   }
   
+  @Action(UPDATE_MNEMONIC)
+  createWifCandidate(passwordCandidate) {
+    this.passwordHolder.setPassword(passwordCandidate);
+    const mnemonic = this.walletManager.createMnemonic();
   
-  @Action(UPDATE_MNEMONIC_AND_PUBLIC_KEY)
+    return {
+      mnemonic: mnemonic,
+    };
+  }
+  
+  @Action(UPDATE_PUBLIC_KEY)
   recoverWifByMnemonic(password, mnemonic) {
     this.passwordHolder.setPassword(password);
     const result = this.walletManager.recoverWifByMnemonic(mnemonic);
     
     return {
-      mnemonic: result.mnemonic,
       publicKey: result.wallet.publicKey,
     };
   }
   
-  @Action(UPDATE_MNEMONIC_AND_PUBLIC_KEY)
+  @Action(UPDATE_PUBLIC_KEY)
   extractWalletFromStorage(password) {
     this.passwordHolder.setPassword(password);
     const wallet = this.walletManager.getWallet();
     
     return {
-      mnemonic: '',
       publicKey: wallet.publicKey,
     }
   }
   
-  @Action(UPDATE_MNEMONIC_AND_PUBLIC_KEY)
+  @Action(UPDATE_PUBLIC_KEY)
   clearWallet() {
     this.walletManager.clear();
     this.passwordHolder.cleanPassword();

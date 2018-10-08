@@ -2,6 +2,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {Inject} from 'src/context/steriotypes/Inject';
 import {ClipboardCopier} from 'src/services/misc/ClipboardCopier';
+import {NotificationActions} from 'src/store/notifications/NotificationActions';
+import {WalletActions} from 'src/store/wallet/WalletActions';
+import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
+import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
 
 import {
   ButtonLink,
@@ -17,21 +21,7 @@ import { SecretWordInput, SecretPhraseWrapper } from '../containers';
 
 // TODO Replace ButtonLink with Button after removing link
 
-const MNEMONIC_SAMPLE = [
-  'wild',
-  'oranges',
-  'hat',
-  'palm',
-  'summit',
-  'run',
-  'keppler',
-  'strict',
-  'meadow',
-  'plum',
-  'octopus',
-  'card',
-];
-
+@ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
 class SecretPhraseRoute extends Component {
   static propTypes = {
     spawnSuccessNotification: PropTypes.func.isRequired,
@@ -40,7 +30,11 @@ class SecretPhraseRoute extends Component {
   };
   
   _renderMnemonic() {
-    return MNEMONIC_SAMPLE.map((item, idx) => (
+    if (!this.props.mnemonic) {
+      return [];
+    }
+    
+    return this.props.mnemonic.split(' ').map((item, idx) => (
       <SecretWordInput number={idx + 1} value={item} disabled size="small" />
     ));
   }

@@ -38,9 +38,8 @@ export class WalletManager {
     return new WalletCreationResult(mnemonic, new Wallet(pubKey, wif));
   }
   
-  createWif() {
-    const mnemonic = bip39.generateMnemonic();
-    return this.recoverWifByMnemonic(mnemonic);
+  createMnemonic() {
+    return bip39.generateMnemonic();
   }
   
   hasWallet() {

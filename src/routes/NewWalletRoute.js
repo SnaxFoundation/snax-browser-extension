@@ -30,7 +30,7 @@ import {
 class NewWalletRoute extends Component {
   
   static propTypes = {
-    createWif: PropTypes.func.isRequired,
+    createWifCandidate: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   };
   
@@ -121,7 +121,7 @@ class NewWalletRoute extends Component {
     const validator = new PasswordValidator(passwordCandidate);
     
     if (validator.isValid) {
-      this.props.createWif(passwordCandidate);
+      this.props.createWifCandidate(passwordCandidate);
       this.props.history.push('/secret-phrase');
     }
   }

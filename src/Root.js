@@ -2,6 +2,7 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import {Inject} from 'src/context/steriotypes/Inject';
+import SecretPhraseConfirmRoute from 'src/routes/SecretPhraseConfirmRoute';
 import {getStore} from 'src/store/store';
 import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
 
@@ -43,6 +44,7 @@ class Root extends React.Component {
         <BrowserRouter>
           <App>
             <Switch>
+              <Route path="/confirm-phrase" component={SecretPhraseConfirmRoute} />
               <Route exact path="/" component={WelcomeRoute} />
               <Route path="/unknown" component={UnknownDomenRoute} />
               <Route path="/new-wallet" component={NewWalletRoute} />
