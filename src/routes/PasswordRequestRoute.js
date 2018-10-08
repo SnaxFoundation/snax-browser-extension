@@ -1,4 +1,8 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import {NotificationActions} from 'src/store/notifications/NotificationActions';
+import {WalletActions} from 'src/store/wallet/WalletActions';
+import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
 
 import {
   ButtonIconOnly,
@@ -16,17 +20,20 @@ import {
   TextFieldWrapper,
 } from '../components';
 
+@ReduxContainer(null, [WalletActions, NotificationActions])
 class PasswordRequestRoute extends Component {
+  
+  static propTypes = {
+    spawnErrorNotification: PropTypes.func.isRequired,
+    extractWalletFromStorage: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired
+  };
+  
   state = {
-    passwordIsVisible: false,
+    isPasswordVisible: false,
+    password: '',
   };
-
-  onPasswordButtonClick = () => {
-    this.setState({
-      passwordIsVisible: !this.state.passwordIsVisible,
-    });
-  };
-
+  
   render() {
     return (
       <Screen>
@@ -37,25 +44,26 @@ class PasswordRequestRoute extends Component {
               <TextFieldLabel>Password</TextFieldLabel>
               <TextFieldIconRow>
                 <TextField
-                  type={this.state.passwordIsVisible ? 'text' : 'password'}
+                  type={this.state.isPasswordVisible ? 'text' : 'password'}
+                  onChange={this.handlePasswordChange}
                 />
                 <ButtonIconOnly
                   icon={
-                    this.state.passwordIsVisible ? (
+                    this.state.isPasswordVisible ? (
                       <IconEyeClosed />
                     ) : (
                       <IconEyeOpened />
                     )
                   }
                   colorScheme="flat"
-                  onClick={this.onPasswordButtonClick}
+                  onClick={this.handlePasswordButtonClick}
                 />
               </TextFieldIconRow>
             </TextFieldWrapper>
           </Row>
         </Content>
         <ButtonRow>
-          <ButtonLink disabled spread to="/wallet">
+          <ButtonLink onClick={this.handleOpenWalletClick} disabled={!this.isPasswordValid()} spread to="/wallet">
             Open wallet
           </ButtonLink>
 
@@ -65,6 +73,37 @@ class PasswordRequestRoute extends Component {
         </ButtonRow>
       </Screen>
     );
+  }
+  
+  handlePasswordButtonClick = () => {
+    this.setState({
+      isPasswordVisible: !this.state.isPasswordVisible,
+    });
+  };
+  
+  handlePasswordChange = (e) => {
+    this.setState({
+      password: e.target.value,
+    });
+  };
+  
+  handleOpenWalletClick = (e) => {
+    e.preventDefault();
+    
+    if (this.isPasswordValid()) {
+      try {
+        this.props.extractWalletFromStorage(this.state.password);
+      } catch (e) {
+        console.error(e);
+        this.props.spawnErrorNotification('Cannot decrypt wallet, please check your password');
+        return;
+      }
+      this.props.history.push('/wallet');
+    }
+  };
+  
+  isPasswordValid() {
+    return !!this.state.password;
   }
 }
 

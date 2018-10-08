@@ -10,3 +10,4 @@ export * from './Screen';
 export * from './Tag';
 export * from './TextField';
 export * from './typography';
+export * from './HiddenInput';

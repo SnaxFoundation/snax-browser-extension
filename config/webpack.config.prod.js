@@ -20,7 +20,7 @@ module.exports = {
     filename: '[name].bundle.js',
   },
   resolve: {
-    modules: ['node_modules'],
+    modules: ['node_modules', paths.appDirectory],
     extensions: ['.js', '.json','.jsx'],
   },
   module: {
