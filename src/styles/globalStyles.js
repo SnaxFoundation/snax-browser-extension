@@ -33,6 +33,8 @@ export const injectGlobalStyle = () => {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
+      flex-shrink: 0;
+      min-height: 100%;
     }
 
     // Utility classes

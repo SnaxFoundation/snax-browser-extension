@@ -16,6 +16,7 @@ export const Content = styled.div`
   width: 100%;
   padding: ${constants.grid.spacingY}px 0;
   padding-bottom: ${constants.grid.spacingY + constants.baseModule}px;
+  flex-shrink: 0;
 
   ${props => props.spread && 'flex-grow: 1;'};
 

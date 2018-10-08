@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import constants from '../../styles/style-constants';
 
 const propTypes = {
+  size: PropTypes.oneOf(['small', 'default']),
   error: PropTypes.bool,
   disabled: PropTypes.bool,
 };
 
 const defaultProps = {
+  size: 'default',
   error: false,
   disabled: false,
 };
@@ -44,12 +46,15 @@ const colorScheme = ({ disabled }) =>
         }
       `;
 
+const size = ({ size }) =>
+  size === 'small' ? 'padding: 0.25em 0.5em;' : 'padding: 0.75em 1em;';
+
 export const TextField = styled.input`
   display: inline-block;
   font-size: ${constants.fontSize.body}px;
   line-height: 1.5;
   border-radius: ${constants.borderRadius}px;
-  padding: 0.75em 1em;
+
   max-width: 100%;
   width: 100%;
   transition: 150ms ease-in;
@@ -60,6 +65,7 @@ export const TextField = styled.input`
   }
 
   ${colorScheme};
+  ${size};
 `;
 
 TextField.propTypes = propTypes;

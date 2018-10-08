@@ -8,11 +8,10 @@ import {
   Row,
   Screen,
   ScreenTitle,
-  TextField,
-  TextFieldLabel,
-  TextFieldWrapper,
   ParagraphBody,
 } from '../components';
+
+import { SecretWordInput } from '../containers';
 
 // TODO Replace ButtonLink with Button after removing link
 
@@ -24,26 +23,20 @@ class SecretPhraseConfirmRoute extends Component {
         <Row>
           <ParagraphBody>
             Let's check your secret phrase. Enter word <strong>4</strong> and{' '}
-            <strong>9</strong>.
+            <strong>12</strong>.
           </ParagraphBody>
         </Row>
         <Content spread centerY>
           <Row>
-            <TextFieldWrapper>
-              <TextFieldLabel>Word 4</TextFieldLabel>
-              <TextField type="text" />
-            </TextFieldWrapper>
+            <SecretWordInput number={4} />
           </Row>
           <Row>
-            <TextFieldWrapper>
-              <TextFieldLabel>Word 9</TextFieldLabel>
-              <TextField type="text" />
-            </TextFieldWrapper>
+            <SecretWordInput number={12} />
           </Row>
         </Content>
 
         <ButtonRow>
-          <ButtonLink spread to="/wallet">
+          <ButtonLink spread to="/wallet" disabled>
             Open wallet
           </ButtonLink>
 
