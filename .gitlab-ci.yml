@@ -1,0 +1,16 @@
+variables:
+  SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+
+stages:
+- test
+- build
+- deploy
+  
+test:
+  stage: test
+  script:
+  - yarn install
+  - yarn test
+  - yarn integration-test
+  tags:
+  - eos
