@@ -4,13 +4,40 @@ variables:
 stages:
 - test
 - build
-- deploy
+- test
+- publish
   
-test:
+test:unit:
   stage: test
   script:
   - yarn install
   - yarn test
+  tags:
+  - eos
+  
+build:
+  stage: build
+  script:
+  - yarn install
+  - yarn build
+  tags:
+  - eos
+
+test:integration:
+  stage: test
+  script:
+  - yarn install
   - yarn integration-test
+  tags:
+  - eos
+  
+publish:
+  stage: publish
+  script:
+  - yarn install
+  - yarn build
+  artifacts:
+    paths:
+      - build/
   tags:
   - eos
