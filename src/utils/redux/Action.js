@@ -26,6 +26,6 @@ export function Action(type) {
   }
 }
 
-Action.Thunk = function (target, name, descriptor) {
+export function ThunkAction() {
 
-};
+}

@@ -24,7 +24,8 @@ import { SecretWordInput } from '../containers';
 class SecretPhraseConfirmRoute extends Component {
   
   static propTypes = {
-    createWifFromCandidate: PropTypes.func.isRequired,
+    tryCreateWifFromCandidate: PropTypes.func.isRequired,
+    spawnErrorNotification: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     mnemonic: PropTypes.string,
   };
@@ -37,8 +38,7 @@ class SecretPhraseConfirmRoute extends Component {
   constructor(props, context) {
     super(props, context);
   
-    const firstValidationNumber = this.getRandomValidationNumber();
-    const secondValidationNumber = this.getRandomValidationNumber(firstValidationNumber);
+    const [firstValidationNumber, secondValidationNumber] = this.getRandomValidationNumbers();
     
     this.state = {
       firstValidationNumber,
@@ -60,18 +60,24 @@ class SecretPhraseConfirmRoute extends Component {
         </Row>
         <Content spread centerY>
           <Row>
-            <SecretWordInput number={firstValidationNumber} onChange={this.handleFirstWordChange} />
+            <SecretWordInput
+              number={firstValidationNumber}
+              onChange={this.handleFirstWordChange}
+            />
           </Row>
           <Row>
-            <SecretWordInput number={secondValidationNumber} onChange={this.handleSecondWordChange}  />
+            <SecretWordInput
+              number={secondValidationNumber}
+              onChange={this.handleSecondWordChange}
+            />
           </Row>
         </Content>
 
         <ButtonRow>
           <ButtonLink
             onClick={this.handleOpenValid}
-            spread to="/wallet"
             disabled={!this.areRandomWordsFromMnemonicValid()}
+            spread to="/wallet"
           >
             Open wallet
           </ButtonLink>
@@ -82,27 +88,6 @@ class SecretPhraseConfirmRoute extends Component {
         </ButtonRow>
       </Screen>
     );
-  }
-  
-  getRandomValidationNumber(exclude) {
-     const number = Math.floor(Math.random() * Math.floor(11)) + 1;
-     
-     if (exclude === undefined) {
-       return number;
-     }
-     
-     if (number === exclude) {
-       return this.getRandomValidationNumber(exclude);
-     }
-     
-     return number;
-  }
-  
-  areRandomWordsFromMnemonicValid() {
-    const mnemonicArray = this.props.mnemonic.split(' ');
-    const firstWord = mnemonicArray[this.state.firstValidationNumber - 1];
-    const secondWord = mnemonicArray[this.state.secondValidationNumber - 1];
-    return firstWord === this.state.firstValidationWord && secondWord === this.state.secondValidationWord;
   }
   
   handleFirstWordChange = (e) => {
@@ -117,12 +102,45 @@ class SecretPhraseConfirmRoute extends Component {
     })
   };
   
-  handleOpenValid = (e) => {
+  handleOpenValid = async (e) => {
     e.preventDefault();
     if (this.areRandomWordsFromMnemonicValid()) {
-      this.props.createWifFromCandidate(this.props.mnemonic);
-      this.props.history.push('/wallet');
+      const result = await this.props.tryCreateWifFromCandidate(this.props.mnemonic);
+      if (result.isCreationSucceed) {
+        this.props.history.push('/wallet');
+      } else {
+        this.props.spawnErrorNotification('Some error occurred during creation, please contact with development team');
+      }
     }
+  };
+  
+  getValidatingWordsFromMnemonicArray(mnemonicArray) {
+    if (mnemonicArray.length !== 12) {
+      throw new Error('Mnemonic array is invalid');
+    }
+    
+    return [
+      mnemonicArray[this.state.firstValidationNumber - 1],
+      mnemonicArray[this.state.secondValidationNumber - 1]
+    ];
+  }
+  
+  getRandomValidationNumbers() {
+    const firstNumber = this.getRandomNumber(1, 6);
+    const secondNumber = this.getRandomNumber(7, 12);
+    return [firstNumber, secondNumber]
+      .sort(() => this.getRandomNumber(0, 1));
+  }
+  
+  getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
+  areRandomWordsFromMnemonicValid() {
+    const mnemonicArray = this.props.mnemonic.split(' ');
+    const [firstWord, secondWord] = this.getValidatingWordsFromMnemonicArray(mnemonicArray);
+    return firstWord === this.state.firstValidationWord
+      && secondWord === this.state.secondValidationWord;
   }
 }
 

@@ -56,10 +56,12 @@ class WalletRoute extends Component {
           </Row>
         </Content>
         <ButtonRow>
-          <ButtonIconOnly onClick={this.handleLogout} colorScheme="flat" icon={<IconLogOut />} />
+          <ButtonIconOnly
+            onClick={this.handleLogout}
+            colorScheme="flat"
+            icon={<IconLogOut />}
+          />
         </ButtonRow>
-
-        {/* <LoaderBox>Loading</LoaderBox> */}
       </Screen>
     );
   }

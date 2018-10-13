@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {ButtonIconOnly} from 'src/components/Button';
-import {IconEyeClosed, IconEyeOpened} from 'src/components/Icon';
-import {TextField, TextFieldIconRow} from 'src/components/TextField';
 import {NotificationActions} from 'src/store/notifications/NotificationActions';
 import {WalletActions} from 'src/store/wallet/WalletActions';
 import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
@@ -11,7 +8,7 @@ import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
 import {
   ButtonLink,
   ButtonRow,
-  Content,
+  Content, PasswordField,
   Row,
   Screen,
   ScreenTitle,
@@ -25,7 +22,7 @@ class ImportRoute extends Component {
   
   static propTypes = {
     spawnErrorNotification: PropTypes.func.isRequired,
-    recoverWifByMnemonic: PropTypes.func.isRequired,
+    tryCreateWalletByMnemonic: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   };
   
@@ -52,24 +49,7 @@ class ImportRoute extends Component {
           </Row>
           <Row>
             <TextFieldWrapper>
-              <TextFieldLabel>Password</TextFieldLabel>
-              <TextFieldIconRow>
-                <TextField
-                  type={this.state.isPasswordVisible ? 'text' : 'password'}
-                  onChange={this.handlePasswordChange}
-                />
-                <ButtonIconOnly
-                  icon={
-                    this.state.isPasswordVisible ? (
-                      <IconEyeClosed />
-                    ) : (
-                      <IconEyeOpened />
-                    )
-                  }
-                  colorScheme="flat"
-                  onClick={this.handlePasswordButtonClick}
-                />
-              </TextFieldIconRow>
+              <PasswordField onChange={this.handlePasswordChange}/>
             </TextFieldWrapper>
           </Row>
         </Content>
@@ -103,19 +83,16 @@ class ImportRoute extends Component {
     });
   };
   
-  handleContinueClick = (e) => {
+  handleContinueClick = async (e) => {
     e.preventDefault();
     
     if (this.arePasswordAndMnemonicValid()) {
-      try {
-        this.props.recoverWifByMnemonic(this.state.mnemonic, this.state.password);
-      } catch (e) {
-        console.error(e);
+      const result = await this.props.tryCreateWalletByMnemonic(this.state.mnemonic, this.state.password);
+      if (result.isCreationSucceed) {
+        this.props.history.push('/wallet');
+      } else {
         this.props.spawnErrorNotification('Recovering failed, please check you password');
-        return;
       }
-      
-      this.props.history.push('/wallet');
     }
   };
   

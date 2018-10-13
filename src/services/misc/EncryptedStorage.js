@@ -1,26 +1,26 @@
 import { AES, enc } from 'crypto-js';
 import {Inject} from 'src/context/steriotypes/Inject';
 import {Singleton} from 'src/context/steriotypes/Singleton';
-import {PasswordHolder} from 'src/services/accounts/PasswordHolder';
+import {PasswordManager} from 'src/services/accounts/PasswordManager';
 
 @Singleton
 export class EncryptedStorage {
   
-  @Inject(PasswordHolder)
-  passwordHolder;
+  @Inject(PasswordManager)
+  passwordManager;
   
-  getItem(key) {
+  async getItem(key) {
     const value = localStorage.getItem(key);
     
     if (!value) {
       return null;
     }
     
-    return AES.decrypt(value, this.passwordHolder.getPassword()).toString(enc.Utf8);
+    return AES.decrypt(value, await this.passwordManager.getPassword()).toString(enc.Utf8);
   }
   
-  setItem(key, string) {
-    const encryptedString = AES.encrypt(string, this.passwordHolder.getPassword());
+  async setItem(key, string) {
+    const encryptedString = AES.encrypt(string, await this.passwordManager.getPassword());
     localStorage.setItem(key, encryptedString);
   }
   

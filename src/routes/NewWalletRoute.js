@@ -2,25 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {WalletActions} from 'src/store/wallet/WalletActions';
 import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
-import {PasswordValidator} from 'src/utils/PasswordValidator';
+import {PasswordValidator} from 'src/utils/validators/PasswordValidator';
 import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
 
 import {
-  ButtonIconOnly,
   ButtonLink,
   ButtonRow,
   Content,
-  IconEyeClosed,
-  IconEyeOpened,
   ListUnordered,
   Row,
   Screen,
   ScreenTitle,
-  TextField,
-  TextFieldLabel,
   TextFieldMessage,
-  TextFieldIconRow,
   TextFieldWrapper,
+  PasswordField,
 } from '../components';
 
 // TODO Replace ButtonLink with Button after removing link
@@ -43,44 +38,24 @@ class NewWalletRoute extends Component {
   render() {
     const validator = new PasswordValidator(this.state.passwordCandidate);
     
-    const { isInputTouched } = this.state;
-    
     return (
       <Screen>
         <ScreenTitle>New wallet</ScreenTitle>
         <Content spread centerY>
           <Row>
             <TextFieldWrapper>
-              <TextFieldLabel error={isInputTouched && !validator.isValid}>Password</TextFieldLabel>
-              <TextFieldIconRow>
-                <TextField
-                  error
-                  type={this.state.isPasswordVisible ? 'text' : 'password'}
-                  onChange={this.handleInputChange}
-                />
-                <ButtonIconOnly
-                  icon={
-                    this.state.isPasswordVisible ? (
-                      <IconEyeClosed />
-                    ) : (
-                      <IconEyeOpened />
-                    )
-                  }
-                  colorScheme="flat"
-                  onClick={this.handlePasswordButtonClick}
-                />
-              </TextFieldIconRow>
-              <TextFieldMessage error={isInputTouched && !validator.doMoreThan7CharactersExist}>
+              <PasswordField error={validator.isValid} onChange={this.handleInputChange}/>
+              <TextFieldMessage error={!validator.areMoreThan7CharactersUsed}>
                 <ListUnordered>
                   <li>8 symbols minimum</li>
                 </ListUnordered>
               </TextFieldMessage>
-              <TextFieldMessage error={isInputTouched && !validator.doUppercaseAndNumberExist}>
+              <TextFieldMessage error={!validator.areUppercaseAndNumberUsed}>
                 <ListUnordered>
                   <li>at least 1 uppercase letter and 1 number</li>
                 </ListUnordered>
               </TextFieldMessage>
-              <TextFieldMessage error={isInputTouched && !validator.doOnlyAlphanumericAndSpecialCharactersPresent}>
+              <TextFieldMessage error={!validator.areOnlyAlphanumericAndSpecialCharactersUsed}>
                 <ListUnordered>
                   <li>0-9, a-z, special characters</li>
                 </ListUnordered>
@@ -104,14 +79,7 @@ class NewWalletRoute extends Component {
   handleInputChange = (e) => {
     this.setState({
       passwordCandidate: e.target.value,
-      isInputTouched: true,
     })
-  };
-  
-  handlePasswordButtonClick = () => {
-    this.setState({
-      isPasswordVisible: !this.state.isPasswordVisible,
-    });
   };
   
   handleCreation = (e) => {

@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import {Inject} from 'src/context/steriotypes/Inject';
-import {ClipboardCopier} from 'src/services/misc/ClipboardCopier';
 import {NotificationActions} from 'src/store/notifications/NotificationActions';
 import {WalletActions} from 'src/store/wallet/WalletActions';
 import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
@@ -38,10 +36,7 @@ class SecretPhraseRoute extends Component {
       <SecretWordInput number={idx + 1} value={item} disabled size="small" />
     ));
   }
-  
-  @Inject(ClipboardCopier)
-  clipboardCopier;
-  
+
   render() {
     const mnemonic = this._renderMnemonic();
 
@@ -81,11 +76,6 @@ class SecretPhraseRoute extends Component {
         </ButtonRow>
       </Screen>
     );
-  }
-  
-  handleCopyClick = () => {
-    this.clipboardCopier.copy(this.props.mnemonic);
-    this.props.spawnSuccessNotification("Mnemonic was copied to your clipboard");
   }
 }
 

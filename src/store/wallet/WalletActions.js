@@ -1,69 +1,84 @@
 import {Actions} from 'src/context/redux/Actions';
 import {Inject} from 'src/context/steriotypes/Inject';
-import {PasswordHolder} from 'src/services/accounts/PasswordHolder';
+import {PasswordManager} from 'src/services/accounts/PasswordManager';
 import {WalletManager} from 'src/services/accounts/WalletManager';
 import {
   UPDATE_MNEMONIC,
   UPDATE_PUBLIC_KEY
 } from 'src/store/wallet/WalletConstants';
-import {Action} from 'src/utils/redux/Action';
+import {Action, ThunkAction} from 'src/utils/redux/Action';
 
 @Actions
 export class WalletActions {
   
-  @Inject(PasswordHolder)
-  passwordHolder;
+  @Inject(PasswordManager)
+  passwordManager;
   
   @Inject(WalletManager)
   walletManager;
   
+  @ThunkAction
+  createWifCandidate(passwordCandidate) {
+    return async (dispatch) => {
+      await this.passwordManager.setPassword(passwordCandidate);
+      const mnemonic = await this.walletManager.createMnemonic();
+      dispatch(this._updateMnemonic(mnemonic));
+      return mnemonic;
+    }
+  }
+  
+  @ThunkAction
+  tryCreateWifFromCandidate(mnemonic) {
+    return async (dispatch) => {
+      const result = await this.walletManager.tryCreateWalletByMnemonic(mnemonic);
+      dispatch(this._updatePublicKey(result.wallet.publicKey));
+      return result;
+    }
+  }
+  
+  @ThunkAction
+  tryCreateWalletByMnemonic(password, mnemonic) {
+    return async (dispatch) => {
+      await this.passwordManager.setPassword(password);
+      const result = await this.walletManager.tryCreateWalletByMnemonic(mnemonic);
+      if (result.isCreationSucceed) {
+        dispatch(this._updatePublicKey(result.wallet.publicKey));
+      }
+      return result;
+    }
+  }
+  
+  @ThunkAction
+  tryExtractWalletFromStorage(password) {
+    return async (dispatch) => {
+      if (password) {
+        await this.passwordManager.setPassword(password);
+      }
+      const result = await this.walletManager.getWallet();
+      if (result.isExtractionSucceed) {
+        dispatch(this._updatePublicKey(result.wallet.publicKey));
+      }
+      return result;
+    }
+  }
+  
+  @ThunkAction
+  clearWallet() {
+    return async (dispatch) => {
+      this.walletManager.clear();
+      await this.passwordManager.cleanPassword();
+      dispatch(this._updatePublicKey(''));
+      dispatch(this._updateMnemonic(''));
+    }
+  }
+  
   @Action(UPDATE_PUBLIC_KEY)
-  createWifFromCandidate(mnemonic) {
-    const result = this.walletManager.recoverWifByMnemonic(mnemonic);
-    console.log(result);
-    return {
-      publicKey: result.wallet.publicKey,
-    };
+  _updatePublicKey(publicKey) {
+    return { publicKey };
   }
   
   @Action(UPDATE_MNEMONIC)
-  createWifCandidate(passwordCandidate) {
-    this.passwordHolder.setPassword(passwordCandidate);
-    const mnemonic = this.walletManager.createMnemonic();
-  
-    return {
-      mnemonic: mnemonic,
-    };
-  }
-  
-  @Action(UPDATE_PUBLIC_KEY)
-  recoverWifByMnemonic(password, mnemonic) {
-    this.passwordHolder.setPassword(password);
-    const result = this.walletManager.recoverWifByMnemonic(mnemonic);
-    
-    return {
-      publicKey: result.wallet.publicKey,
-    };
-  }
-  
-  @Action(UPDATE_PUBLIC_KEY)
-  extractWalletFromStorage(password) {
-    this.passwordHolder.setPassword(password);
-    const wallet = this.walletManager.getWallet();
-    
-    return {
-      publicKey: wallet.publicKey,
-    }
-  }
-  
-  @Action(UPDATE_PUBLIC_KEY)
-  clearWallet() {
-    this.walletManager.clear();
-    this.passwordHolder.cleanPassword();
-    
-    return {
-      mnemonic: '',
-      publicKey: '',
-    }
+  _updateMnemonic(mnemonic) {
+    return { mnemonic };
   }
 }

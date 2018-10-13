@@ -1,21 +1,21 @@
 export class PasswordValidator {
   
   isValid = false;
-  doMoreThan7CharactersExist = false;
-  doUppercaseAndNumberExist = false;
-  doOnlyAlphanumericAndSpecialCharactersPresent = false;
+  areMoreThan7CharactersUsed = false;
+  areUppercaseAndNumberUsed = false;
+  areOnlyAlphanumericAndSpecialCharactersUsed = false;
   
   constructor(passwordCandidate) {
-    this.doMoreThan7CharactersExist
+    this.areMoreThan7CharactersUsed
       = this.validateThatMoreThan7CharactersExist(passwordCandidate);
-    this.doUppercaseAndNumberExist
+    this.areUppercaseAndNumberUsed
       = this.validateThatUppercaseAndNumberExist(passwordCandidate);
-    this.doOnlyAlphanumericAndSpecialCharactersPresent
+    this.areOnlyAlphanumericAndSpecialCharactersUsed
       = this.validateThatOnlyAlphanumericAndSpecialCharactersPresent(passwordCandidate);
     
-    this.isValid = this.doMoreThan7CharactersExist
-      && this.doUppercaseAndNumberExist
-      && this.doOnlyAlphanumericAndSpecialCharactersPresent;
+    this.isValid = this.areMoreThan7CharactersUsed
+      && this.areUppercaseAndNumberUsed
+      && this.areOnlyAlphanumericAndSpecialCharactersUsed;
   }
   
   validateThatMoreThan7CharactersExist(passwordCandidate) {

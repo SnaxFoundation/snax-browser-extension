@@ -3,23 +3,43 @@ import { PrivateKey, seedPrivate, privateToPublic } from 'eosjs-ecc';
 import {Inject} from 'src/context/steriotypes/Inject';
 import {Singleton} from 'src/context/steriotypes/Singleton';
 import {EncryptedStorage} from 'src/services/misc/EncryptedStorage';
-import {PasswordHolder} from 'src/services/accounts/PasswordHolder';
+import {PasswordManager} from 'src/services/accounts/PasswordManager';
 
 const WIF_STORAGE_ITEM_NAME = 'xf881x';
 
 class Wallet {
-  constructor(publicKey, wif) {
-    this.publicKey = publicKey;
+  constructor(wif) {
+    this.publicKey = privateToPublic(wif);
     this.wif = wif;
   }
 }
 
 class WalletCreationResult {
+  
+  static negative(mnemonic) {
+    return new WalletCreationResult(arguments);
+  }
+  
   constructor(mnemonic, wallet) {
     this.wallet = wallet;
     this.mnemonic = mnemonic;
+    this.isCreationSucceed = !!wallet;
   }
 }
+
+
+class WalletExtractionResult {
+  
+  static negative() {
+    return new WalletExtractionResult();
+  }
+  
+  constructor(wallet) {
+    this.wallet = wallet;
+    this.isExtractionSucceed = !!wallet;
+  }
+}
+
 
 @Singleton
 export class WalletManager {
@@ -27,33 +47,36 @@ export class WalletManager {
   @Inject(EncryptedStorage)
   encryptedStorage = null;
   
-  @Inject(PasswordHolder)
-  passwordHolder = null;
+  @Inject(PasswordManager)
+  passwordManager = null;
   
-  recoverWifByMnemonic(mnemonic) {
-    const seed = bip39.mnemonicToSeed(mnemonic, this.passwordHolder.getPassword()).toString();
+  async tryCreateWalletByMnemonic(mnemonic) {
+    const seed = bip39.mnemonicToSeed(mnemonic, await this.passwordManager.getPassword()).toString();
     const wif = seedPrivate(seed);
-    const pubKey = privateToPublic(wif);
     this.encryptedStorage.setItem(WIF_STORAGE_ITEM_NAME, wif);
-    return new WalletCreationResult(mnemonic, new Wallet(pubKey, wif));
+    return new WalletCreationResult(mnemonic, new Wallet(wif));
   }
   
-  createMnemonic() {
+  async createMnemonic() {
     return bip39.generateMnemonic();
   }
   
-  hasWallet() {
+  async hasWallet() {
     return !!this.encryptedStorage.hasItem(WIF_STORAGE_ITEM_NAME)
   }
   
-  getWallet() {
-    const wif = this.encryptedStorage.getItem(WIF_STORAGE_ITEM_NAME);
+  async hasWalletAndCanUse() {
+    return this.hasWallet() && await this.passwordManager.hasPassword();
+  }
+  
+  async getWallet() {
+    const wif = await this.encryptedStorage.getItem(WIF_STORAGE_ITEM_NAME);
     
     if (!wif) {
-      throw new Error('Cannot get or decrypt WIF');
+      return WalletExtractionResult.negative();
     }
     
-    return new Wallet(privateToPublic(wif), wif);
+    return new WalletExtractionResult(new Wallet(wif));
   }
   
   clear() {

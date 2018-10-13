@@ -11,3 +11,4 @@ export * from './Tag';
 export * from './TextField';
 export * from './typography';
 export * from './HiddenInput';
+export * from './PasswordField';

@@ -29,7 +29,7 @@ export class WalletReducer {
   @Reduce.Default
   defaultState() {
     return {
-      hasWallet: this.walletManager.hasWallet()
+      hasWallet: false,
     };
   }
 }

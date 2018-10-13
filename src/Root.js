@@ -3,8 +3,10 @@ import {Provider} from 'react-redux';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import {Inject} from 'src/context/steriotypes/Inject';
 import SecretPhraseConfirmRoute from 'src/routes/SecretPhraseConfirmRoute';
+import {PasswordManager} from 'src/services/accounts/PasswordManager';
+import {WalletManager} from 'src/services/accounts/WalletManager';
 import {getStore} from 'src/store/store';
-import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
+import {WalletActions} from 'src/store/wallet/WalletActions';
 
 import { App } from './components';
 
@@ -24,19 +26,41 @@ import {
 
 class Root extends React.Component {
   
-  @Inject(WalletSelectors)
-  walletSelectors;
+
+  @Inject(WalletManager)
+  walletManager;
+  
+  @Inject(PasswordManager)
+  passwordManager;
+  
+  @Inject(WalletActions)
+  walletActions;
   
   state = {
     store: null,
     hasWallet: false,
+    canUse: false,
   };
   
   constructor(props, context) {
     super(props, context);
     this.state.store = getStore();
-    this.state.hasWallet = this.walletSelectors.hasWallet(this.state.store.getState());
+    
   }
+  
+  async componentDidMount() {
+    const hasWallet = await this.walletManager.hasWallet();
+    const canUse = await this.walletManager.hasWalletAndCanUse();
+    this.setState({
+      hasWallet,
+      canUse,
+    });
+    
+    if (canUse) {
+      this.state.store.dispatch(this.walletActions.tryExtractWalletFromStorage());
+    }
+  }
+  
   
   render() {
     return (
@@ -60,7 +84,8 @@ class Root extends React.Component {
               />
               <Route path="*" render={() => <Redirect to="/" />} />
             </Switch>
-            {this.state.hasWallet && <Redirect to="/password"/>}
+            {this.state.hasWallet && !this.state.canUse && <Redirect to="/password"/>}
+            {this.state.canUse && <Redirect to="/wallet"/>}
           </App>
         </BrowserRouter>
       </Provider>

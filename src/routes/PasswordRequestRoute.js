@@ -5,19 +5,13 @@ import {WalletActions} from 'src/store/wallet/WalletActions';
 import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
 
 import {
-  ButtonIconOnly,
   ButtonLink,
   ButtonRow,
   Content,
-  IconEyeClosed,
-  IconEyeOpened,
   Row,
   Screen,
   ScreenTitle,
-  TextFieldLabel,
-  TextField,
-  TextFieldIconRow,
-  TextFieldWrapper,
+  TextFieldWrapper, PasswordField,
 } from '../components';
 
 @ReduxContainer(null, [WalletActions, NotificationActions])
@@ -25,7 +19,7 @@ class PasswordRequestRoute extends Component {
   
   static propTypes = {
     spawnErrorNotification: PropTypes.func.isRequired,
-    extractWalletFromStorage: PropTypes.func.isRequired,
+    tryExtractWalletFromStorage: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   };
   
@@ -41,24 +35,7 @@ class PasswordRequestRoute extends Component {
         <Content spread centerY>
           <Row>
             <TextFieldWrapper>
-              <TextFieldLabel>Password</TextFieldLabel>
-              <TextFieldIconRow>
-                <TextField
-                  type={this.state.isPasswordVisible ? 'text' : 'password'}
-                  onChange={this.handlePasswordChange}
-                />
-                <ButtonIconOnly
-                  icon={
-                    this.state.isPasswordVisible ? (
-                      <IconEyeClosed />
-                    ) : (
-                      <IconEyeOpened />
-                    )
-                  }
-                  colorScheme="flat"
-                  onClick={this.handlePasswordButtonClick}
-                />
-              </TextFieldIconRow>
+              <PasswordField onChange={this.handlePasswordChange}/>
             </TextFieldWrapper>
           </Row>
         </Content>
@@ -87,18 +64,17 @@ class PasswordRequestRoute extends Component {
     });
   };
   
-  handleOpenWalletClick = (e) => {
+  handleOpenWalletClick = async (e) => {
     e.preventDefault();
     
     if (this.isPasswordValid()) {
-      try {
-        this.props.extractWalletFromStorage(this.state.password);
-      } catch (e) {
-        console.error(e);
-        this.props.spawnErrorNotification('Cannot decrypt wallet, please check your password');
-        return;
-      }
-      this.props.history.push('/wallet');
+        const result = await this.props.tryExtractWalletFromStorage(this.state.password);
+        
+        if (!result.isExtractionSucceed) {
+          this.props.spawnErrorNotification('Cannot decrypt wallet, please check your password');
+        } else {
+          this.props.history.push('/wallet');
+        }
     }
   };
   
