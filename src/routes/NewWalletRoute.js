@@ -44,7 +44,7 @@ class NewWalletRoute extends Component {
         <Content spread centerY>
           <Row>
             <TextFieldWrapper>
-              <PasswordField error={validator.isValid} onChange={this.handleInputChange}/>
+              <PasswordField error={!validator.isValid} onChange={this.handleInputChange}/>
               <TextFieldMessage error={!validator.areMoreThan7CharactersUsed}>
                 <ListUnordered>
                   <li>8 symbols minimum</li>

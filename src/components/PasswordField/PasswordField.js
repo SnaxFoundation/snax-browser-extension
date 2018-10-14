@@ -21,13 +21,13 @@ export class PasswordField extends React.Component {
   };
   
   render() {
-    
+    const hasError = this.state.isInputTouched && this.props.error;
     return (
       <React.Fragment>
-        <TextFieldLabel error={this.state.isInputTouched && this.props.error}>Password</TextFieldLabel>
+        <TextFieldLabel error={hasError}>Password</TextFieldLabel>
         <TextFieldIconRow>
           <TextField
-            error
+            error={hasError}
             value={this.props.value}
             type={this.state.isPasswordVisible ? 'text' : 'password'}
             onChange={this.handleInputChange}
