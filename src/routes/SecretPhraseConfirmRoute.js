@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {NotificationActions} from 'src/store/notifications/NotificationActions';
+import {TransactionSelectors} from 'src/store/transaction/TransactionSelectors';
 import {WalletActions} from 'src/store/wallet/WalletActions';
 import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
 import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
@@ -20,7 +21,7 @@ import { SecretWordInput } from '../containers';
 // TODO Replace ButtonLink with Button after removing link
 
 
-@ReduxContainer(WalletSelectors, [WalletActions, NotificationActions])
+@ReduxContainer([WalletSelectors, TransactionSelectors], [WalletActions, NotificationActions])
 class SecretPhraseConfirmRoute extends Component {
   
   static propTypes = {
@@ -104,10 +105,14 @@ class SecretPhraseConfirmRoute extends Component {
   
   handleOpenValid = async (e) => {
     e.preventDefault();
+    const redirectUrl = this.props.isCurrentTransactionActive
+      ? '/transaction-sign-request'
+      : '/wallet';
+    
     if (this.areRandomWordsFromMnemonicValid()) {
       const result = await this.props.tryCreateWifFromCandidate(this.props.mnemonic);
       if (result.isCreationSucceed) {
-        this.props.history.push('/wallet');
+        this.props.history.push(redirectUrl);
       } else {
         this.props.spawnErrorNotification('Some error occurred during creation, please contact with development team');
       }

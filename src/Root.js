@@ -1,11 +1,13 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
+import {createBrowserHistory} from 'history';
 import {Inject} from 'src/context/steriotypes/Inject';
 import SecretPhraseConfirmRoute from 'src/routes/SecretPhraseConfirmRoute';
-import {PasswordManager} from 'src/services/accounts/PasswordManager';
 import {WalletManager} from 'src/services/accounts/WalletManager';
+import {TransactionManager} from 'src/services/transaction/TransactionManager';
 import {getStore} from 'src/store/store';
+import {TransactionActions} from 'src/store/transaction/TransactionActions';
 import {WalletActions} from 'src/store/wallet/WalletActions';
 
 import { App } from './components';
@@ -23,18 +25,25 @@ import {
   TransactionSignRequestRoute,
 } from './routes';
 
+export const browserHistory = createBrowserHistory();
+
+export class NavigableRouter extends BrowserRouter {
+  history = browserHistory;
+}
 
 class Root extends React.Component {
   
-
   @Inject(WalletManager)
   walletManager;
   
-  @Inject(PasswordManager)
-  passwordManager;
-  
   @Inject(WalletActions)
   walletActions;
+
+  @Inject(TransactionManager)
+  transactionManager;
+  
+  @Inject(TransactionActions)
+  transactionActions;
   
   state = {
     store: null,
@@ -44,17 +53,33 @@ class Root extends React.Component {
   
   constructor(props, context) {
     super(props, context);
-    this.state.store = getStore();
     
+    this.state.store = getStore();
+    this.transactionManager.listen(async (transaction) => {
+      this.state.store.dispatch(this.transactionActions.setTransactionToSign(transaction.id, transaction.from, transaction.to, transaction.amount));
+  
+      const canUse = await this.canUse();
+      const hasWallet = await this.hasWallet();
+      
+      if (!hasWallet) {
+        browserHistory.push('/new-wallet');
+        return;
+      }
+      
+      if (!canUse) {
+        browserHistory.push('/password');
+        return;
+      }
+      
+      browserHistory.push('/transaction-sign-request');
+    });
   }
   
   async componentDidMount() {
-    const hasWallet = await this.walletManager.hasWallet();
-    const canUse = await this.walletManager.hasWalletAndCanUse();
-    this.setState({
-      hasWallet,
-      canUse,
-    });
+    const canUse = await this.canUse();
+    const hasWallet = await this.hasWallet();
+    
+    this.setState({ canUse, hasWallet });
     
     if (canUse) {
       this.state.store.dispatch(this.walletActions.tryExtractWalletFromStorage());
@@ -65,11 +90,13 @@ class Root extends React.Component {
   render() {
     return (
       <Provider store={this.state.store}>
-        <BrowserRouter>
+        <NavigableRouter>
           <App>
+            {this.state.hasWallet && !this.state.canUse && <Redirect to="/password"/>}
+            {this.state.canUse && <Redirect to="/wallet"/>}
             <Switch>
-              <Route path="/confirm-phrase" component={SecretPhraseConfirmRoute} />
               <Route exact path="/" component={WelcomeRoute} />
+              <Route path="/confirm-phrase" component={SecretPhraseConfirmRoute} />
               <Route path="/unknown" component={UnknownDomenRoute} />
               <Route path="/new-wallet" component={NewWalletRoute} />
               <Route path="/secret-phrase" component={SecretPhraseRoute} />
@@ -78,18 +105,21 @@ class Root extends React.Component {
               <Route path="/error" component={ErrorRoute} />
               <Route path="/password" component={PasswordRequestRoute} />
               <Route path="/sign-request" component={SignRequestRoute} />
-              <Route
-                path="/transaction-sign-request"
-                component={TransactionSignRequestRoute}
-              />
+              <Route path="/transaction-sign-request" component={TransactionSignRequestRoute} />
               <Route path="*" render={() => <Redirect to="/" />} />
             </Switch>
-            {this.state.hasWallet && !this.state.canUse && <Redirect to="/password"/>}
-            {this.state.canUse && <Redirect to="/wallet"/>}
           </App>
-        </BrowserRouter>
+        </NavigableRouter>
       </Provider>
     )
   }
+  async hasWallet() {
+    return await this.walletManager.hasWallet();
+  }
+  
+  async canUse() {
+    return await this.walletManager.hasWalletAndCanUse();
+  }
+  
 }
 export default Root;

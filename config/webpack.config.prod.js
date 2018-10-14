@@ -13,6 +13,7 @@ module.exports = {
   entry: {
     index: path.join(paths.appSrc, "index.js"),
     background: path.join(paths.appSrc, "background.js"),
+    injected: path.join(paths.appSrc, "injected.js"),
     contentscript:path.join(paths.appSrc, "contentscript.js")
   },
   output: {

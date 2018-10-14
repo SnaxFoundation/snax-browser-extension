@@ -23,6 +23,7 @@ module.exports = (env) => {
     entry: {
       index: indexEntries,
       background: path.join(paths.appSrc, "background.js"),
+      injected: path.join(paths.appSrc, "injected.js"),
       contentscript: path.join(paths.appSrc, "contentscript.js")
     },
     output: {

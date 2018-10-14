@@ -37,6 +37,9 @@
       "all_frames": true
     }
   ],
+  "web_accessible_resources": [
+    "injected.bundle.js"
+  ],
   "permissions": [
     "storage",
     "unlimitedStorage",

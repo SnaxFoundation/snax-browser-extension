@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {NotificationActions} from 'src/store/notifications/NotificationActions';
+import {TransactionSelectors} from 'src/store/transaction/TransactionSelectors';
 import {WalletActions} from 'src/store/wallet/WalletActions';
 import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
 
@@ -14,12 +15,13 @@ import {
   TextFieldWrapper, PasswordField,
 } from '../components';
 
-@ReduxContainer(null, [WalletActions, NotificationActions])
+@ReduxContainer(TransactionSelectors, [WalletActions, NotificationActions])
 class PasswordRequestRoute extends Component {
   
   static propTypes = {
     spawnErrorNotification: PropTypes.func.isRequired,
     tryExtractWalletFromStorage: PropTypes.func.isRequired,
+    isCurrentTransactionActive: PropTypes.bool,
     history: PropTypes.object.isRequired
   };
   
@@ -70,10 +72,14 @@ class PasswordRequestRoute extends Component {
     if (this.isPasswordValid()) {
         const result = await this.props.tryExtractWalletFromStorage(this.state.password);
         
+        const redirectUrl = this.props.isCurrentTransactionActive
+          ? '/transaction-sign-request'
+          : '/wallet';
+        
         if (!result.isExtractionSucceed) {
           this.props.spawnErrorNotification('Cannot decrypt wallet, please check your password');
         } else {
-          this.props.history.push('/wallet');
+          this.props.history.push(redirectUrl);
         }
     }
   };

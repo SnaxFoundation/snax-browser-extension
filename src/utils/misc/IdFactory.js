@@ -1,5 +1,6 @@
 export class IdFactory {
   static _global;
+  static lastId = 1;
   
   static getId() {
     if (!this._global) {
@@ -9,7 +10,6 @@ export class IdFactory {
     return this._global.getId();
   }
   
-  lastId = 1;
   prefix;
   
   constructor(prefix = '') {
@@ -17,6 +17,6 @@ export class IdFactory {
   }
   
   getId() {
-    return this.prefix + (this.lastId++).toString()
+    return this.prefix + (IdFactory.lastId++).toString() + Math.random() + Date.now().toString();
   }
 }

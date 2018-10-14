@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import {TransactionActions} from 'src/store/transaction/TransactionActions';
+import {TransactionSelectors} from 'src/store/transaction/TransactionSelectors';
+import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
 
 import {
   Button,
@@ -12,38 +15,52 @@ import {
 
 import { TransactionAmount, TransactionRecipient } from '../containers';
 
+
+@ReduxContainer(TransactionSelectors, TransactionActions)
 class TransactionSignRequestRoute extends Component {
   render() {
-    const error = (
-      <Row>
-        <ParagraphError>Not enought tokens</ParagraphError>
-      </Row>
-    );
-
     return (
       <Screen>
         <ScreenTitle>Transaction request</ScreenTitle>
         <Content spread>
           <Row>
-            <TransactionAmount amount={458} />
+            <TransactionAmount amount={this.props.currentTransactionAmount} />
           </Row>
           <Row>
-            <TransactionRecipient type="twitter" name="fluffystuff19" />
+            <TransactionRecipient type="twitter" name={this.props.currentTransactionRecipient} />
           </Row>
-          {error}
+          {this._renderErrorIfNeeded()}
         </Content>
         <ButtonRow>
-          <Button spread disabled>
+          <Button onClick={this._handleConfirmClick} spread >
             Confirm
           </Button>
 
-          <Button colorScheme="flat" spread to="/">
+          <Button onClick={this._handleCancelClick} colorScheme="flat" spread>
             Cancel
           </Button>
         </ButtonRow>
       </Screen>
     );
   }
+  
+  _renderErrorIfNeeded() {
+    return (
+      <Row>
+        <ParagraphError>Not enought tokens</ParagraphError>
+      </Row>
+    )
+  }
+  
+  _handleConfirmClick = () => {
+    this.props.signTransaction();
+    window.close();
+  };
+  
+  _handleCancelClick = () => {
+    this.props.discardTransaction();
+    window.close();
+  };
 }
 
 export default TransactionSignRequestRoute;

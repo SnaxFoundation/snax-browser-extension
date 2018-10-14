@@ -1,4 +1,4 @@
-import {AbstractMessage} from 'src/services/communication/messages/AbstractMessage';
+import {AbstractMessage} from 'src/utils/communication/messages/AbstractMessage';
 
 
 export class SavePasswordMessage extends AbstractMessage {

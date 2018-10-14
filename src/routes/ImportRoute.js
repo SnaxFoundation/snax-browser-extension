@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {NotificationActions} from 'src/store/notifications/NotificationActions';
+import {TransactionSelectors} from 'src/store/transaction/TransactionSelectors';
 import {WalletActions} from 'src/store/wallet/WalletActions';
 import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
 import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
@@ -17,7 +18,7 @@ import {
   TextFieldWrapper,
 } from '../components';
 
-@ReduxContainer(WalletSelectors, [WalletActions, NotificationActions])
+@ReduxContainer([WalletSelectors, TransactionSelectors], [WalletActions, NotificationActions])
 class ImportRoute extends Component {
   
   static propTypes = {
@@ -85,11 +86,15 @@ class ImportRoute extends Component {
   
   handleContinueClick = async (e) => {
     e.preventDefault();
+  
+    const redirectUrl = this.props.isCurrentTransactionActive
+      ? '/transaction-sign-request'
+      : '/wallet';
     
     if (this.arePasswordAndMnemonicValid()) {
       const result = await this.props.tryCreateWalletByMnemonic(this.state.mnemonic, this.state.password);
       if (result.isCreationSucceed) {
-        this.props.history.push('/wallet');
+        this.props.history.push(redirectUrl);
       } else {
         this.props.spawnErrorNotification('Recovering failed, please check you password');
       }

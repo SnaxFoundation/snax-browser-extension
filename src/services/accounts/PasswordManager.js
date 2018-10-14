@@ -1,23 +1,19 @@
 import {Inject} from 'src/context/steriotypes/Inject';
 import {Singleton} from 'src/context/steriotypes/Singleton';
-import {GetPasswordMessage} from 'src/services/communication/messages/GetPasswordMessage';
-import {SavePasswordMessage} from 'src/services/communication/messages/SavePasswordMessage';
-import {OutboundCommunicator} from 'src/services/communication/OutboundCommunicator';
+import {PasswordOutboundCommunicator} from 'src/services/communication/password/PasswordOutboundCommunicator';
 
 @Singleton
 export class PasswordManager {
   
-  @Inject(OutboundCommunicator)
-  outboundCommunicator;
+  @Inject(PasswordOutboundCommunicator)
+  passwordOutboundCommunicator;
   
   async hasPassword() {
-    return !!(await this.outboundCommunicator.send(new GetPasswordMessage())).password;
+    return !!await this.passwordOutboundCommunicator.getPassword();
   }
   
   async getPassword() {
-    const passwordResponse = await this.outboundCommunicator.send(new GetPasswordMessage());
-    
-    const password = passwordResponse.password;
+    const password = await this.passwordOutboundCommunicator.getPassword();
     
     if (password == null) {
       throw new Error('password is not defined');
@@ -26,10 +22,10 @@ export class PasswordManager {
   }
   
   async setPassword(password) {
-    await this.outboundCommunicator.send(new SavePasswordMessage(password))
+    await this.passwordOutboundCommunicator.savePassword(password);
   }
   
   async cleanPassword() {
-    await this.outboundCommunicator.send(new SavePasswordMessage(null))
+    await this.passwordOutboundCommunicator.savePassword(null);
   }
 }
