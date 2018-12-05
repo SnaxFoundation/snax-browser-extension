@@ -10,12 +10,12 @@ import {
   Screen,
 } from '../components';
 
-class UnknownDomenRoute extends Component {
+class UnknownDomainRoute extends Component {
   render() {
     return (
       <Screen>
         <BrandBox>
-          <BrandBoxTitle>Mints</BrandBoxTitle>
+          <BrandBoxTitle>Snax</BrandBoxTitle>
           <BrandBoxSubtitle>wallet</BrandBoxSubtitle>
         </BrandBox>
         <Content spread centerY>
@@ -33,4 +33,4 @@ class UnknownDomenRoute extends Component {
   }
 }
 
-export default UnknownDomenRoute;
+export default UnknownDomainRoute;

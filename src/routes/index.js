@@ -1,4 +1,4 @@
-import UnknownDomenRoute from './UnknownDomenRoute';
+import UnknownDomainRoute from './UnknownDomainRoute';
 import WelcomeRoute from './WelcomeRoute';
 import NewWalletRoute from './NewWalletRoute';
 import SecretPhraseRoute from './SecretPhraseRoute';
@@ -12,7 +12,7 @@ import TransactionSignRequestRoute from './TransactionSignRequestRoute';
 
 export {
   WelcomeRoute,
-  UnknownDomenRoute,
+  UnknownDomainRoute,
   NewWalletRoute,
   SecretPhraseRoute,
   SecretPhraseConfirmRoute,

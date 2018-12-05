@@ -1,4 +1,4 @@
-Mints Wallet 
+Snax Wallet 
 
 Updating dependencies:\
 `npm install` or `yarn install`\

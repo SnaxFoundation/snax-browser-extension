@@ -13,7 +13,7 @@ import {WalletActions} from 'src/store/wallet/WalletActions';
 import { App } from './components';
 
 import {
-  UnknownDomenRoute,
+  UnknownDomainRoute,
   WelcomeRoute,
   NewWalletRoute,
   SecretPhraseRoute,
@@ -97,7 +97,7 @@ class Root extends React.Component {
             <Switch>
               <Route exact path="/" component={WelcomeRoute} />
               <Route path="/confirm-phrase" component={SecretPhraseConfirmRoute} />
-              <Route path="/unknown" component={UnknownDomenRoute} />
+              <Route path="/unknown" component={UnknownDomainRoute} />
               <Route path="/new-wallet" component={NewWalletRoute} />
               <Route path="/secret-phrase" component={SecretPhraseRoute} />
               <Route path="/wallet" component={WalletRoute} />

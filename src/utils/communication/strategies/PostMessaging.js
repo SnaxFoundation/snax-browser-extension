@@ -2,13 +2,13 @@ class Inbound {
   listenAndAnswer(listener) {
     window.addEventListener('message', async (event) => {
       const data = event.data;
-      if (data.___mintsMessage && data.___mintsRequest) {
+      if (data.___snaxMessage && data.___snaxRequest) {
         const result = await listener(data.payload);
         window.postMessage({
           payload: result,
-          ___mintsMessage: true,
-          ___mintsAnswer: true,
-          ___mintsRequest: false,
+          ___snaxMessage: true,
+          ___snaxAnswer: true,
+          ___snaxRequest: false,
         }, '*');
       }
     });
@@ -19,16 +19,16 @@ class Outbound {
   send(message) {
     window.postMessage({
       payload: message,
-      ___mintsMessage: true,
-      ___mintsAnswer: false,
-      ___mintsRequest: true,
+      ___snaxMessage: true,
+      ___snaxAnswer: false,
+      ___snaxRequest: true,
     } , '*');
   }
   
   listen(listener) {
     window.addEventListener('message', (event) => {
       const data = event.data;
-      if (data.___mintsMessage && data.___mintsAnswer) {
+      if (data.___snaxMessage && data.___snaxAnswer) {
         listener(data.payload);
       }
     });

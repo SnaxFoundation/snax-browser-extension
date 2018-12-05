@@ -37,7 +37,7 @@ class WalletRoute extends Component {
     return (
       <Screen>
         <BrandBox>
-          <BrandBoxTitle>Mints</BrandBoxTitle>
+          <BrandBoxTitle>Snax</BrandBoxTitle>
           <BrandBoxSubtitle>wallet</BrandBoxSubtitle>
         </BrandBox>
         <Content spread centerY>

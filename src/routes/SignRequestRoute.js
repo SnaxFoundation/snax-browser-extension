@@ -19,7 +19,7 @@ class SignRequestRoute extends Component {
             <strong>Sign needed</strong>
           </ParagraphBody>
           <ParagraphBody>
-            So as to authorize on platform with Mints Wallets we need your
+            So as to authorize on platform with Snax Wallets we need your
             permission
           </ParagraphBody>
         </Content>

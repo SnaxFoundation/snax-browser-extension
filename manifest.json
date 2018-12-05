@@ -1,18 +1,16 @@
 {
-  "name": "Mints",
-  "short_name": "MNT",
+  "name": "Snax",
+  "short_name": "SNAX",
   "version": "0.1.0",
   "manifest_version": 2,
-  "author": "https://mints.com",
-  "description": "Mints extension",
+  "author": "https://snax.com",
+  "description": "Snax extension",
   "icons": {
     "16": "favicon.png",
     "128": "favicon.png"
   },
   "background": {
-    "scripts": [
-      "background.bundle.js"
-    ],
+    "scripts": ["background.bundle.js"],
     "persistent": true
   },
   "browser_action": {
@@ -20,26 +18,18 @@
       "19": "favicon.png",
       "38": "favicon.png"
     },
-    "default_title": "Mints",
+    "default_title": "Snax",
     "default_popup": "index.html"
   },
   "content_scripts": [
     {
-      "matches": [
-        "file://*/*",
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": [
-        "contentscript.bundle.js"
-      ],
+      "matches": ["file://*/*", "http://*/*", "https://*/*"],
+      "js": ["contentscript.bundle.js"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
-  "web_accessible_resources": [
-    "injected.bundle.js"
-  ],
+  "web_accessible_resources": ["injected.bundle.js"],
   "permissions": [
     "storage",
     "unlimitedStorage",

@@ -3,64 +3,63 @@ class Inbound {
   constructor(connectionName) {
     this.connectionName = connectionName;
   }
-  
+
   listenAndAnswer(listener) {
     const event = chrome.extension.onConnect;
-    
-    event.addListener((port) => {
+
+    event.addListener(port => {
       if (port.name !== this.connectionName) {
         return;
       }
-      
-      port.onMessage.addListener(async (msg) => {
+
+      port.onMessage.addListener(async msg => {
         if (msg) {
           port.postMessage(await listener(msg));
         }
       });
-    })
+    });
   }
-  
 }
 
 class Outbound {
   _port;
   _connectionName;
-  
+
   constructor(connectionName) {
     this._connectionName = connectionName;
   }
-  
+
   send(message) {
     this._initialize();
     this._port.postMessage(message);
   }
-  
+
   listen(listener) {
     this._listener = listener;
   }
-  
+
   _initialize() {
     this._port = chrome.extension.connect({
       name: this._connectionName
     });
-  
+
     if (this._port.onMessage.hasListener(this._handleMessage)) {
-        this._port.onmessage.removeListener(this._handleMessage);
+      this._port.onmessage.removeListener(this._handleMessage);
     }
-    
+
     this._port.onMessage.addListener(this._handleMessage);
   }
-  
-  _handleMessage = async (msg) => {
+
+  _handleMessage = async msg => {
     if (this._listener && msg) {
       this._listener(msg);
     }
-  }
+  };
 }
 
 export class ExtensionMessaging {
   connectionName;
-  
+
   constructor(connectionName) {
     this.connectionName = connectionName;
   }
@@ -68,7 +67,7 @@ export class ExtensionMessaging {
   getInbound() {
     return new Inbound(this.connectionName);
   }
-  
+
   getOutbound() {
     return new Outbound(this.connectionName);
   }
