@@ -1,35 +1,36 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import {NotificationActions} from 'src/store/notifications/NotificationActions';
-import {TransactionSelectors} from 'src/store/transaction/TransactionSelectors';
-import {WalletActions} from 'src/store/wallet/WalletActions';
-import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
+  Button,
   ButtonLink,
   ButtonRow,
   Content,
   Row,
   Screen,
   ScreenTitle,
-  TextFieldWrapper, PasswordField,
-} from '../components';
+  TextFieldWrapper,
+  PasswordField
+} from "../components";
 
 @ReduxContainer(TransactionSelectors, [WalletActions, NotificationActions])
 class PasswordRequestRoute extends Component {
-  
   static propTypes = {
     spawnErrorNotification: PropTypes.func.isRequired,
     tryExtractWalletFromStorage: PropTypes.func.isRequired,
     isCurrentTransactionActive: PropTypes.bool,
     history: PropTypes.object.isRequired
   };
-  
+
   state = {
     isPasswordVisible: false,
-    password: '',
+    password: ""
   };
-  
+
   render() {
     return (
       <Screen>
@@ -37,15 +38,18 @@ class PasswordRequestRoute extends Component {
         <Content spread centerY>
           <Row>
             <TextFieldWrapper>
-              <PasswordField onChange={this.handlePasswordChange}/>
+              <PasswordField onChange={this.handlePasswordChange} />
             </TextFieldWrapper>
           </Row>
         </Content>
         <ButtonRow>
-          <ButtonLink onClick={this.handleOpenWalletClick} disabled={!this.isPasswordValid()} spread to="/wallet">
+          <Button
+            onClick={this.handleOpenWalletClick}
+            disabled={!this.isPasswordValid()}
+            spread
+          >
             Open wallet
-          </ButtonLink>
-
+          </Button>
           <ButtonLink colorScheme="flat" spread to="/">
             Cancel
           </ButtonLink>
@@ -53,37 +57,42 @@ class PasswordRequestRoute extends Component {
       </Screen>
     );
   }
-  
+
   handlePasswordButtonClick = () => {
     this.setState({
-      isPasswordVisible: !this.state.isPasswordVisible,
+      isPasswordVisible: !this.state.isPasswordVisible
     });
   };
-  
-  handlePasswordChange = (e) => {
+
+  handlePasswordChange = e => {
     this.setState({
-      password: e.target.value,
+      password: e.target.value
     });
   };
-  
-  handleOpenWalletClick = async (e) => {
+
+  handleOpenWalletClick = async e => {
     e.preventDefault();
-    
+    console.log(this.state);
+
     if (this.isPasswordValid()) {
-        const result = await this.props.tryExtractWalletFromStorage(this.state.password);
-        
-        const redirectUrl = this.props.isCurrentTransactionActive
-          ? '/transaction-sign-request'
-          : '/wallet';
-        
-        if (!result.isExtractionSucceed) {
-          this.props.spawnErrorNotification('Cannot decrypt wallet, please check your password');
-        } else {
-          this.props.history.push(redirectUrl);
-        }
+      const result = await this.props.tryExtractWalletFromStorage(
+        this.state.password
+      );
+
+      const redirectUrl = this.props.isCurrentTransactionActive
+        ? "/transaction-sign-request"
+        : "/wallet";
+
+      if (!result.isExtractionSucceed) {
+        this.props.spawnErrorNotification(
+          "Cannot decrypt wallet, please check your password"
+        );
+      } else {
+        this.props.history.push(redirectUrl);
+      }
     }
   };
-  
+
   isPasswordValid() {
     return !!this.state.password;
   }

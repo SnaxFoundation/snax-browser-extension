@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import {NotificationActions} from 'src/store/notifications/NotificationActions';
-import {WalletActions} from 'src/store/wallet/WalletActions';
-import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
-import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
   ButtonLink,
@@ -12,10 +12,10 @@ import {
   Row,
   Screen,
   ScreenTitle,
-  ParagraphBody,
-} from '../components';
+  ParagraphBody
+} from "../components";
 
-import { SecretWordInput, SecretPhraseWrapper } from '../containers';
+import { SecretWordInput, SecretPhraseWrapper } from "../containers";
 
 // TODO Replace ButtonLink with Button after removing link
 
@@ -24,17 +24,19 @@ class SecretPhraseRoute extends Component {
   static propTypes = {
     spawnSuccessNotification: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    mnemonic: PropTypes.string,
+    mnemonic: PropTypes.string
   };
-  
+
   _renderMnemonic() {
     if (!this.props.mnemonic) {
       return [];
     }
-    
-    return this.props.mnemonic.split(' ').map((item, idx) => (
-      <SecretWordInput number={idx + 1} value={item} disabled size="small" />
-    ));
+
+    return this.props.mnemonic
+      .split(" ")
+      .map((item, idx) => (
+        <SecretWordInput number={idx + 1} value={item} disabled size="small" />
+      ));
   }
 
   render() {

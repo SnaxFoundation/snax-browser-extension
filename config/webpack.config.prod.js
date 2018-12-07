@@ -1,8 +1,7 @@
-'use strict';
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const paths = require('./paths');
+const path = require("path");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const paths = require("./paths");
 
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -14,15 +13,15 @@ module.exports = {
     index: path.join(paths.appSrc, "index.js"),
     background: path.join(paths.appSrc, "background.js"),
     injected: path.join(paths.appSrc, "injected.js"),
-    contentscript:path.join(paths.appSrc, "contentscript.js")
+    contentscript: path.join(paths.appSrc, "contentscript.js")
   },
   output: {
     path: paths.appBuild,
-    filename: '[name].bundle.js',
+    filename: "[name].bundle.js"
   },
   resolve: {
-    modules: ['node_modules', paths.appDirectory],
-    extensions: ['.js', '.json','.jsx'],
+    modules: ["node_modules", paths.appDirectory],
+    extensions: [".js", ".json", ".jsx"]
   },
   module: {
     strictExportPresence: true,
@@ -31,36 +30,38 @@ module.exports = {
         oneOf: [
           {
             test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-            loader: require.resolve('url-loader'),
+            loader: require.resolve("url-loader"),
             options: {
               limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]',
-            },
+              name: "static/media/[name].[hash:8].[ext]"
+            }
           },
           // Process JS with Babel.
           {
             test: /\.(js|jsx|mjs)$/,
             include: paths.appSrc,
-            loader: require.resolve('babel-loader'),
+            loader: require.resolve("babel-loader"),
             options: {
-              
-              compact: true,
-            },
+              compact: true
+            }
           },
           {
-            loader: require.resolve('file-loader'),
+            loader: require.resolve("file-loader"),
             exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
             options: {
-              name: 'static/media/[name].[hash:8].[ext]',
-            },
-          },
-        ],
-      },
-    ],
+              name: "static/media/[name].[hash:8].[ext]"
+            }
+          }
+        ]
+      }
+    ]
   },
   plugins: [
     new CleanWebpackPlugin(["build"]),
-    new CopyWebpackPlugin([{ from: "manifest.json"}, { from: 'public/favicon.png' } ]),
+    new CopyWebpackPlugin([
+      { from: "manifest.json" },
+      { from: "public/favicon.png" }
+    ]),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,
@@ -72,11 +73,11 @@ module.exports = {
         removeEmptyAttributes: true,
         removeStyleLinkTypeAttributes: true,
         keepClosingSlash: true,
-        minifyJS: true,
-        minifyURLs: true,
-      },
+        minifyJS: false,
+        minifyURLs: true
+      }
     }),
-    new webpack.optimize.UglifyJsPlugin({
+    /*new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
         comparisons: false,
@@ -85,7 +86,7 @@ module.exports = {
         comments: false,
         ascii_only: true,
       }
-    }),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-  ],
+  }),*/
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+  ]
 };

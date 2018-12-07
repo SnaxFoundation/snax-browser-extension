@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import {NotificationActions} from 'src/store/notifications/NotificationActions';
-import {TransactionSelectors} from 'src/store/transaction/TransactionSelectors';
-import {WalletActions} from 'src/store/wallet/WalletActions';
-import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
-import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
   ButtonLink,
@@ -13,49 +13,54 @@ import {
   Row,
   Screen,
   ScreenTitle,
-  ParagraphBody,
-} from '../components';
+  ParagraphBody
+} from "../components";
 
-import { SecretWordInput } from '../containers';
+import { SecretWordInput } from "../containers";
 
 // TODO Replace ButtonLink with Button after removing link
 
-
-@ReduxContainer([WalletSelectors, TransactionSelectors], [WalletActions, NotificationActions])
+@ReduxContainer(
+  [WalletSelectors, TransactionSelectors],
+  [WalletActions, NotificationActions]
+)
 class SecretPhraseConfirmRoute extends Component {
-  
   static propTypes = {
     tryCreateWifFromCandidate: PropTypes.func.isRequired,
     spawnErrorNotification: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    mnemonic: PropTypes.string,
+    mnemonic: PropTypes.string
   };
-  
+
   state = {
-    firstValidationWord: '',
-    secondValidationWord: '',
+    firstValidationWord: "",
+    secondValidationWord: ""
   };
-  
+
   constructor(props, context) {
     super(props, context);
-  
-    const [firstValidationNumber, secondValidationNumber] = this.getRandomValidationNumbers();
-    
+
+    const [
+      firstValidationNumber,
+      secondValidationNumber
+    ] = this.getRandomValidationNumbers();
+
     this.state = {
       firstValidationNumber,
-      secondValidationNumber,
-    }
+      secondValidationNumber
+    };
   }
-  
+
   render() {
     const { firstValidationNumber, secondValidationNumber } = this.state;
-    
+
     return (
       <Screen>
         <ScreenTitle>Check secret phrase</ScreenTitle>
         <Row>
           <ParagraphBody>
-            Let's check your secret phrase. Enter word <strong>{firstValidationNumber}</strong> and{' '}
+            Let's check your secret phrase. Enter word{" "}
+            <strong>{firstValidationNumber}</strong> and{" "}
             <strong>{secondValidationNumber}</strong>.
           </ParagraphBody>
         </Row>
@@ -78,7 +83,8 @@ class SecretPhraseConfirmRoute extends Component {
           <ButtonLink
             onClick={this.handleOpenValid}
             disabled={!this.areRandomWordsFromMnemonicValid()}
-            spread to="/wallet"
+            spread
+            to="/wallet"
           >
             Open wallet
           </ButtonLink>
@@ -90,62 +96,72 @@ class SecretPhraseConfirmRoute extends Component {
       </Screen>
     );
   }
-  
-  handleFirstWordChange = (e) => {
+
+  handleFirstWordChange = e => {
     this.setState({
-      firstValidationWord: e.target.value,
-    })
+      firstValidationWord: e.target.value
+    });
   };
-  
-  handleSecondWordChange = (e) => {
+
+  handleSecondWordChange = e => {
     this.setState({
       secondValidationWord: e.target.value
-    })
+    });
   };
-  
-  handleOpenValid = async (e) => {
+
+  handleOpenValid = async e => {
     e.preventDefault();
     const redirectUrl = this.props.isCurrentTransactionActive
-      ? '/transaction-sign-request'
-      : '/wallet';
-    
+      ? "/transaction-sign-request"
+      : "/wallet";
+    console.log(this.state);
     if (this.areRandomWordsFromMnemonicValid()) {
-      const result = await this.props.tryCreateWifFromCandidate(this.props.mnemonic);
+      const result = await this.props.tryCreateWifFromCandidate(
+        this.props.mnemonic
+      );
+      console.log(result);
       if (result.isCreationSucceed) {
         this.props.history.push(redirectUrl);
       } else {
-        this.props.spawnErrorNotification('Some error occurred during creation, please contact with development team');
+        this.props.spawnErrorNotification(
+          "Some error occurred during creation, please contact with development team"
+        );
       }
+    } else {
+      console.log(20);
     }
   };
-  
+
   getValidatingWordsFromMnemonicArray(mnemonicArray) {
     if (mnemonicArray.length !== 12) {
-      throw new Error('Mnemonic array is invalid');
+      throw new Error("Mnemonic array is invalid");
     }
-    
+
     return [
       mnemonicArray[this.state.firstValidationNumber - 1],
       mnemonicArray[this.state.secondValidationNumber - 1]
     ];
   }
-  
+
   getRandomValidationNumbers() {
     const firstNumber = this.getRandomNumber(1, 6);
     const secondNumber = this.getRandomNumber(7, 12);
-    return [firstNumber, secondNumber]
-      .sort(() => this.getRandomNumber(0, 1));
+    return [firstNumber, secondNumber].sort(() => this.getRandomNumber(0, 1));
   }
-  
+
   getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-  
+
   areRandomWordsFromMnemonicValid() {
-    const mnemonicArray = this.props.mnemonic.split(' ');
-    const [firstWord, secondWord] = this.getValidatingWordsFromMnemonicArray(mnemonicArray);
-    return firstWord === this.state.firstValidationWord
-      && secondWord === this.state.secondValidationWord;
+    const mnemonicArray = this.props.mnemonic.split(" ");
+    const [firstWord, secondWord] = this.getValidatingWordsFromMnemonicArray(
+      mnemonicArray
+    );
+    return (
+      firstWord === this.state.firstValidationWord &&
+      secondWord === this.state.secondValidationWord
+    );
   }
 }
 

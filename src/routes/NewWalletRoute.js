@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {WalletActions} from 'src/store/wallet/WalletActions';
-import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
-import {PasswordValidator} from 'src/utils/validators/PasswordValidator';
-import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
+import { PasswordValidator } from "src/utils/validators/PasswordValidator";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
   ButtonLink,
@@ -15,36 +15,38 @@ import {
   ScreenTitle,
   TextFieldMessage,
   TextFieldWrapper,
-  PasswordField,
-} from '../components';
+  PasswordField
+} from "../components";
 
 // TODO Replace ButtonLink with Button after removing link
 
-
 @ReduxContainer(WalletSelectors, WalletActions)
 class NewWalletRoute extends Component {
-  
   static propTypes = {
     createWifCandidate: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   };
-  
+
   state = {
     isPasswordVisible: false,
     isInputTouched: false,
-    passwordCandidate: '',
+    passwordCandidate: ""
   };
-  
+
   render() {
     const validator = new PasswordValidator(this.state.passwordCandidate);
-    
+
     return (
       <Screen>
         <ScreenTitle>New wallet</ScreenTitle>
         <Content spread centerY>
           <Row>
             <TextFieldWrapper>
-              <PasswordField error={!validator.isValid} onChange={this.handleInputChange}/>
+              <PasswordField
+                error={!validator.isValid}
+                onChange={this.handleInputChange}
+                value="Brave_new_world12"
+              />
               <TextFieldMessage error={!validator.areMoreThan7CharactersUsed}>
                 <ListUnordered>
                   <li>8 symbols minimum</li>
@@ -55,7 +57,9 @@ class NewWalletRoute extends Component {
                   <li>at least 1 uppercase letter and 1 number</li>
                 </ListUnordered>
               </TextFieldMessage>
-              <TextFieldMessage error={!validator.areOnlyAlphanumericAndSpecialCharactersUsed}>
+              <TextFieldMessage
+                error={!validator.areOnlyAlphanumericAndSpecialCharactersUsed}
+              >
                 <ListUnordered>
                   <li>0-9, a-z, special characters</li>
                 </ListUnordered>
@@ -64,7 +68,12 @@ class NewWalletRoute extends Component {
           </Row>
         </Content>
         <ButtonRow>
-          <ButtonLink onClick={this.handleCreation} disabled={!validator.isValid} spread to="/secret-phrase">
+          <ButtonLink
+            onClick={this.handleCreation}
+            disabled={!validator.isValid}
+            spread
+            to="/secret-phrase"
+          >
             Create new wallet
           </ButtonLink>
 
@@ -75,24 +84,24 @@ class NewWalletRoute extends Component {
       </Screen>
     );
   }
-  
-  handleInputChange = (e) => {
+
+  handleInputChange = e => {
     this.setState({
-      passwordCandidate: e.target.value,
-    })
+      passwordCandidate: e.target.value
+    });
   };
-  
-  handleCreation = (e) => {
-    const {passwordCandidate} = this.state;
+
+  handleCreation = async e => {
+    const { passwordCandidate } = this.state;
     e.preventDefault();
-  
+
     const validator = new PasswordValidator(passwordCandidate);
-    
+
     if (validator.isValid) {
-      this.props.createWifCandidate(passwordCandidate);
-      this.props.history.push('/secret-phrase');
+      await this.props.createWifCandidate(passwordCandidate);
+      this.props.history.push("/secret-phrase");
     }
-  }
+  };
 }
 
 export default NewWalletRoute;

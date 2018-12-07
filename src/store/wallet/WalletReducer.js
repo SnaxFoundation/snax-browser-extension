@@ -1,35 +1,37 @@
-import {Reducer} from 'src/context/redux/Reducer';
-import {Inject} from 'src/context/steriotypes/Inject';
-import {WalletManager} from 'src/services/accounts/WalletManager';
-import {UPDATE_MNEMONIC, UPDATE_PUBLIC_KEY} from 'src/store/wallet/WalletConstants';
-import {Reduce} from 'src/utils/redux/Reduce';
+import { Reducer } from "src/context/redux/Reducer";
+import { Inject } from "src/context/steriotypes/Inject";
+import { WalletManager } from "src/services/accounts/WalletManager";
+import {
+  UPDATE_MNEMONIC,
+  UPDATE_PUBLIC_KEY
+} from "src/store/wallet/WalletConstants";
+import { Reduce } from "src/utils/redux/Reduce";
 
 @Reducer()
 export class WalletReducer {
-  
-  @Inject(WalletManager)
-  walletManager;
-  
+  @Inject(WalletManager) walletManager;
+
   @Reduce(UPDATE_PUBLIC_KEY)
   handleUpdatePublicKey(state, payload) {
     return {
       ...state,
-      publicKey: payload.publicKey,
-    }
+      publicKey: payload.publicKey
+    };
   }
-  
+
   @Reduce(UPDATE_MNEMONIC)
   handleUpdateMnemonic(state, payload) {
+    console.log(state, payload);
     return {
       ...state,
-      mnemonic: payload.mnemonic,
-    }
+      mnemonic: payload.mnemonic
+    };
   }
 
   @Reduce.Default
   defaultState() {
     return {
-      hasWallet: false,
+      hasWallet: false
     };
   }
 }
