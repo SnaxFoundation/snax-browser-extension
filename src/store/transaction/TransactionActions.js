@@ -56,6 +56,12 @@ export class TransactionActions {
       if (accountName !== to) {
         throw new Error("Can\t resolve to account");
       }
+      const transaction = {
+        id,
+        from,
+        to: { platformId: toId, platformAccountName: to },
+        amount
+      };
       dispatch(
         this.setTransactionToSign(
           id,
@@ -64,6 +70,7 @@ export class TransactionActions {
           amount
         )
       );
+      return transaction;
     };
   }
 

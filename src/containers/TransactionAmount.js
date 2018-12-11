@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { ParagraphCaption } from '../components';
-import styleConstants from '../styles/style-constants';
+import React from "react";
+import styled from "styled-components";
+import { ParagraphCaption } from "../components";
+import styleConstants from "../styles/style-constants";
 
 const Wrapper = styled.div``;
 
@@ -13,7 +13,7 @@ const Amount = styled.div`
 
 export const TransactionAmount = ({ amount, ...props }) => (
   <Wrapper {...props}>
-    <Amount>{amount} SNAX</Amount>
-    <ParagraphCaption>${amount * 0.01} approximately</ParagraphCaption>
+    <Amount>{amount}</Amount>
+    {/*<ParagraphCaption>${parseFloat(amount) * 0.01} approximately</ParagraphCaption>*/}
   </Wrapper>
 );

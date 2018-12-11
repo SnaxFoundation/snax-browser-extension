@@ -1,15 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Wrapper, Icon, Text } from './styles';
+import React from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { Wrapper, Icon, Text } from "./styles";
 
 const propTypes = {
   icon: PropTypes.element,
-  text: PropTypes.oneOf(PropTypes.string, PropTypes.element),
+  text: PropTypes.oneOf(PropTypes.string, PropTypes.element)
 };
 
 const defaultProps = {
   icon: null,
-  text: '',
+  text: ""
 };
 
 export const Tag = ({ icon, text, ...props }) => (
@@ -21,3 +22,12 @@ export const Tag = ({ icon, text, ...props }) => (
 
 Tag.propTypes = propTypes;
 Tag.defaultProps = defaultProps;
+
+export const TagLink = ({ icon, text, to, ...props }) => (
+  <a href={to} target="_blank" rel="noopener noreferrer">
+    <Wrapper href={to}>
+      <Icon>{icon}</Icon>
+      <Text>{text}</Text>
+    </Wrapper>
+  </a>
+);

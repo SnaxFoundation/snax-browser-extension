@@ -51,16 +51,13 @@ class Root extends React.Component {
 
     this.state.store = getStore();
     this.transactionManager.listen(async transaction => {
-      console.log(
-        this.state.store.dispatch(
-          this.transactionActions.prepareTransaction(
-            transaction.id,
-            transaction.from,
-            transaction.to,
-            transaction.amount
-          )
-        )
-      );
+      const preparedTransaction = await this.transactionActions.prepareTransaction(
+        transaction.id,
+        transaction.from,
+        transaction.to,
+        transaction.amount
+      )(this.state.store.dispatch);
+
 
       const canUse = await this.canUse();
       const hasWallet = await this.hasWallet();
@@ -76,6 +73,8 @@ class Root extends React.Component {
       }
 
       browserHistory.push("/transaction-sign-request");
+
+      return preparedTransaction;
     });
   }
 

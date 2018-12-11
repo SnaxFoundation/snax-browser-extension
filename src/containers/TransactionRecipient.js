@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Tag, IconTwitter } from '../components';
-import styleConstants from '../styles/style-constants';
+import React from "react";
+import styled from "styled-components";
+import { TagLink, IconTwitter } from "../components";
+import styleConstants from "../styles/style-constants";
 
 const iconMap = {
-  twitter: <IconTwitter color={styleConstants.brandColor.twitter} />,
+  twitter: <IconTwitter color={styleConstants.brandColor.twitter} />
 };
 
 const Wrapper = styled.div`
@@ -23,6 +23,10 @@ const Prefix = styled.span`
 export const TransactionRecipient = ({ type, name, ...props }) => (
   <Wrapper {...props}>
     <Prefix>to: </Prefix>
-    <Tag text={name} icon={iconMap[type]} />
+    <TagLink
+      to={`https://twitter.com/${name}`}
+      text={name}
+      icon={iconMap[type]}
+    />
   </Wrapper>
 );

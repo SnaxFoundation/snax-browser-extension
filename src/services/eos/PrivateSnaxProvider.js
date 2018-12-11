@@ -9,6 +9,14 @@ export class PrivateSnaxProvider {
 
   async transfer(from, to, amount) {
     let error = null;
+    console.log(
+      "Trying to send tokens from " +
+        from +
+        " to " +
+        to +
+        " in amount of " +
+        amount
+    );
     try {
       const rpc = new JsonRpc(
         process.env.SNAXNODE || "http://172.31.38.163:8888",
@@ -30,8 +38,8 @@ export class PrivateSnaxProvider {
         {
           actions: [
             {
-              account: "snax.token",
-              name: "transfer",
+              account: "p.twitter",
+              name: "transfertou",
               authorization: [
                 {
                   actor: from,
@@ -41,8 +49,7 @@ export class PrivateSnaxProvider {
               data: {
                 from,
                 to,
-                quantity: amount,
-                memo: "u to u transfer"
+                amount
               }
             }
           ]
@@ -51,14 +58,6 @@ export class PrivateSnaxProvider {
           blocksBehind: 1,
           expireSeconds: 30
         }
-      );
-      console.log(
-        "Trying to send tokens from " +
-          from +
-          " to " +
-          to +
-          " in amount of " +
-          amount
       );
     } catch (e) {
       error = e;

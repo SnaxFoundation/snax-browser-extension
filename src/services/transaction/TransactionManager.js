@@ -14,7 +14,7 @@ export class TransactionManager {
   listen(handler) {
     this.privateTransactionInboundCommunicator.handleConfirmTransaction(
       async payload => {
-        handler(payload);
+        payload = await handler(payload);
         return await this._handleTransactionConfirmation(payload);
       }
     );

@@ -11,7 +11,7 @@ export class TransactionSelectors {
 
   @Selector
   currentTransactionRecipient(state) {
-    return state.to.platformAccountName;
+    return state.to;
   }
 
   @Selector

@@ -28,7 +28,7 @@ class TransactionSignRequestRoute extends Component {
           <Row>
             <TransactionRecipient
               type="twitter"
-              name={this.props.currentTransactionRecipient}
+              name={this.props.currentTransactionRecipient.platformAccountName}
             />
           </Row>
           {this._renderErrorIfNeeded()}
@@ -49,14 +49,14 @@ class TransactionSignRequestRoute extends Component {
   _renderErrorIfNeeded() {
     return (
       <Row>
-        <ParagraphError>Not enought tokens</ParagraphError>
+        <ParagraphError>Not enough tokens</ParagraphError>
       </Row>
     );
   }
 
   _handleConfirmClick = async () => {
     await this.props.signTransaction();
-    //window.close();
+    window.close();
   };
 
   _handleCancelClick = async () => {
