@@ -114,12 +114,11 @@ class SecretPhraseConfirmRoute extends Component {
     const redirectUrl = this.props.isCurrentTransactionActive
       ? "/transaction-sign-request"
       : "/wallet";
-    console.log(this.state);
+
     if (this.areRandomWordsFromMnemonicValid()) {
       const result = await this.props.tryCreateWifFromCandidate(
         this.props.mnemonic
       );
-      console.log(result);
       if (result.isCreationSucceed) {
         this.props.history.push(redirectUrl);
       } else {
@@ -127,8 +126,6 @@ class SecretPhraseConfirmRoute extends Component {
           "Some error occurred during creation, please contact with development team"
         );
       }
-    } else {
-      console.log(20);
     }
   };
 

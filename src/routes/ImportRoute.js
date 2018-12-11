@@ -1,37 +1,40 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {NotificationActions} from 'src/store/notifications/NotificationActions';
-import {TransactionSelectors} from 'src/store/transaction/TransactionSelectors';
-import {WalletActions} from 'src/store/wallet/WalletActions';
-import {WalletSelectors} from 'src/store/wallet/WalletSelectors';
-import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
   ButtonLink,
   ButtonRow,
-  Content, PasswordField,
+  Content,
+  PasswordField,
   Row,
   Screen,
   ScreenTitle,
   TextFieldLabel,
   TextFieldMultiline,
-  TextFieldWrapper,
-} from '../components';
+  TextFieldWrapper
+} from "../components";
 
-@ReduxContainer([WalletSelectors, TransactionSelectors], [WalletActions, NotificationActions])
+@ReduxContainer(
+  [WalletSelectors, TransactionSelectors],
+  [WalletActions, NotificationActions]
+)
 class ImportRoute extends Component {
-  
   static propTypes = {
     spawnErrorNotification: PropTypes.func.isRequired,
     tryCreateWalletByMnemonic: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   };
-  
+
   state = {
-    password: '',
-    mnemonic: '',
+    password: "",
+    mnemonic: ""
   };
-  
+
   render() {
     return (
       <Screen>
@@ -50,15 +53,19 @@ class ImportRoute extends Component {
           </Row>
           <Row>
             <TextFieldWrapper>
-              <PasswordField onChange={this.handlePasswordChange}/>
+              <PasswordField onChange={this.handlePasswordChange} />
             </TextFieldWrapper>
           </Row>
         </Content>
         <ButtonRow>
-          <ButtonLink onClick={this.handleContinueClick} disabled={!this.arePasswordAndMnemonicValid()} spread to="/password">
+          <ButtonLink
+            onClick={this.handleContinueClick}
+            disabled={!this.arePasswordAndMnemonicValid()}
+            spread
+            to="/password"
+          >
             Continue
           </ButtonLink>
-
           <ButtonLink colorScheme="flat" spread to="/">
             Cancel
           </ButtonLink>
@@ -68,43 +75,47 @@ class ImportRoute extends Component {
   }
   handlePasswordButtonClick = () => {
     this.setState({
-      passwordIsVisible: !this.state.passwordIsVisible,
+      passwordIsVisible: !this.state.passwordIsVisible
     });
   };
-  
-  handlePasswordChange = (e) => {
+
+  handlePasswordChange = e => {
     this.setState({
-        password: e.target.value,
+      password: e.target.value
     });
   };
-  
-  handleMnemonicChange = (e) => {
+
+  handleMnemonicChange = e => {
     this.setState({
-      mnemonic: e.target.value,
+      mnemonic: e.target.value
     });
   };
-  
-  handleContinueClick = async (e) => {
+
+  handleContinueClick = async e => {
     e.preventDefault();
-  
+
     const redirectUrl = this.props.isCurrentTransactionActive
-      ? '/transaction-sign-request'
-      : '/wallet';
-    
+      ? "/transaction-sign-request"
+      : "/wallet";
+
     if (this.arePasswordAndMnemonicValid()) {
-      const result = await this.props.tryCreateWalletByMnemonic(this.state.mnemonic, this.state.password);
+      const result = await this.props.tryCreateWalletByMnemonic(
+        this.state.mnemonic,
+        this.state.password
+      );
       if (result.isCreationSucceed) {
         this.props.history.push(redirectUrl);
       } else {
-        this.props.spawnErrorNotification('Recovering failed, please check you password');
+        this.props.spawnErrorNotification(
+          "Recovering failed, please check you password"
+        );
       }
     }
   };
-  
+
   arePasswordAndMnemonicValid() {
     return this.state.mnemonic && this.state.password;
   }
 }
-
 
 export default ImportRoute;

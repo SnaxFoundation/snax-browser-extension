@@ -1,5 +1,9 @@
 import bip39 from "bip39";
-import { PrivateKey, seedPrivate, privateToPublic } from "eosjs-ecc";
+import {
+  PrivateKey,
+  seedPrivate,
+  privateToPublic
+} from "@snaxfoundation/snaxjs-ecc";
 import { Inject } from "src/context/steriotypes/Inject";
 import { Singleton } from "src/context/steriotypes/Singleton";
 import { EncryptedStorage } from "src/services/misc/EncryptedStorage";
@@ -72,7 +76,9 @@ export class WalletManager {
       return WalletExtractionResult.negative();
     }
 
-    return new WalletExtractionResult(new Wallet(wif));
+    const wallet = new WalletExtractionResult(new Wallet(wif));
+
+    return wallet;
   }
 
   clear() {

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import {TransactionActions} from 'src/store/transaction/TransactionActions';
-import {TransactionSelectors} from 'src/store/transaction/TransactionSelectors';
-import {ReduxContainer} from 'src/utils/redux/ReduxContainer';
+import React, { Component } from "react";
+import { TransactionActions } from "src/store/transaction/TransactionActions";
+import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
   Button,
@@ -10,11 +10,10 @@ import {
   ParagraphError,
   Row,
   Screen,
-  ScreenTitle,
-} from '../components';
+  ScreenTitle
+} from "../components";
 
-import { TransactionAmount, TransactionRecipient } from '../containers';
-
+import { TransactionAmount, TransactionRecipient } from "../containers";
 
 @ReduxContainer(TransactionSelectors, TransactionActions)
 class TransactionSignRequestRoute extends Component {
@@ -27,12 +26,15 @@ class TransactionSignRequestRoute extends Component {
             <TransactionAmount amount={this.props.currentTransactionAmount} />
           </Row>
           <Row>
-            <TransactionRecipient type="twitter" name={this.props.currentTransactionRecipient} />
+            <TransactionRecipient
+              type="twitter"
+              name={this.props.currentTransactionRecipient}
+            />
           </Row>
           {this._renderErrorIfNeeded()}
         </Content>
         <ButtonRow>
-          <Button onClick={this._handleConfirmClick} spread >
+          <Button onClick={this._handleConfirmClick} spread>
             Confirm
           </Button>
 
@@ -43,22 +45,22 @@ class TransactionSignRequestRoute extends Component {
       </Screen>
     );
   }
-  
+
   _renderErrorIfNeeded() {
     return (
       <Row>
         <ParagraphError>Not enought tokens</ParagraphError>
       </Row>
-    )
+    );
   }
-  
-  _handleConfirmClick = () => {
-    this.props.signTransaction();
-    window.close();
+
+  _handleConfirmClick = async () => {
+    await this.props.signTransaction();
+    //window.close();
   };
-  
-  _handleCancelClick = () => {
-    this.props.discardTransaction();
+
+  _handleCancelClick = async () => {
+    await this.props.discardTransaction();
     window.close();
   };
 }

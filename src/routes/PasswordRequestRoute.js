@@ -72,7 +72,6 @@ class PasswordRequestRoute extends Component {
 
   handleOpenWalletClick = async e => {
     e.preventDefault();
-    console.log(this.state);
 
     if (this.isPasswordValid()) {
       const result = await this.props.tryExtractWalletFromStorage(

@@ -45,7 +45,6 @@ class NewWalletRoute extends Component {
               <PasswordField
                 error={!validator.isValid}
                 onChange={this.handleInputChange}
-                value="Brave_new_world12"
               />
               <TextFieldMessage error={!validator.areMoreThan7CharactersUsed}>
                 <ListUnordered>

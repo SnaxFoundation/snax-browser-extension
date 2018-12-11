@@ -1,14 +1,14 @@
 import "babel-polyfill";
 import { Inject } from "src/context/steriotypes/Inject";
-import { PublicOnPageEosProvider } from "src/services/eos/PublicOnPageEosProvider";
+import { PublicOnPageSnaxProvider } from "src/services/eos/PublicOnPageSnaxProvider";
 
 class InjectedScript {
-  @Inject(PublicOnPageEosProvider) publicOnPageEosProvider;
+  @Inject(PublicOnPageSnaxProvider) publicOnPageSnaxProvider;
 
   run() {
     const snaxObject = {
-      transfer: this.publicOnPageEosProvider.transfer.bind(
-        this.publicOnPageEosProvider
+      transfer: this.publicOnPageSnaxProvider.transfer.bind(
+        this.publicOnPageSnaxProvider
       )
     };
 

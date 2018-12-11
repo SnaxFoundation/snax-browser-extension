@@ -4,7 +4,7 @@ import {PublicTransactionOutboundCommunicator} from 'src/services/communication/
 import {IdFactory} from 'src/utils/misc/IdFactory';
 
 @Singleton
-export class PublicOnPageEosProvider {
+export class PublicOnPageSnaxProvider {
   
   @Inject(PublicTransactionOutboundCommunicator)
   _transactionOutboundCommunicator;

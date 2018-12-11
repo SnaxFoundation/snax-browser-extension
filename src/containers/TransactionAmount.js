@@ -13,7 +13,7 @@ const Amount = styled.div`
 
 export const TransactionAmount = ({ amount, ...props }) => (
   <Wrapper {...props}>
-    <Amount>{amount} MNT</Amount>
+    <Amount>{amount} SNAX</Amount>
     <ParagraphCaption>${amount * 0.01} approximately</ParagraphCaption>
   </Wrapper>
 );
