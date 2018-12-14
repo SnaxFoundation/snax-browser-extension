@@ -1,10 +1,13 @@
 import { Actions } from "src/context/redux/Actions";
 import { Inject } from "src/context/steriotypes/Inject";
 import { PasswordManager } from "src/services/accounts/PasswordManager";
+//import { PrivateSnaxProvider } from "src/services/accounts/PrivateSnaxProvider";
 import { WalletManager } from "src/services/accounts/WalletManager";
 import {
   UPDATE_MNEMONIC,
-  UPDATE_PUBLIC_KEY
+  UPDATE_PUBLIC_KEY,
+  UPDATE_BALANCE,
+  UPDATE_ACCOUNT
 } from "src/store/wallet/WalletConstants";
 import { Action, ThunkAction } from "src/utils/redux/Action";
 
@@ -13,6 +16,16 @@ export class WalletActions {
   @Inject(PasswordManager) passwordManager;
 
   @Inject(WalletManager) walletManager;
+
+  /*@Inject(PrivateSnaxProvider) privateSnaxProvider;
+
+  @ThunkAction
+  updateAccountBalance() {
+    return async dispatch => {
+      const balance = await this.privateSnaxProvider.getBalance();
+      dispatch(this._updateBalance(balance));
+    };
+}*/
 
   @ThunkAction
   createWifCandidate(passwordCandidate) {
@@ -76,6 +89,16 @@ export class WalletActions {
   @Action(UPDATE_PUBLIC_KEY)
   _updatePublicKey(publicKey) {
     return { publicKey };
+  }
+
+  @Action(UPDATE_BALANCE)
+  _updateBalance(balance) {
+    return { balance };
+  }
+
+  @Action(UPDATE_ACCOUNT)
+  _updateAccount(account) {
+    return { account };
   }
 
   @Action(UPDATE_MNEMONIC)

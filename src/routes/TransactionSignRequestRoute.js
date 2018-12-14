@@ -31,13 +31,13 @@ class TransactionSignRequestRoute extends Component {
               name={this.props.currentTransactionRecipient.platformAccountName}
             />
           </Row>
+          {this._renderBalance()}
           {this._renderErrorIfNeeded()}
         </Content>
         <ButtonRow>
           <Button onClick={this._handleConfirmClick} spread>
             Confirm
           </Button>
-
           <Button onClick={this._handleCancelClick} colorScheme="flat" spread>
             Cancel
           </Button>
@@ -47,11 +47,21 @@ class TransactionSignRequestRoute extends Component {
   }
 
   _renderErrorIfNeeded() {
-    return (
-      <Row>
-        <ParagraphError>Not enough tokens</ParagraphError>
-      </Row>
-    );
+    if (
+      parseFloat(this.props.currentAccountBalance) >
+      parseFloat(this.props.currentTransactionAmount)
+    )
+      return null;
+    else
+      return (
+        <Row>
+          <ParagraphError>Not enough tokens</ParagraphError>
+        </Row>
+      );
+  }
+
+  _renderBalance() {
+    return <Row> Your balance is: {this.props.currentAccountBalance}</Row>;
   }
 
   _handleConfirmClick = async () => {

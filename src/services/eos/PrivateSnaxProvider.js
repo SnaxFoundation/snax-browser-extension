@@ -7,6 +7,17 @@ import { Inject } from "src/context/steriotypes/Inject";
 export class PrivateSnaxProvider {
   @Inject(WalletManager) walletManager;
 
+  rpc = new JsonRpc(process.env.SNAXNODE || "http://172.31.38.163:8888", {
+    fetch
+  });
+
+  async getBalance(account) {
+    return (
+      (await this.rpc.get_currency_balance("snax.token", account, "SNAX"))[0] ||
+      "0.0000 SNAX"
+    );
+  }
+
   async transfer(from, to, amount) {
     let error = null;
     console.log(
@@ -18,18 +29,12 @@ export class PrivateSnaxProvider {
         amount
     );
     try {
-      const rpc = new JsonRpc(
-        process.env.SNAXNODE || "http://172.31.38.163:8888",
-        {
-          fetch
-        }
-      );
       const {
         wallet: { wif: privateKey }
       } = await this.walletManager.getWallet();
       const signatureProvider = new JsSignatureProvider([privateKey]);
       const api = new Api({
-        rpc,
+        rpc: this.rpc,
         signatureProvider,
         textDecoder: new TextDecoder(),
         textEncoder: new TextEncoder()

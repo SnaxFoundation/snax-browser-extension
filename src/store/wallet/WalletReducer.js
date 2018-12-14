@@ -3,7 +3,9 @@ import { Inject } from "src/context/steriotypes/Inject";
 import { WalletManager } from "src/services/accounts/WalletManager";
 import {
   UPDATE_MNEMONIC,
-  UPDATE_PUBLIC_KEY
+  UPDATE_PUBLIC_KEY,
+  UPDATE_BALANCE,
+  UPDATE_ACCOUNT
 } from "src/store/wallet/WalletConstants";
 import { Reduce } from "src/utils/redux/Reduce";
 
@@ -19,9 +21,24 @@ export class WalletReducer {
     };
   }
 
+  @Reduce(UPDATE_BALANCE)
+  handleUpdateBalance(state, payload) {
+    return {
+      ...state,
+      balance: payload.balance
+    };
+  }
+
+  @Reduce(UPDATE_ACCOUNT)
+  handleUpdateAccount(state, payload) {
+    return {
+      ...state,
+      account: payload.account
+    };
+  }
+
   @Reduce(UPDATE_MNEMONIC)
   handleUpdateMnemonic(state, payload) {
-    console.log(state, payload);
     return {
       ...state,
       mnemonic: payload.mnemonic

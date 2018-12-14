@@ -54,9 +54,11 @@ export class TransactionActions {
       const toId = await this.accountResolver.getIdByAccountName(to);
       const accountName = await this.accountResolver.getAccountNameById(toId);
       if (accountName !== to) {
-        throw new Error("Can\t resolve to account");
+        throw new Error('Can\'t resolve "to" account');
       }
+      const currentBalance = await this.privateSnaxProvider.getBalance(from);
       const transaction = {
+        balance: currentBalance,
         id,
         from,
         to: { platformId: toId, platformAccountName: to },
@@ -64,6 +66,7 @@ export class TransactionActions {
       };
       dispatch(
         this.setTransactionToSign(
+          currentBalance,
           id,
           from,
           { platformId: toId, platformAccountName: to },
@@ -75,8 +78,9 @@ export class TransactionActions {
   }
 
   @Action(SET_TRANSACTION_TO_SIGN)
-  setTransactionToSign(id, from, to, amount) {
+  setTransactionToSign(balance, id, from, to, amount) {
     return {
+      balance,
       id,
       to,
       from,

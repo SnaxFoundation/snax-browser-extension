@@ -25,6 +25,11 @@ export class TransactionSelectors {
   }
 
   @Selector
+  currentAccountBalance(state) {
+    return state.balance;
+  }
+
+  @Selector
   currentTransactionError(state) {
     return state.error;
   }
