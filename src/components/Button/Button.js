@@ -41,10 +41,10 @@ const colorScheme = ({ colorScheme = 'primary', disabled }) =>
     &,
     &:hover,
     &:focus {
-      background-color: rgba(0,0,0,0.1);
+      background-color: rgba(180,180,180,0.1);
       color: ${constants.textColor.medium};
       cursor: default;
-      pointer-evemts: none;
+      pointer-events: none;
     }
   `
     : css`

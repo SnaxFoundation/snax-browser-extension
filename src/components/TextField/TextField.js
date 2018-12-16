@@ -22,7 +22,7 @@ const colorScheme = ({ disabled }) =>
       &:focus {
         box-shadow: none;
         outline: none;
-        background-color: rgba(0,0,0,0.07);
+        background-color: rgba(180,180,180,0.1);
         color: ${constants.textColor.medium};
         cursor: default;
         border: 1px solid transparent;
@@ -34,10 +34,11 @@ const colorScheme = ({ disabled }) =>
         &:focus {
           box-shadow: none;
           outline: none;
-          background-color: #fff;
+          background-color: ${constants.paletteBlueGrey[900]};
           color: currentColor;
           border: 1px solid
-            ${props => (props.error ? constants.color.error : 'transparent')};
+            ${props =>
+              props.error ? constants.color.error : constants.colorBorder};
         }
 
         &:hover,

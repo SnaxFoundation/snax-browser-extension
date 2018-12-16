@@ -6,8 +6,10 @@
   "author": "https://snax.com",
   "description": "Snax extension",
   "icons": {
-    "16": "favicon.png",
-    "128": "favicon.png"
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "background": {
     "scripts": ["background.bundle.js"],
@@ -15,8 +17,8 @@
   },
   "browser_action": {
     "default_icon": {
-      "19": "favicon.png",
-      "38": "favicon.png"
+      "19": "icon16.png",
+      "38": "icon32.png"
     },
     "default_title": "Snax",
     "default_popup": "index.html"
