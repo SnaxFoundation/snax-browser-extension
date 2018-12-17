@@ -24,7 +24,7 @@ const sizeMap = {
     lineHeight: 1.4,
     borderRadius: `${constants.borderRadius}px`,
     fontSize: constants.fontSize.button,
-    padding: '0.75em 1.5em',
+    padding: '0.5em 1.5em',
   },
 
   small: {

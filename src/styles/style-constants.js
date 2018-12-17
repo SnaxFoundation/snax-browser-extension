@@ -69,19 +69,19 @@ export default {
   fontSize: {
     xsmall: 10,
     small: 13,
-    body: 16,
+    body: 14,
     body2: 18,
     button: 18,
     heading: 20,
-    heading2: 28,
-    title: 36,
+    heading2: 24,
+    title: 30,
     display1: 45,
   },
 
   grid: {
-    appPaddingY: 20,
-    appPaddingX: 20,
-    spacingY: 15,
+    appPaddingY: 15,
+    appPaddingX: 15,
+    spacingY: 10,
     spacingX: 10,
   },
 

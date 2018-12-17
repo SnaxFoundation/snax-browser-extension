@@ -1,10 +1,10 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import styled from "styled-components";
-import { NotificationActions } from "src/store/notifications/NotificationActions";
-import { WalletActions } from "src/store/wallet/WalletActions";
-import { WalletSelectors } from "src/store/wallet/WalletSelectors";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import { NotificationActions } from 'src/store/notifications/NotificationActions';
+import { WalletActions } from 'src/store/wallet/WalletActions';
+import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
+import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
 
 import {
   ButtonLink,
@@ -13,32 +13,20 @@ import {
   Row,
   Screen,
   ScreenTitle,
-  ParagraphBody
-} from "../components";
+  ParagraphBody,
+} from '../components';
 
-import { SecretWordInput, SecretPhraseWrapper } from "../containers";
+import { SecretWordInput, SecretPhraseWrapper } from '../containers';
 
 // TODO Replace ButtonLink with Button after removing link
 //
-const CustomizedScreenTitle = styled(ScreenTitle)`
-  margin-bottom: 5px;
-`;
-
-const CustomizedContent = styled(Content)`
-  padding-top: 5px;
-  padding-bottom: 0px;
-`;
-
-const CustomizedButtonRow = styled(ButtonRow)`
-  margin-top: 5px;
-`;
 
 @ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
 class SecretPhraseRoute extends Component {
   static propTypes = {
     spawnSuccessNotification: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    mnemonic: PropTypes.string
+    mnemonic: PropTypes.string,
   };
 
   _renderMnemonic() {
@@ -47,7 +35,7 @@ class SecretPhraseRoute extends Component {
     }
 
     return this.props.mnemonic
-      .split(" ")
+      .split(' ')
       .map((item, idx) => (
         <SecretWordInput number={idx + 1} value={item} disabled size="small" />
       ));
@@ -58,18 +46,18 @@ class SecretPhraseRoute extends Component {
 
     return (
       <Screen>
-        <CustomizedScreenTitle>Secret phrase</CustomizedScreenTitle>
+        <ScreenTitle>Secret phrase</ScreenTitle>
         <Row>
           <ParagraphBody>
             This 12 words will help your to restore your wallet. Save it
             somewhere safe and secure.
           </ParagraphBody>
         </Row>
-        <CustomizedContent spread centerY>
+        <Content spread centerY>
           <Row>
             <SecretPhraseWrapper>{mnemonic}</SecretPhraseWrapper>
           </Row>
-        </CustomizedContent>
+        </Content>
         <Row className="text-align-center">
           <div>
             <ParagraphBody>
@@ -81,7 +69,7 @@ class SecretPhraseRoute extends Component {
             </ParagraphBody>
           </div>
         </Row>
-        <CustomizedButtonRow>
+        <ButtonRow>
           <ButtonLink spread to="/confirm-phrase">
             I've saved it
           </ButtonLink>
@@ -89,7 +77,7 @@ class SecretPhraseRoute extends Component {
           <ButtonLink colorScheme="flat" spread to="/">
             Cancel
           </ButtonLink>
-        </CustomizedButtonRow>
+        </ButtonRow>
       </Screen>
     );
   }
