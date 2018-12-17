@@ -1,30 +1,27 @@
-'use strict';
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const paths = require('./paths');
-const CleanWebpackPlugin = require("clean-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-
-
-module.exports = (env) => {
+module.exports = env => {
   const isPackaging = env.packaging === 'true';
-  
-  const indexEntries = [path.join(paths.appSrc, "index.js")];
-  
+
+  const indexEntries = [path.join(paths.appSrc, 'index.js')];
+
   if (!isPackaging) {
     indexEntries.push(require.resolve('react-dev-utils/webpackHotDevClient'));
   }
-  
+
   return {
     devtool: 'cheap-module-source-map',
     entry: {
       index: indexEntries,
-      background: path.join(paths.appSrc, "background.js"),
-      injected: path.join(paths.appSrc, "injected.js"),
-      contentscript: path.join(paths.appSrc, "contentscript.js")
+      background: path.join(paths.appSrc, 'background.js'),
+      injected: path.join(paths.appSrc, 'injected.js'),
+      contentscript: path.join(paths.appSrc, 'contentscript.js'),
     },
     output: {
       path: paths.appBuild,
@@ -33,7 +30,7 @@ module.exports = (env) => {
     },
     resolve: {
       modules: ['node_modules', paths.appDirectory],
-      extensions: ['.js', '.json', '.jsx']
+      extensions: ['.js', '.json', '.jsx'],
     },
     module: {
       strictExportPresence: true,
@@ -68,8 +65,22 @@ module.exports = (env) => {
       ],
     },
     plugins: [
-      new CleanWebpackPlugin(["build"]),
-      new CopyWebpackPlugin([{from: "manifest.json"}, {from: 'public/favicon.png'}]),
+      new CleanWebpackPlugin(['build']),
+      new CopyWebpackPlugin([
+        { from: 'manifest.json' },
+        {
+          from: 'public/icon16.png',
+        },
+        {
+          from: 'public/icon32.png',
+        },
+        {
+          from: 'public/icon48.png',
+        },
+        {
+          from: 'public/icon128.png',
+        },
+      ]),
       new HtmlWebpackPlugin({
         inject: true,
         template: paths.appHtml,
@@ -80,5 +91,5 @@ module.exports = (env) => {
       new CaseSensitivePathsPlugin(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
-  }
+  };
 };

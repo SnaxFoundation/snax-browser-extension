@@ -5,7 +5,7 @@ export default {
   primary: {
     bgColor: constants.color.primary,
     bgColorHover: Color(constants.color.primary).darken(0.1),
-    color: '#fff',
+    color: '#000',
   },
 
   secondary: {
@@ -16,7 +16,7 @@ export default {
 
   flat: {
     bgColor: 'rgba(0,0,0,0)',
-    bgColorHover: 'rgba(0,0,0,0.1)',
-    color: '#000',
+    bgColorHover: 'rgba(255,255,255,0.1)',
+    color: '#fff',
   },
 };
