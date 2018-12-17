@@ -23,7 +23,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["file://*/*", "http://*/*", "https://*/*"],
+      "matches": ["http://localhost/*", "https://snax.one/*"],
       "js": ["contentscript.bundle.js"],
       "run_at": "document_start",
       "all_frames": true

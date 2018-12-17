@@ -7,7 +7,7 @@ import { Inject } from "src/context/steriotypes/Inject";
 export class PrivateSnaxProvider {
   @Inject(WalletManager) walletManager;
 
-  rpc = new JsonRpc(process.env.SNAXNODE || "http://172.31.38.163:8888", {
+  rpc = new JsonRpc(process.env.SNAXNODE || "https://testnetcdn.snax.one", {
     fetch
   });
 

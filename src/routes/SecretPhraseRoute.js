@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
+import styled from "styled-components";
 import { NotificationActions } from "src/store/notifications/NotificationActions";
 import { WalletActions } from "src/store/wallet/WalletActions";
 import { WalletSelectors } from "src/store/wallet/WalletSelectors";
@@ -18,6 +19,14 @@ import {
 import { SecretWordInput, SecretPhraseWrapper } from "../containers";
 
 // TODO Replace ButtonLink with Button after removing link
+//
+const CustomizedScreenTitle = styled(ScreenTitle)`
+  margin-bottom: 0px;
+`;
+
+const CustomizedContent = styled(Content)`
+  padding: 0px;
+`;
 
 @ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
 class SecretPhraseRoute extends Component {
@@ -44,18 +53,18 @@ class SecretPhraseRoute extends Component {
 
     return (
       <Screen>
-        <ScreenTitle>Secret phrase</ScreenTitle>
+        <CustomizedScreenTitle>Secret phrase</CustomizedScreenTitle>
         <Row>
           <ParagraphBody>
             This 12 words will help your to restore your wallet. Save it
             somewhere safe and secure.
           </ParagraphBody>
         </Row>
-        <Content spread centerY>
+        <CustomizedContent spread centerY>
           <Row>
             <SecretPhraseWrapper>{mnemonic}</SecretPhraseWrapper>
           </Row>
-        </Content>
+        </CustomizedContent>
         <Row className="text-align-center">
           <div>
             <ParagraphBody>

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import constants from '../../styles/style-constants';
+import styled from "styled-components";
+import constants from "../../styles/style-constants";
 
 export const ScreenTitle = styled.h2`
   font-size: ${constants.fontSize.title}px;
