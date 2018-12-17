@@ -60,7 +60,10 @@ module.exports = {
     new CleanWebpackPlugin(["build"]),
     new CopyWebpackPlugin([
       { from: "manifest.json" },
-      { from: "public/favicon.png" }
+      { from: "public/icon16.png" },
+      { from: "public/icon32.png" },
+      { from: "public/icon48.png" },
+      { from: "public/icon128.png" }
     ]),
     new HtmlWebpackPlugin({
       inject: true,

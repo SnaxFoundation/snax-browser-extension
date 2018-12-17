@@ -21,11 +21,16 @@ import { SecretWordInput, SecretPhraseWrapper } from "../containers";
 // TODO Replace ButtonLink with Button after removing link
 //
 const CustomizedScreenTitle = styled(ScreenTitle)`
-  margin-bottom: 0px;
+  margin-bottom: 5px;
 `;
 
 const CustomizedContent = styled(Content)`
-  padding: 0px;
+  padding-top: 5px;
+  padding-bottom: 0px;
+`;
+
+const CustomizedButtonRow = styled(ButtonRow)`
+  margin-top: 5px;
 `;
 
 @ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
@@ -76,7 +81,7 @@ class SecretPhraseRoute extends Component {
             </ParagraphBody>
           </div>
         </Row>
-        <ButtonRow>
+        <CustomizedButtonRow>
           <ButtonLink spread to="/confirm-phrase">
             I've saved it
           </ButtonLink>
@@ -84,7 +89,7 @@ class SecretPhraseRoute extends Component {
           <ButtonLink colorScheme="flat" spread to="/">
             Cancel
           </ButtonLink>
-        </ButtonRow>
+        </CustomizedButtonRow>
       </Screen>
     );
   }
