@@ -14,6 +14,7 @@ export class TransactionReducer {
   handleSettingTransactionToSign(state, payload) {
     return {
       ...state,
+      balance: payload.balance,
       from: payload.from,
       amount: payload.amount,
       id: payload.id,

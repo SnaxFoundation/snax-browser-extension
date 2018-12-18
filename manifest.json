@@ -26,12 +26,23 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://*.snax.one/*", "https://snax.one/*"],
+      "matches": [
+        "https://*.snax.one/*",
+        "https://snax.one/*",
+        "http://localhost:3000/*"
+      ],
       "js": ["contentscript.bundle.js"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
   "web_accessible_resources": ["injected.bundle.js"],
-  "permissions": ["storage", "activeTab", "notifications"]
+  "permissions": [
+    "storage",
+    "activeTab",
+    "webRequest",
+    "clipboardCopier",
+    "notifications",
+    "https://*/"
+  ]
 }
