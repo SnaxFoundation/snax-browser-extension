@@ -1,5 +1,10 @@
 ## Snax browser extension 
 
+### Supported browsers
+
+* Google Chrome
+* Firefox (WIP)
+
 ### Dependencies
 `npm install` or `yarn install`
 
