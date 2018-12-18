@@ -1,7 +1,7 @@
 ## Snax browser extension 
 
 ### Dependencies
-`npm install` or `yarn install`\
+`npm install` or `yarn install`
 
 ### Build options
 
