@@ -3,8 +3,8 @@
   "short_name": "SNAX",
   "version": "0.1.0",
   "manifest_version": 2,
-  "author": "https://snax.com",
-  "description": "Snax extension",
+  "author": "https://snax.one",
+  "description": "Snax browser extension",
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
