@@ -1,5 +1,5 @@
 {
-  "name": "snax-extension",
+  "name": "snax-browser-extension",
   "version": "0.1.1",
   "private": true,
   "dependencies": {
