@@ -1,5 +1,5 @@
 import { Inject } from "src/context/steriotypes/Inject";
-import { PublicOnPageSnaxProvider } from "src/services/eos/PublicOnPageSnaxProvider";
+import { PublicOnPageSnaxProvider } from "src/services/snax/PublicOnPageSnaxProvider";
 
 class InjectedScript {
   @Inject(PublicOnPageSnaxProvider) publicOnPageSnaxProvider;

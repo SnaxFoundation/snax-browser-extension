@@ -1,6 +1,6 @@
 import { Actions } from "src/context/redux/Actions";
 import { Inject } from "src/context/steriotypes/Inject";
-import { PrivateSnaxProvider } from "src/services/eos/PrivateSnaxProvider";
+import { PrivateSnaxProvider } from "src/services/snax/PrivateSnaxProvider";
 import { TransactionManager } from "src/services/transaction/TransactionManager";
 import { AccountResolver } from "src/services/accounts/AccountResolver";
 import {
