@@ -2,7 +2,7 @@ import {Actions} from 'src/context/redux/Actions';
 import {HIDE, SHOW} from 'src/store/notifications/NotificationConstants';
 import {Action} from 'src/utils/redux/Action';
 
-const DELAY = 1000;
+const DELAY = 5000;
 
 @Actions
 export class NotificationActions {

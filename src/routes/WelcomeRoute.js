@@ -16,7 +16,7 @@ class WelcomeRoute extends Component {
       <Screen>
         <BrandBox>
           <BrandBoxTitle>Snax</BrandBoxTitle>
-          <BrandBoxSubtitle>wallet</BrandBoxSubtitle>
+          <BrandBoxSubtitle>extension</BrandBoxSubtitle>
         </BrandBox>
         <Content spread centerY>
           <Row>

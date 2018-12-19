@@ -69,12 +69,12 @@ export default {
   fontSize: {
     xsmall: 10,
     small: 13,
-    body: 14,
-    body2: 18,
-    button: 18,
+    body: 13,
+    body2: 16,
+    button: 16,
     heading: 20,
     heading2: 24,
-    title: 30,
+    title: 24,
     display1: 45,
   },
 
