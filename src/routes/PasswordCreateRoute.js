@@ -21,7 +21,7 @@ import {
 // TODO Replace ButtonLink with Button after removing link
 
 @ReduxContainer(WalletSelectors, WalletActions)
-class NewWalletRoute extends Component {
+class PasswordCreateRoute extends Component {
   static propTypes = {
     createWifCandidate: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
@@ -92,15 +92,24 @@ class NewWalletRoute extends Component {
 
   handleCreation = async e => {
     const { passwordCandidate } = this.state;
+    const { publicKey } = this.props;
     e.preventDefault();
 
     const validator = new PasswordValidator(passwordCandidate);
 
     if (validator.isValid) {
-      await this.props.createWifCandidate(passwordCandidate);
-      this.props.history.push("/secret-phrase");
+      if (!publicKey) {
+        await this.props.createWifCandidate(passwordCandidate);
+        this.props.history.push("/secret-phrase");
+      } else {
+        await this.props.setPassword(passwordCandidate);
+        const redirectUrl = this.props.isCurrentTransactionActive
+          ? "/transaction-sign-request"
+          : "/wallet";
+        this.props.history.push(redirectUrl);
+      }
     }
   };
 }
 
-export default NewWalletRoute;
+export default PasswordCreateRoute;

@@ -13,9 +13,6 @@ export class PasswordManager {
   async getPassword() {
     const password = await this.passwordOutboundCommunicator.getPassword();
 
-    if (password == null) {
-      throw new Error("password is not defined");
-    }
     return password;
   }
 

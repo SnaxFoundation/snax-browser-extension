@@ -8,9 +8,9 @@ import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
   ButtonLink,
+  Button,
   ButtonRow,
   Content,
-  PasswordField,
   Row,
   Screen,
   ScreenTitle,
@@ -31,7 +31,6 @@ class ImportRoute extends Component {
   };
 
   state = {
-    password: "",
     mnemonic: ""
   };
 
@@ -51,21 +50,15 @@ class ImportRoute extends Component {
               />
             </TextFieldWrapper>
           </Row>
-          <Row>
-            <TextFieldWrapper>
-              <PasswordField onChange={this.handlePasswordChange} />
-            </TextFieldWrapper>
-          </Row>
         </Content>
         <ButtonRow>
-          <ButtonLink
+          <Button
             onClick={this.handleContinueClick}
-            disabled={!this.arePasswordAndMnemonicValid()}
+            disabled={!this.isMnemonicValid()}
             spread
-            to="/password"
           >
             Continue
-          </ButtonLink>
+          </Button>
           <ButtonLink colorScheme="flat" spread to="/">
             Cancel
           </ButtonLink>
@@ -73,17 +66,6 @@ class ImportRoute extends Component {
       </Screen>
     );
   }
-  handlePasswordButtonClick = () => {
-    this.setState({
-      passwordIsVisible: !this.state.passwordIsVisible
-    });
-  };
-
-  handlePasswordChange = e => {
-    this.setState({
-      password: e.target.value
-    });
-  };
 
   handleMnemonicChange = e => {
     this.setState({
@@ -94,27 +76,21 @@ class ImportRoute extends Component {
   handleContinueClick = async e => {
     e.preventDefault();
 
-    const redirectUrl = this.props.isCurrentTransactionActive
-      ? "/transaction-sign-request"
-      : "/wallet";
-
-    if (this.arePasswordAndMnemonicValid()) {
+    if (this.isMnemonicValid()) {
       const result = await this.props.tryCreateWalletByMnemonic(
-        this.state.mnemonic,
-        this.state.password
+        this.state.mnemonic
       );
       if (result.isCreationSucceed) {
-        this.props.history.push(redirectUrl);
+        await this.props.setPassword("");
+        this.props.history.push("/new-wallet");
       } else {
-        this.props.spawnErrorNotification(
-          "Recovering failed, please check you password"
-        );
+        this.props.spawnErrorNotification("Recovering failed");
       }
     }
   };
 
-  arePasswordAndMnemonicValid() {
-    return this.state.mnemonic && this.state.password;
+  isMnemonicValid() {
+    return this.state.mnemonic && this.state.mnemonic.split(" ").length === 12;
   }
 }
 

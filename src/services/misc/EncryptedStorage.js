@@ -25,12 +25,12 @@ export class EncryptedStorage {
 
     const password = await this.passwordManager.getPassword();
 
-    return AES.decrypt(value, password).toString(enc.Utf8);
+    return AES.decrypt(value, password || "").toString(enc.Utf8);
   }
 
   async setItem(key, string) {
     const password = await this.passwordManager.getPassword();
-    const encryptedString = AES.encrypt(string, password);
+    const encryptedString = AES.encrypt(string, password || "");
 
     return localStorage.setItem(key, encryptedString);
   }

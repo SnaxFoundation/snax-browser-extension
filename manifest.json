@@ -1,7 +1,7 @@
 {
   "name": "Snax",
   "short_name": "Snax",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "manifest_version": 2,
   "author": "https://snax.one",
   "description": "Snax browser extension",
@@ -41,9 +41,11 @@
     "storage",
     "activeTab",
     "webRequest",
-    "clipboardCopier",
+    "clipboardWrite",
+    "clipboardRead",
     "notifications",
     "https://twitter.com/*",
-    "https://snax.one/*"
+    "https://snax.one/*",
+    "https://*.snax.one/*"
   ]
 }

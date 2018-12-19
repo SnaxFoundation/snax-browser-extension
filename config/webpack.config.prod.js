@@ -10,10 +10,7 @@ module.exports = {
   bail: true,
   devtool: false,
   entry: {
-    index: path.join(paths.appSrc, "index.js"),
-    background: path.join(paths.appSrc, "background.js"),
-    injected: path.join(paths.appSrc, "injected.js"),
-    contentscript: path.join(paths.appSrc, "contentscript.js")
+    index: path.join(paths.appSrc, "index.js")
   },
   output: {
     path: paths.appBuild,

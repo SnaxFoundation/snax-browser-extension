@@ -15,7 +15,7 @@ import { App } from "./components";
 import {
   UnknownDomainRoute,
   WelcomeRoute,
-  NewWalletRoute,
+  PasswordCreateRoute,
   SecretPhraseRoute,
   WalletRoute,
   ImportRoute,
@@ -57,7 +57,6 @@ class Root extends React.Component {
         transaction.to,
         transaction.amount
       )(this.state.store.dispatch);
-
 
       const canUse = await this.canUse();
       const hasWallet = await this.hasWallet();
@@ -106,7 +105,7 @@ class Root extends React.Component {
                 component={SecretPhraseConfirmRoute}
               />
               <Route path="/unknown" component={UnknownDomainRoute} />
-              <Route path="/new-wallet" component={NewWalletRoute} />
+              <Route path="/new-wallet" component={PasswordCreateRoute} />
               <Route path="/secret-phrase" component={SecretPhraseRoute} />
               <Route path="/wallet" component={WalletRoute} />
               <Route path="/import-wallet" component={ImportRoute} />
@@ -129,7 +128,7 @@ class Root extends React.Component {
   }
 
   async canUse() {
-    return await this.walletManager.hasWalletAndCanUse();
+    return await this.state.store.getState().wallet.hasWallet;
   }
 }
 export default Root;
