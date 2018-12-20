@@ -87,8 +87,8 @@ export class WalletActions {
   @ThunkAction
   clearWallet() {
     return async dispatch => {
-      this.walletManager.clear();
-      this.encryptedStorage.setItem(WIF_STORAGE_ITEM_NAME, null);
+      await this.encryptedStorage.removeItem(WIF_STORAGE_ITEM_NAME);
+      await this.walletManager.clear();
       await this.passwordManager.clearPassword();
       dispatch(this._updatePublicKey(""));
       dispatch(this._updateMnemonic(""));

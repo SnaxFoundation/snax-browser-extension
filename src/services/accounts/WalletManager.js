@@ -91,7 +91,9 @@ export class WalletManager {
     return wallet;
   }
 
-  clear() {}
+  async clear() {
+    return this.encryptedStorage.hasItem(WIF_STORAGE_ITEM_NAME);
+  }
 }
 
 /*
