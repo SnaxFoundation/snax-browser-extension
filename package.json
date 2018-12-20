@@ -75,7 +75,7 @@
     "test": "jest --projects src",
     "integration-test": "jest --projects selenium",
     "start": "node scripts/start.js",
-    "build": "webpack --config ./config/webpack.config.prod.js",
+    "build": "webpack --config ./config/webpack.config.prod.js && webpack --config ./config/webpack.config.prod.ext.js",
     "package": "webpack --config ./config/webpack.config.dev.js --env.packaging=true"
   },
   "babel": {
