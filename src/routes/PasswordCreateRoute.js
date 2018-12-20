@@ -73,7 +73,7 @@ class PasswordCreateRoute extends Component {
             spread
             to="/secret-phrase"
           >
-            Create new wallet
+            {this.props.publicKey ? "Import wallet" : "Create new wallet"}
           </ButtonLink>
 
           <ButtonLink colorScheme="flat" spread to="/">

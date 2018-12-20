@@ -90,7 +90,15 @@ class ImportRoute extends Component {
   };
 
   isMnemonicValid() {
-    return this.state.mnemonic && this.state.mnemonic.split(" ").length === 12;
+    return (
+      this.state.mnemonic &&
+      this.state.mnemonic
+        .split(" ")
+        .reduce(
+          (count, word) => (/^a-zA-Z0-9$/.test(word) ? count + 1 : false),
+          0
+        ) === 12
+    );
   }
 }
 
