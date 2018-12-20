@@ -8,6 +8,9 @@ class InjectedScript {
     const snaxObject = {
       transfer: this.publicOnPageSnaxProvider.transfer.bind(
         this.publicOnPageSnaxProvider
+      ),
+      getPublicKey: this.publicOnPageSnaxProvider.getPublicKey.bind(
+        this.publicOnPageSnaxProvider
       )
     };
 
