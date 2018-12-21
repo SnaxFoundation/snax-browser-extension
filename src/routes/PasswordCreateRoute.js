@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { WalletActions } from "src/store/wallet/WalletActions";
-import { WalletSelectors } from "src/store/wallet/WalletSelectors";
-import { PasswordValidator } from "src/utils/validators/PasswordValidator";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { WalletActions } from 'src/store/wallet/WalletActions';
+import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
+import { PasswordValidator } from 'src/utils/validators/PasswordValidator';
+import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
 
 import {
   ButtonLink,
@@ -15,8 +15,10 @@ import {
   ScreenTitle,
   TextFieldMessage,
   TextFieldWrapper,
-  PasswordField
-} from "../components";
+  PasswordField,
+  SecondaryInfoBox,
+  Anchor,
+} from '../components';
 
 // TODO Replace ButtonLink with Button after removing link
 
@@ -24,13 +26,13 @@ import {
 class PasswordCreateRoute extends Component {
   static propTypes = {
     createWifCandidate: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
   };
 
   state = {
     isPasswordVisible: false,
     isInputTouched: false,
-    passwordCandidate: ""
+    passwordCandidate: '',
   };
 
   render() {
@@ -73,12 +75,14 @@ class PasswordCreateRoute extends Component {
             spread
             to="/secret-phrase"
           >
-            {this.props.publicKey ? "Import wallet" : "Create new wallet"}
+            {this.props.publicKey ? 'Import wallet' : 'Create new wallet'}
           </ButtonLink>
 
-          <ButtonLink colorScheme="flat" spread to="/">
-            Cancel
-          </ButtonLink>
+          <SecondaryInfoBox>
+            <Anchor colorScheme="flat" spread to="/">
+              Back
+            </Anchor>
+          </SecondaryInfoBox>
         </ButtonRow>
       </Screen>
     );
@@ -86,7 +90,7 @@ class PasswordCreateRoute extends Component {
 
   handleInputChange = e => {
     this.setState({
-      passwordCandidate: e.target.value
+      passwordCandidate: e.target.value,
     });
   };
 
@@ -100,12 +104,12 @@ class PasswordCreateRoute extends Component {
     if (validator.isValid) {
       if (!publicKey) {
         await this.props.createWifCandidate(passwordCandidate);
-        this.props.history.push("/secret-phrase");
+        this.props.history.push('/secret-phrase');
       } else {
         await this.props.setPassword(passwordCandidate);
         const redirectUrl = this.props.isCurrentTransactionActive
-          ? "/transaction-sign-request"
-          : "/wallet";
+          ? '/transaction-sign-request'
+          : '/wallet';
         this.props.history.push(redirectUrl);
       }
     }

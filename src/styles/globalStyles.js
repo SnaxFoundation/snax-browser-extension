@@ -1,9 +1,7 @@
-import { injectGlobal } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 import constants from './style-constants';
 
-export const injectGlobalStyle = () => {
-  // eslint-disable-next-line no-unused-expressions
-  injectGlobal`    
+export const InjectGlobalStyle = createGlobalStyle`    
     html,
     body {
       font-size: 100%;
@@ -54,4 +52,3 @@ export const injectGlobalStyle = () => {
       word-break: break-all;
     }
   `;
-};

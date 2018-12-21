@@ -1,4 +1,4 @@
-import { injectGlobal } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
 /*
  * Reset
@@ -16,30 +16,27 @@ import { injectGlobal } from 'styled-components';
  *
  * 3 - Remove the margin in all browsers (opinionated).
  *
-*/
+ */
 
-export const injectResetStyle = () => {
-  // eslint-disable-next-line no-unused-expressions
-  injectGlobal`
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box; /* 1 */
-    }
-    
-    html {
-      font-family: sans-serif;      
-      -ms-text-size-adjust: 100%; /* 2 */
-      -webkit-text-size-adjust: 100%; /* 2 */
-    }
-    
-    body {
-      margin: 0; /* 3 */
-    }
+export const InjectResetStyle = createGlobalStyle`
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box; /* 1 */
+  }
+  
+  html {
+    font-family: sans-serif;      
+    -ms-text-size-adjust: 100%; /* 2 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+  }
+  
+  body {
+    margin: 0; /* 3 */
+  }
 
-    div { width: 100%; }
-    
-    p:first-child { margin-top: 0; }
-    p:last-child { margin-bottom: 0; }
-  `;
-};
+  div { width: 100%; }
+  
+  p:first-child { margin-top: 0; }
+  p:last-child { margin-bottom: 0; }
+`;

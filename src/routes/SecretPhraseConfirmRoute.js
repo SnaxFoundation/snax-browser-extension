@@ -1,40 +1,42 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { NotificationActions } from "src/store/notifications/NotificationActions";
-import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
-import { WalletActions } from "src/store/wallet/WalletActions";
-import { WalletSelectors } from "src/store/wallet/WalletSelectors";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { NotificationActions } from 'src/store/notifications/NotificationActions';
+import { TransactionSelectors } from 'src/store/transaction/TransactionSelectors';
+import { WalletActions } from 'src/store/wallet/WalletActions';
+import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
+import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
 
 import {
+  SecondaryInfoBox,
+  Anchor,
   ButtonLink,
   ButtonRow,
   Content,
   Row,
   Screen,
   ScreenTitle,
-  ParagraphBody
-} from "../components";
+  ParagraphBody,
+} from '../components';
 
-import { SecretWordInput } from "../containers";
+import { SecretWordInput } from '../containers';
 
 // TODO Replace ButtonLink with Button after removing link
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],
-  [WalletActions, NotificationActions]
+  [WalletActions, NotificationActions],
 )
 class SecretPhraseConfirmRoute extends Component {
   static propTypes = {
     tryCreateWifFromCandidate: PropTypes.func.isRequired,
     spawnErrorNotification: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    mnemonic: PropTypes.string
+    mnemonic: PropTypes.string,
   };
 
   state = {
-    firstValidationWord: "",
-    secondValidationWord: ""
+    firstValidationWord: '',
+    secondValidationWord: '',
   };
 
   constructor(props, context) {
@@ -42,12 +44,12 @@ class SecretPhraseConfirmRoute extends Component {
 
     const [
       firstValidationNumber,
-      secondValidationNumber
+      secondValidationNumber,
     ] = this.getRandomValidationNumbers();
 
     this.state = {
       firstValidationNumber,
-      secondValidationNumber
+      secondValidationNumber,
     };
   }
 
@@ -59,8 +61,8 @@ class SecretPhraseConfirmRoute extends Component {
         <ScreenTitle>Check secret phrase</ScreenTitle>
         <Row>
           <ParagraphBody>
-            Let's check your secret phrase. Enter word{" "}
-            <strong>{firstValidationNumber}</strong> and{" "}
+            Let's check your secret phrase. Enter word{' '}
+            <strong>{firstValidationNumber}</strong> and{' '}
             <strong>{secondValidationNumber}</strong>.
           </ParagraphBody>
         </Row>
@@ -82,16 +84,18 @@ class SecretPhraseConfirmRoute extends Component {
         <ButtonRow>
           <ButtonLink
             onClick={this.handleOpenValid}
-            disabled={!this.areRandomWordsFromMnemonicValid()}
+            // disabled={!this.areRandomWordsFromMnemonicValid()}
             spread
             to="/wallet"
           >
             Open wallet
           </ButtonLink>
 
-          <ButtonLink colorScheme="flat" spread to="/secret-phrase">
-            Back
-          </ButtonLink>
+          <SecondaryInfoBox>
+            <Anchor colorScheme="flat" spread to="/secret-phrase">
+              Back
+            </Anchor>
+          </SecondaryInfoBox>
         </ButtonRow>
       </Screen>
     );
@@ -99,31 +103,31 @@ class SecretPhraseConfirmRoute extends Component {
 
   handleFirstWordChange = e => {
     this.setState({
-      firstValidationWord: e.target.value
+      firstValidationWord: e.target.value,
     });
   };
 
   handleSecondWordChange = e => {
     this.setState({
-      secondValidationWord: e.target.value
+      secondValidationWord: e.target.value,
     });
   };
 
   handleOpenValid = async e => {
     e.preventDefault();
     const redirectUrl = this.props.isCurrentTransactionActive
-      ? "/transaction-sign-request"
-      : "/wallet";
+      ? '/transaction-sign-request'
+      : '/wallet';
 
     if (this.areRandomWordsFromMnemonicValid()) {
       const result = await this.props.tryCreateWifFromCandidate(
-        this.props.mnemonic
+        this.props.mnemonic,
       );
       if (result.isCreationSucceed) {
         this.props.history.push(redirectUrl);
       } else {
         this.props.spawnErrorNotification(
-          "Some error occurred during creation, please contact with development team"
+          'Some error occurred during creation, please contact with development team',
         );
       }
     }
@@ -131,12 +135,12 @@ class SecretPhraseConfirmRoute extends Component {
 
   getValidatingWordsFromMnemonicArray(mnemonicArray) {
     if (mnemonicArray.length !== 12) {
-      throw new Error("Mnemonic array is invalid");
+      throw new Error('Mnemonic array is invalid');
     }
 
     return [
       mnemonicArray[this.state.firstValidationNumber - 1],
-      mnemonicArray[this.state.secondValidationNumber - 1]
+      mnemonicArray[this.state.secondValidationNumber - 1],
     ];
   }
 
@@ -151,9 +155,9 @@ class SecretPhraseConfirmRoute extends Component {
   }
 
   areRandomWordsFromMnemonicValid() {
-    const mnemonicArray = this.props.mnemonic.split(" ");
+    const mnemonicArray = this.props.mnemonic.split(' ');
     const [firstWord, secondWord] = this.getValidatingWordsFromMnemonicArray(
-      mnemonicArray
+      mnemonicArray,
     );
     return (
       firstWord === this.state.firstValidationWord &&

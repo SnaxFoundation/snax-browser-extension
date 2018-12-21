@@ -4,8 +4,8 @@ import constants from '../../styles/style-constants';
 const iconSize = '1.25em';
 
 export const Wrapper = styled.div`
-  border-radius: 0.85em;
-  background-color: #d5d8e2;
+  border-radius: ${constants.borderRadius}px;
+  background-color: ${constants.paletteBlueGrey[900]};
   padding: 0.25em 0.75em;
   display: flex;
   align-items: flex-start;
@@ -29,4 +29,5 @@ export const Text = styled.div`
   color: ${constants.textColor.body};
   line-height: 1.25;
   word-break: break-word;
+  text-decoration: none;
 `;

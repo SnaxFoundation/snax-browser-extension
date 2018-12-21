@@ -16,7 +16,9 @@ import {
   ScreenTitle,
   TextFieldLabel,
   TextFieldMultiline,
-  TextFieldWrapper
+  TextFieldWrapper,
+  Anchor,
+  SecondaryInfoBox
 } from "../components";
 
 @ReduxContainer(
@@ -59,9 +61,11 @@ class ImportRoute extends Component {
           >
             Continue
           </Button>
-          <ButtonLink colorScheme="flat" spread to="/">
-            Cancel
-          </ButtonLink>
+          <SecondaryInfoBox>
+            <Anchor colorScheme="flat" spread to="/">
+              Back
+            </Anchor>
+          </SecondaryInfoBox>
         </ButtonRow>
       </Screen>
     );
@@ -95,7 +99,8 @@ class ImportRoute extends Component {
       this.state.mnemonic
         .split(" ")
         .reduce(
-          (count, word) => (/^a-zA-Z0-9$/.test(word) ? count + 1 : false),
+          (count, word) =>
+            /^[a-zA-Z0-9]+$/.test(word) ? count + 1 : -Infinity,
           0
         ) === 12
     );
