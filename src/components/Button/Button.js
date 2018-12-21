@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
-import Color from 'color';
 import { Link } from 'react-router-dom';
 import constants from '../../styles/style-constants';
 import colorMap from './constants';

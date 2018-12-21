@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { NotificationActions } from "src/store/notifications/NotificationActions";
-import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
-import { WalletActions } from "src/store/wallet/WalletActions";
-import { WalletSelectors } from "src/store/wallet/WalletSelectors";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { NotificationActions } from 'src/store/notifications/NotificationActions';
+import { TransactionSelectors } from 'src/store/transaction/TransactionSelectors';
+import { WalletActions } from 'src/store/wallet/WalletActions';
+import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
+import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
 
 import {
   ButtonLink,
@@ -16,22 +16,24 @@ import {
   ScreenTitle,
   TextFieldLabel,
   TextFieldMultiline,
-  TextFieldWrapper
-} from "../components";
+  TextFieldWrapper,
+  Anchor,
+  SecondaryInfoBox,
+} from '../components';
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],
-  [WalletActions, NotificationActions]
+  [WalletActions, NotificationActions],
 )
 class ImportRoute extends Component {
   static propTypes = {
     spawnErrorNotification: PropTypes.func.isRequired,
     tryCreateWalletByMnemonic: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
   };
 
   state = {
-    mnemonic: ""
+    mnemonic: '',
   };
 
   render() {
@@ -59,9 +61,11 @@ class ImportRoute extends Component {
           >
             Continue
           </Button>
-          <ButtonLink colorScheme="flat" spread to="/">
-            Cancel
-          </ButtonLink>
+          <SecondaryInfoBox>
+            <Anchor colorScheme="flat" spread to="/">
+              Back
+            </Anchor>
+          </SecondaryInfoBox>
         </ButtonRow>
       </Screen>
     );
@@ -69,7 +73,7 @@ class ImportRoute extends Component {
 
   handleMnemonicChange = e => {
     this.setState({
-      mnemonic: e.target.value
+      mnemonic: e.target.value,
     });
   };
 
@@ -78,13 +82,13 @@ class ImportRoute extends Component {
 
     if (this.isMnemonicValid()) {
       const result = await this.props.tryCreateWalletByMnemonic(
-        this.state.mnemonic
+        this.state.mnemonic,
       );
       if (result.isCreationSucceed) {
-        await this.props.setPassword("");
-        this.props.history.push("/new-wallet");
+        await this.props.setPassword('');
+        this.props.history.push('/new-wallet');
       } else {
-        this.props.spawnErrorNotification("Recovering failed");
+        this.props.spawnErrorNotification('Recovering failed');
       }
     }
   };
@@ -93,10 +97,10 @@ class ImportRoute extends Component {
     return (
       this.state.mnemonic &&
       this.state.mnemonic
-        .split(" ")
+        .split(' ')
         .reduce(
           (count, word) => (/^a-zA-Z0-9$/.test(word) ? count + 1 : false),
-          0
+          0,
         ) === 12
     );
   }

@@ -7,6 +7,7 @@ import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
 import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
 
 import {
+  Anchor,
   ButtonLink,
   ButtonRow,
   Content,
@@ -14,6 +15,7 @@ import {
   Screen,
   ScreenTitle,
   ParagraphBody,
+  SecondaryInfoBox,
 } from '../components';
 
 import { SecretWordInput, SecretPhraseWrapper } from '../containers';
@@ -74,9 +76,11 @@ class SecretPhraseRoute extends Component {
             I've saved it
           </ButtonLink>
 
-          <ButtonLink colorScheme="flat" spread to="/">
-            Cancel
-          </ButtonLink>
+          <SecondaryInfoBox>
+            <Anchor spread to="/new-wallet">
+              Back
+            </Anchor>
+          </SecondaryInfoBox>
         </ButtonRow>
       </Screen>
     );

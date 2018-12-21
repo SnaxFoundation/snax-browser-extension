@@ -19,8 +19,7 @@ class SignRequestRoute extends Component {
             <strong>Sign needed</strong>
           </ParagraphBody>
           <ParagraphBody>
-            So as to authorize on platform with Snax Wallets we need your
-            permission
+            We need your permission to authorize on platform with Snax Extension
           </ParagraphBody>
         </Content>
         <ButtonRow>
