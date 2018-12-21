@@ -99,7 +99,7 @@ class Root extends React.Component {
           <App>
             <InjectResetStyle />
             <InjectGlobalStyle />
-            <VersionBox version="0.1.3" />
+            <VersionBox version="0.1.4" />
 
             {this.state.hasWallet && !this.state.canUse && (
               <Redirect to="/password" />
