@@ -95,7 +95,7 @@ class ImportRoute extends Component {
       this.state.mnemonic
         .split(" ")
         .reduce(
-          (count, word) => (/^a-zA-Z0-9$/.test(word) ? count + 1 : false),
+          (count, word) => (/^[a-zA-Z0-9]+$/.test(word) ? count + 1 : false),
           0
         ) === 12
     );
