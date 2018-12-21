@@ -1,18 +1,18 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
-import { Inject } from 'src/context/steriotypes/Inject';
-import SecretPhraseConfirmRoute from 'src/routes/SecretPhraseConfirmRoute';
-import { WalletManager } from 'src/services/accounts/WalletManager';
-import { TransactionManager } from 'src/services/transaction/TransactionManager';
-import { getStore } from 'src/store/store';
-import { TransactionActions } from 'src/store/transaction/TransactionActions';
-import { WalletActions } from 'src/store/wallet/WalletActions';
+import React from "react";
+import { Provider } from "react-redux";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import { Inject } from "src/context/steriotypes/Inject";
+import SecretPhraseConfirmRoute from "src/routes/SecretPhraseConfirmRoute";
+import { WalletManager } from "src/services/accounts/WalletManager";
+import { TransactionManager } from "src/services/transaction/TransactionManager";
+import { getStore } from "src/store/store";
+import { TransactionActions } from "src/store/transaction/TransactionActions";
+import { WalletActions } from "src/store/wallet/WalletActions";
 
-import { App } from './components';
-import { VersionBox } from './containers';
-import { InjectResetStyle, InjectGlobalStyle } from './styles';
+import { App } from "./components";
+import { VersionBox } from "./containers";
+import { InjectResetStyle, InjectGlobalStyle } from "./styles";
 
 import {
   UnknownDomainRoute,
@@ -24,8 +24,8 @@ import {
   ErrorRoute,
   PasswordRequestRoute,
   SignRequestRoute,
-  TransactionSignRequestRoute,
-} from './routes';
+  TransactionSignRequestRoute
+} from "./routes";
 
 export const browserHistory = createBrowserHistory();
 
@@ -45,7 +45,7 @@ class Root extends React.Component {
   state = {
     store: null,
     hasWallet: false,
-    canUse: false,
+    canUse: false
   };
 
   constructor(props, context) {
@@ -57,23 +57,23 @@ class Root extends React.Component {
         transaction.id,
         transaction.from,
         transaction.to,
-        transaction.amount,
+        transaction.amount
       )(this.state.store.dispatch);
 
       const canUse = await this.canUse();
       const hasWallet = await this.hasWallet();
 
       if (!hasWallet) {
-        browserHistory.push('/new-wallet');
+        browserHistory.push("/new-wallet");
         return;
       }
 
       if (!canUse) {
-        browserHistory.push('/password');
+        browserHistory.push("/password");
         return;
       }
 
-      browserHistory.push('/transaction-sign-request');
+      browserHistory.push("/transaction-sign-request");
 
       return preparedTransaction;
     });
@@ -87,7 +87,7 @@ class Root extends React.Component {
 
     if (canUse) {
       this.state.store.dispatch(
-        this.walletActions.tryExtractWalletFromStorage(),
+        this.walletActions.tryExtractWalletFromStorage()
       );
     }
   }
@@ -101,9 +101,8 @@ class Root extends React.Component {
             <InjectGlobalStyle />
             <VersionBox version="0.1.4" />
 
-            {this.state.hasWallet && !this.state.canUse && (
-              <Redirect to="/password" />
-            )}
+            {this.state.hasWallet &&
+              !this.state.canUse && <Redirect to="/password" />}
             {this.state.canUse && <Redirect to="/wallet" />}
             <Switch>
               <Route exact path="/" component={WelcomeRoute} />
@@ -135,7 +134,7 @@ class Root extends React.Component {
   }
 
   async canUse() {
-    return await this.state.store.getState().wallet.hasWallet;
+    return await this.walletManager.hasWalletAndCanUse();
   }
 }
 export default Root;
