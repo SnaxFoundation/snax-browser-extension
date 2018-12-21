@@ -14,13 +14,8 @@ export class TransactionManager {
   listen(handler) {
     this.privateTransactionInboundCommunicator.handleConfirmTransaction(
       async payload => {
-        if (payload.from && payload.to) {
-          payload = await handler(payload);
-
-          return await this._handleTransactionConfirmation(payload);
-        } else if (payload.data) {
-          console.log(payload);
-        }
+        payload = await handler(payload);
+        return await this._handleTransactionConfirmation(payload);
       }
     );
   }

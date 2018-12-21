@@ -12,8 +12,4 @@ export class PublicTransactionOutboundCommunicator extends OutboundCommunicator 
   sendTransaction(id, from, to, amount) {
     return this.send(new SendTransactionMessage({ id, from, to, amount }));
   }
-
-  getData(data) {
-    return this.send(new SendTransactionMessage({ data }));
-  }
 }

@@ -1,3 +1,4 @@
+//import "babel-polyfill";
 import { Inject } from "src/context/steriotypes/Inject";
 import { PublicOnPageSnaxProvider } from "src/services/snax/PublicOnPageSnaxProvider";
 

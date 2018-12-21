@@ -1,12 +1,15 @@
-import { Inject } from "src/context/steriotypes/Inject";
-import { Singleton } from "src/context/steriotypes/Singleton";
-import { PublicTransactionOutboundCommunicator } from "src/services/communication/publicTransaction/PublicTransactionOutboundCommunicator";
 import { IdFactory } from "src/utils/misc/IdFactory";
+import { Inject } from "src/context/steriotypes/Inject";
+import { PublicTransactionOutboundCommunicator } from "src/services/communication/publicTransaction/PublicTransactionOutboundCommunicator";
+import { PublicDataOutboundCommunicator } from "../communication/publicData/PublicDataOutboundCommunicator";
+import { Singleton } from "src/context/steriotypes/Singleton";
 
 @Singleton
 export class PublicOnPageSnaxProvider {
   @Inject(PublicTransactionOutboundCommunicator)
   _transactionOutboundCommunicator;
+
+  @Inject(PublicDataOutboundCommunicator) _publicDataOutboundCommunicator;
 
   _idFactory;
 
@@ -24,7 +27,7 @@ export class PublicOnPageSnaxProvider {
   }
 
   getPublicKey() {
-    return this._transactionOutboundCommunicator.getData(
+    return this._publicDataOutboundCommunicator.sendRequestDataMessage(
       this._idFactory.getId(),
       "publicKey"
     );

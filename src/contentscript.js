@@ -1,7 +1,10 @@
 import "babel-polyfill";
 import { Inject } from "src/context/steriotypes/Inject";
 import { PrivateTransactionOutboundCommunicator } from "src/services/communication/privateTransaction/PrivateTransactionOutboundCommunicator";
+import { PrivateDataInboundCommunicator } from "src/services/communication/privateData/PrivateDataInboundCommunicator";
+import { PublicDataInboundCommunicator } from "src/services/communication/publicData/PublicDataInboundCommunicator";
 import { PublicTransactionInboundCommunicator } from "src/services/communication/publicTransaction/PublicTransactionInboundCommunicator";
+import { PrivateDataOutboundCommunicator } from "src/services/communication/privateData/PrivateDataOutboundCommunicator";
 
 class ContentScript {
   @Inject(PublicTransactionInboundCommunicator)
@@ -9,6 +12,11 @@ class ContentScript {
 
   @Inject(PrivateTransactionOutboundCommunicator)
   privateTransactionOutboundCommunicator;
+
+  @Inject(PrivateDataInboundCommunicator) privateDataInboundCommunicator;
+  @Inject(PublicDataInboundCommunicator) publicDataInboundCommunicator;
+
+  @Inject(PrivateDataOutboundCommunicator) dataOutboundCommunicator;
 
   run() {
     window.onload = () => {
@@ -23,6 +31,15 @@ class ContentScript {
       async payload => {
         return await this.privateTransactionOutboundCommunicator.sendRequestConfirmationTransactionMessage(
           payload
+        );
+      }
+    );
+
+    this.publicDataInboundCommunicator.handleRequestData(
+      async ({ id, name }) => {
+        return await this.dataOutboundCommunicator.sendRequestDataMessage(
+          id,
+          name
         );
       }
     );

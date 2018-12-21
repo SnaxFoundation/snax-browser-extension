@@ -44,9 +44,11 @@ export class OutboundCommunicator {
     this._strategy = strategy.getOutbound();
 
     this._strategy.listen(msg => {
-      if (!isMessageValid(msg)) {
+      if (!isMessageValid(msg) || !msg) {
         console.warn("Message has invalid format, please check", msg, this);
       }
+
+      if (!msg) return;
 
       if (!this._resolversMap.has(msg.id)) {
         console.warn(
@@ -63,6 +65,7 @@ export class OutboundCommunicator {
   }
 
   send(message) {
+    console.log("SENT", message);
     if (!(message instanceof AbstractMessage)) {
       console.warn("Message is not a instance if AbstractMessage", message);
     }
