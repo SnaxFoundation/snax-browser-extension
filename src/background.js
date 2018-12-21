@@ -25,6 +25,8 @@ class BackgroundScript {
 
   popup;
 
+  publicPopup;
+
   run() {
     this.handlePopupRequests();
     this.handleContentRequests();
@@ -68,11 +70,38 @@ class BackgroundScript {
     this.privateDataInboundCommunicator.handleRequestData(
       ({ id, name }) =>
         new Promise(resolve => {
-          resolve({
-            name,
-            data:
-              name !== PASSWORD_HOLDER_TOKEN ? this.holder.get(name) : void 0
-          });
+          if (
+            name === PASSWORD_HOLDER_TOKEN ||
+            String(name) === PASSWORD_HOLDER_TOKEN
+          ) {
+            return {
+              name
+            };
+          }
+
+          const value = this.holder.get(name);
+
+          if (value == null) {
+            setTimeout(() => {
+              if (!this.publicPopup) {
+                this.publicPopup = window.open(
+                  chrome.extension.getURL("index.html"),
+                  "extension_popup",
+                  "width=360,height=500,status=no,scrollbars=no,resizable=no"
+                );
+              }
+            }, 500);
+
+            resolve({
+              name,
+              data: this.holder.get(name)
+            });
+          } else {
+            resolve({
+              name,
+              data: value
+            });
+          }
         })
     );
   }
