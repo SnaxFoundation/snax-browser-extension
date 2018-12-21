@@ -3,3 +3,4 @@ export * from './SecretWordInput';
 export * from './SecretPhraseWrapper';
 export * from './TransactionAmount';
 export * from './TransactionRecipient';
+export * from './VersionBox';

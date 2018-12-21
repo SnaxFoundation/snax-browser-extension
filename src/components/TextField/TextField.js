@@ -53,6 +53,7 @@ const size = ({ size }) =>
 export const TextField = styled.input`
   display: inline-block;
   font-size: ${constants.fontSize.body}px;
+  font-family: ${constants.fontFamily.body};
   line-height: 1.5;
   border-radius: ${constants.borderRadius}px;
 

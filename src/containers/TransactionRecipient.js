@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { TagLink, IconTwitter } from "../components";
-import styleConstants from "../styles/style-constants";
+import React from 'react';
+import styled from 'styled-components';
+import { TagLink, IconTwitter } from '../components';
+import styleConstants from '../styles/style-constants';
 
 const iconMap = {
-  twitter: <IconTwitter color={styleConstants.brandColor.twitter} />
+  twitter: <IconTwitter color={styleConstants.brandColor.twitter} />,
 };
 
 const Wrapper = styled.div`

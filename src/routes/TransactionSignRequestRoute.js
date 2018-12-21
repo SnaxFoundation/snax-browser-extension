@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { TransactionActions } from "src/store/transaction/TransactionActions";
-import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import React, { Component } from 'react';
+import { TransactionActions } from 'src/store/transaction/TransactionActions';
+import { TransactionSelectors } from 'src/store/transaction/TransactionSelectors';
+import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
 
 import {
   Button,
@@ -10,10 +10,10 @@ import {
   ParagraphError,
   Row,
   Screen,
-  ScreenTitle
-} from "../components";
+  ScreenTitle,
+} from '../components';
 
-import { TransactionAmount, TransactionRecipient } from "../containers";
+import { TransactionAmount, TransactionRecipient } from '../containers';
 
 @ReduxContainer(TransactionSelectors, TransactionActions)
 class TransactionSignRequestRoute extends Component {
@@ -61,7 +61,7 @@ class TransactionSignRequestRoute extends Component {
   }
 
   _renderBalance() {
-    return <Row> Your balance is: {this.props.currentAccountBalance}</Row>;
+    return <Row> Your balance is: 685{this.props.currentAccountBalance}</Row>;
   }
 
   _handleConfirmClick = async () => {

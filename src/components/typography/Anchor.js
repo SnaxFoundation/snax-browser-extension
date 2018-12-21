@@ -12,6 +12,9 @@ export const Anchor = styled(Link)`
   &:hover,
   &:focus {
     color: currentColor;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
   }
 
   &:hover,

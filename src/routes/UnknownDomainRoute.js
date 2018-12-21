@@ -16,14 +16,14 @@ class UnknownDomainRoute extends Component {
       <Screen>
         <BrandBox>
           <BrandBoxTitle>Snax</BrandBoxTitle>
-          <BrandBoxSubtitle>wallet</BrandBoxSubtitle>
+          <BrandBoxSubtitle>extension</BrandBoxSubtitle>
         </BrandBox>
         <Content spread centerY>
           <Row>
             <Button spread>Go to my wallet</Button>
           </Row>
           <Row>
-            <ParagraphCaption>
+            <ParagraphCaption style={{ textAlign: 'center', width: '100%' }}>
               Wallet will be opened in a new tab
             </ParagraphCaption>
           </Row>
