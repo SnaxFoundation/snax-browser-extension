@@ -16,6 +16,9 @@ import {
   Screen,
   ScreenTitle,
   ParagraphBody,
+  TextFieldWrapper,
+  TextFieldLabel,
+  TextFieldMultiline,
 } from '../components';
 
 import { SecretWordInput } from '../containers';
@@ -60,24 +63,19 @@ class SecretPhraseConfirmRoute extends Component {
       <Screen>
         <ScreenTitle>Check secret phrase</ScreenTitle>
         <Row>
-          <ParagraphBody>
-            Let's check your secret phrase. Enter word{' '}
-            <strong>{firstValidationNumber}</strong> and{' '}
-            <strong>{secondValidationNumber}</strong>.
-          </ParagraphBody>
+          <ParagraphBody>Let's check your secret phrase.</ParagraphBody>
         </Row>
         <Content spread centerY>
           <Row>
-            <SecretWordInput
-              number={firstValidationNumber}
-              onChange={this.handleFirstWordChange}
-            />
-          </Row>
-          <Row>
-            <SecretWordInput
-              number={secondValidationNumber}
-              onChange={this.handleSecondWordChange}
-            />
+            <TextFieldWrapper>
+              <TextFieldLabel>Secret phrase</TextFieldLabel>
+              <TextFieldMultiline
+                type="text"
+                placeholder="Enter your 12 word secret phrase"
+                onChange={null}
+                rows={3}
+              />
+            </TextFieldWrapper>
           </Row>
         </Content>
 
@@ -93,7 +91,7 @@ class SecretPhraseConfirmRoute extends Component {
 
           <SecondaryInfoBox>
             <Anchor colorScheme="flat" spread to="/secret-phrase">
-              Back
+              Generate new key
             </Anchor>
           </SecondaryInfoBox>
         </ButtonRow>

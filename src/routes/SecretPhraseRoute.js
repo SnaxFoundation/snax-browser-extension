@@ -16,6 +16,9 @@ import {
   ScreenTitle,
   ParagraphBody,
   SecondaryInfoBox,
+  TextFieldWrapper,
+  TextFieldLabel,
+  TextFieldMultiline,
 } from '../components';
 
 import { SecretWordInput, SecretPhraseWrapper } from '../containers';
@@ -36,11 +39,35 @@ class SecretPhraseRoute extends Component {
       return [];
     }
 
-    return this.props.mnemonic
-      .split(' ')
-      .map((item, idx) => (
-        <SecretWordInput number={idx + 1} value={item} disabled size="small" />
-      ));
+    // return this.props.mnemonic
+    //   .split(' ')
+    //   .map((item, idx) => (
+    //     <SecretWordInput number={idx + 1} value={item} disabled size="small" />
+    //   ));
+
+    return [
+      <div>
+        <TextFieldLabel>Secret phrase</TextFieldLabel>
+        <TextFieldMultiline
+          type="text"
+          disabled
+          value={this.props.mnemonic}
+          rows={3}
+        />
+      </div>,
+      <div className="text-align-right">
+        <Anchor
+          as="button"
+          colorScheme="flat"
+          size="small"
+          style={{ textDecoration: 'none' }}
+        >
+          <span onClick={this.handleCopyClick} className="dashed">
+            Copy
+          </span>
+        </Anchor>
+      </div>,
+    ];
   }
 
   render() {
