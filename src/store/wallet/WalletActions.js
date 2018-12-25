@@ -85,6 +85,15 @@ export class WalletActions {
   }
 
   @ThunkAction
+  clearPassword() {
+    return async dispatch => {
+      await this.passwordManager.clearPassword();
+      dispatch(this._updatePublicKey(""));
+      dispatch(this._updateMnemonic(""));
+    };
+  }
+
+  @ThunkAction
   clearWallet() {
     return async dispatch => {
       await this.encryptedStorage.removeItem(WIF_STORAGE_ITEM_NAME);

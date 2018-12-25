@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Inject } from 'src/context/steriotypes/Inject';
-import { ClipboardCopier } from 'src/services/misc/ClipboardCopier';
-import { NotificationActions } from 'src/store/notifications/NotificationActions';
-import { WalletActions } from 'src/store/wallet/WalletActions';
-import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
-import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Inject } from "src/context/steriotypes/Inject";
+import { ClipboardCopier } from "src/services/misc/ClipboardCopier";
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 import {
   BrandBox,
   BrandBoxTitle,
@@ -18,18 +18,17 @@ import {
   HeadingSmall,
   ParagraphBody,
   Row,
-  Screen,
-} from '../components';
+  Screen
+} from "../components";
 @ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
 class WalletRoute extends Component {
   static propTypes = {
     spawnSuccessNotification: PropTypes.func.isRequired,
     clearWallet: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   };
 
-  @Inject(ClipboardCopier)
-  clipboardCopier;
+  @Inject(ClipboardCopier) clipboardCopier;
 
   render() {
     return (
@@ -38,11 +37,6 @@ class WalletRoute extends Component {
           <BrandBoxTitle>Snax</BrandBoxTitle>
           <BrandBoxSubtitle>wallet</BrandBoxSubtitle>
         </BrandBox>
-        {/* <Content>
-          <Row>
-            <ParagraphBody>Place your text here</ParagraphBody>
-          </Row>
-        </Content> */}
         <Content spread centerY>
           <Row>
             <div>
@@ -55,7 +49,7 @@ class WalletRoute extends Component {
                   as="button"
                   colorScheme="flat"
                   size="small"
-                  style={{ textDecoration: 'none' }}
+                  style={{ textDecoration: "none" }}
                 >
                   <span onClick={this.handleCopyClick} className="dashed">
                     Copy
@@ -65,13 +59,13 @@ class WalletRoute extends Component {
             </div>
           </Row>
         </Content>
-        <ButtonRow style={{ justifyContent: 'flex-start' }}>
+        <ButtonRow style={{ justifyContent: "flex-start" }}>
           <ButtonWithIcon
             onClick={this.handleLogout}
             colorScheme="flat"
             icon={<IconLogOut />}
             size="small"
-            style={{ textAlign: 'left' }}
+            style={{ textAlign: "left" }}
           >
             Lock my wallet
           </ButtonWithIcon>
@@ -83,13 +77,13 @@ class WalletRoute extends Component {
   handleCopyClick = () => {
     this.clipboardCopier.copy(this.props.publicKey);
     this.props.spawnSuccessNotification(
-      'Public key was successfully copied to your clipboard',
+      "Public key was successfully copied to your clipboard"
     );
   };
 
   handleLogout = () => {
-    this.props.clearWallet();
-    this.props.history.push('/');
+    this.props.clearPassword();
+    this.props.history.push("/password");
   };
 }
 

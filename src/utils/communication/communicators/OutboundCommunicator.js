@@ -65,7 +65,6 @@ export class OutboundCommunicator {
   }
 
   send(message) {
-    console.log("SENT", message);
     if (!(message instanceof AbstractMessage)) {
       console.warn("Message is not a instance if AbstractMessage", message);
     }

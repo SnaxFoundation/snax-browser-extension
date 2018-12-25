@@ -92,14 +92,25 @@ class Root extends React.Component {
     }
   }
 
+  getVersion() {
+    return (
+      (window &&
+        window.chrome &&
+        window.chrome.runtime &&
+        (window.chrome.runtime.getManifest() || {}).version) ||
+      null
+    );
+  }
+
   render() {
+    const version = this.getVersion();
     return (
       <Provider store={this.state.store}>
         <NavigableRouter>
           <App>
             <InjectResetStyle />
             <InjectGlobalStyle />
-            <VersionBox version="0.1.4" />
+            {version ? <VersionBox version={version} /> : null}
 
             {this.state.hasWallet &&
               !this.state.canUse && <Redirect to="/password" />}
