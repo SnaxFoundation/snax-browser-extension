@@ -8,8 +8,6 @@ import bip39 from "bip39";
 import { Inject } from "src/context/steriotypes/Inject";
 import { PasswordManager } from "src/services/accounts/PasswordManager";
 import { Singleton } from "src/context/steriotypes/Singleton";
-
-import { PrivateDataOutboundCommunicator } from "../communication/privateData/PrivateDataOutboundCommunicator";
 import { EncryptedStorage } from "../misc/EncryptedStorage";
 
 class Wallet {
@@ -50,20 +48,9 @@ export class WalletManager {
 
   @Inject(EncryptedStorage) encryptedStorage = null;
 
-  @Inject(PrivateDataOutboundCommunicator) dataOutboundCommunicator = null;
-
-  setBackgroundPublicKey(publicKey) {
-    return this.dataOutboundCommunicator.sendSetDataMessage(
-      "tx" + Math.random() * 100,
-      "publicKey",
-      publicKey
-    );
-  }
-
   async tryCreateWalletByMnemonic(mnemonic) {
     const seed = bip39.mnemonicToSeedHex(mnemonic).toString();
     const wif = seedPrivate(seed);
-    this.setBackgroundPublicKey(privateToPublic(wif));
     return new WalletCreationResult(mnemonic, new Wallet(wif));
   }
 
@@ -77,7 +64,6 @@ export class WalletManager {
       wif = seedPrivate(seed);
       valid = isValidPrivate(wif);
     } while (!valid);
-    this.setBackgroundPublicKey(privateToPublic(wif));
     return mnemonic;
   }
 
@@ -86,7 +72,12 @@ export class WalletManager {
   }
 
   async hasWalletAndCanUse() {
-    return this.hasWallet() && (await this.passwordManager.hasPassword());
+    let result = false;
+    try {
+      result = (await this.getWallet()).isExtractionSucceed;
+    } finally {
+      return result;
+    }
   }
 
   async getWallet() {
@@ -96,8 +87,6 @@ export class WalletManager {
     }
 
     const wallet = new WalletExtractionResult(new Wallet(wif));
-
-    this.setBackgroundPublicKey(privateToPublic(wif));
 
     return wallet;
   }

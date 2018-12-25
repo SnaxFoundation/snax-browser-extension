@@ -1,15 +1,15 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { NotificationActions } from 'src/store/notifications/NotificationActions';
-import { TransactionSelectors } from 'src/store/transaction/TransactionSelectors';
-import { WalletActions } from 'src/store/wallet/WalletActions';
-import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
-import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
   SecondaryInfoBox,
   Anchor,
-  ButtonLink,
+  Button,
   ButtonRow,
   Content,
   Row,
@@ -18,47 +18,36 @@ import {
   ParagraphBody,
   TextFieldWrapper,
   TextFieldLabel,
-  TextFieldMultiline,
-} from '../components';
-
-import { SecretWordInput } from '../containers';
-
-// TODO Replace ButtonLink with Button after removing link
+  TextFieldMultiline
+} from "../components";
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],
-  [WalletActions, NotificationActions],
+  [WalletActions, NotificationActions]
 )
 class SecretPhraseConfirmRoute extends Component {
   static propTypes = {
     tryCreateWifFromCandidate: PropTypes.func.isRequired,
     spawnErrorNotification: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    mnemonic: PropTypes.string,
-  };
-
-  state = {
-    firstValidationWord: '',
-    secondValidationWord: '',
+    mnemonic: PropTypes.string
   };
 
   constructor(props, context) {
     super(props, context);
 
-    const [
-      firstValidationNumber,
-      secondValidationNumber,
-    ] = this.getRandomValidationNumbers();
-
     this.state = {
-      firstValidationNumber,
-      secondValidationNumber,
+      mnemonic: ""
     };
   }
 
-  render() {
-    const { firstValidationNumber, secondValidationNumber } = this.state;
+  updateMnemonic = async () => {
+    this.props.setConfirmed(false);
+    await this.props.clearWallet();
+    await this.props.createNewMnemonic();
+  };
 
+  render() {
     return (
       <Screen>
         <ScreenTitle>Check secret phrase</ScreenTitle>
@@ -72,25 +61,30 @@ class SecretPhraseConfirmRoute extends Component {
               <TextFieldMultiline
                 type="text"
                 placeholder="Enter your 12 word secret phrase"
-                onChange={null}
+                onChange={this.handleMnemonicChange}
                 rows={3}
+                value={this.state.mnemonic}
               />
             </TextFieldWrapper>
           </Row>
         </Content>
 
         <ButtonRow>
-          <ButtonLink
+          <Button
             onClick={this.handleOpenValid}
             // disabled={!this.areRandomWordsFromMnemonicValid()}
             spread
-            to="/wallet"
           >
             Open wallet
-          </ButtonLink>
+          </Button>
 
           <SecondaryInfoBox>
-            <Anchor colorScheme="flat" spread to="/secret-phrase">
+            <Anchor
+              colorScheme="flat"
+              spread
+              to="/secret-phrase"
+              onClick={this.updateMnemonic}
+            >
               Generate new key
             </Anchor>
           </SecondaryInfoBox>
@@ -99,69 +93,33 @@ class SecretPhraseConfirmRoute extends Component {
     );
   }
 
-  handleFirstWordChange = e => {
+  handleMnemonicChange = e => {
     this.setState({
-      firstValidationWord: e.target.value,
+      mnemonic: e.target.value
     });
   };
 
-  handleSecondWordChange = e => {
-    this.setState({
-      secondValidationWord: e.target.value,
-    });
-  };
+  async checkMnemonic() {
+    const walletResult = await this.props.tryExtractWalletFromStorage();
+    const walletFromMnemonic = await this.props.generateWalletFromMnemonic(
+      this.state.mnemonic
+    );
+    return walletResult.wallet.wif === walletFromMnemonic.wallet.wif;
+  }
 
   handleOpenValid = async e => {
     e.preventDefault();
     const redirectUrl = this.props.isCurrentTransactionActive
-      ? '/transaction-sign-request'
-      : '/wallet';
+      ? "/transaction-sign-request"
+      : "/wallet";
 
-    if (this.areRandomWordsFromMnemonicValid()) {
-      const result = await this.props.tryCreateWifFromCandidate(
-        this.props.mnemonic,
-      );
-      if (result.isCreationSucceed) {
-        this.props.history.push(redirectUrl);
-      } else {
-        this.props.spawnErrorNotification(
-          'Some error occurred during creation, please contact with development team',
-        );
-      }
+    if (await this.checkMnemonic()) {
+      this.props.setConfirmed();
+      this.props.history.push(redirectUrl);
+    } else {
+      this.props.spawnErrorNotification("Invalid mnemonic");
     }
   };
-
-  getValidatingWordsFromMnemonicArray(mnemonicArray) {
-    if (mnemonicArray.length !== 12) {
-      throw new Error('Mnemonic array is invalid');
-    }
-
-    return [
-      mnemonicArray[this.state.firstValidationNumber - 1],
-      mnemonicArray[this.state.secondValidationNumber - 1],
-    ];
-  }
-
-  getRandomValidationNumbers() {
-    const firstNumber = this.getRandomNumber(1, 6);
-    const secondNumber = this.getRandomNumber(7, 12);
-    return [firstNumber, secondNumber].sort(() => this.getRandomNumber(0, 1));
-  }
-
-  getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  areRandomWordsFromMnemonicValid() {
-    const mnemonicArray = this.props.mnemonic.split(' ');
-    const [firstWord, secondWord] = this.getValidatingWordsFromMnemonicArray(
-      mnemonicArray,
-    );
-    return (
-      firstWord === this.state.firstValidationWord &&
-      secondWord === this.state.secondValidationWord
-    );
-  }
 }
 
 export default SecretPhraseConfirmRoute;

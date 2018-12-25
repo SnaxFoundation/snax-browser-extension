@@ -33,6 +33,13 @@ class PasswordRequestRoute extends Component {
     password: ""
   };
 
+  handleRestoreClick = async e => {
+    e.preventDefault();
+    await this.props.clearWallet();
+    await this.props.clearPassword();
+    this.props.history.push("/");
+  };
+
   render() {
     return (
       <ScreenForm onSubmit={this.handleOpenWalletClick}>
@@ -49,7 +56,12 @@ class PasswordRequestRoute extends Component {
             Unlock wallet
           </Button>
           <SecondaryInfoBox>
-            <Anchor colorScheme="flat" spread to="/">
+            <Anchor
+              colorScheme="flat"
+              spread
+              onClick={this.handleRestoreClick}
+              to="/"
+            >
               Restore wallet
             </Anchor>
           </SecondaryInfoBox>

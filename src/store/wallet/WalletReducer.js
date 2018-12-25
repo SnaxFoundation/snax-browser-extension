@@ -1,13 +1,15 @@
-import { Reducer } from "src/context/redux/Reducer";
 import { Inject } from "src/context/steriotypes/Inject";
-import { WalletManager } from "src/services/accounts/WalletManager";
+import { Reduce } from "src/utils/redux/Reduce";
+import { Reducer } from "src/context/redux/Reducer";
 import {
   UPDATE_MNEMONIC,
   UPDATE_PUBLIC_KEY,
   UPDATE_BALANCE,
   UPDATE_ACCOUNT
 } from "src/store/wallet/WalletConstants";
-import { Reduce } from "src/utils/redux/Reduce";
+import { WalletManager } from "src/services/accounts/WalletManager";
+
+import { SET_CONFIRMED } from "./WalletConstants";
 
 @Reducer()
 export class WalletReducer {
@@ -37,6 +39,13 @@ export class WalletReducer {
     };
   }
 
+  @Reduce(SET_CONFIRMED)
+  handleConfirmation(state, payload) {
+    // TODO: FIX
+    window.localStorage.setItem("confirmed", payload.confirmed);
+    return { ...state, confirmed: payload.confirmed };
+  }
+
   @Reduce(UPDATE_MNEMONIC)
   handleUpdateMnemonic(state, payload) {
     return {
@@ -48,7 +57,9 @@ export class WalletReducer {
   @Reduce.Default
   defaultState() {
     return {
-      hasWallet: false
+      hasWallet: false,
+      // TODO: FIX
+      confirmed: window.localStorage.getItem("confirmed") === "true" || false
     };
   }
 }

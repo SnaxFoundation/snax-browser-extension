@@ -1,14 +1,14 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import { NotificationActions } from 'src/store/notifications/NotificationActions';
-import { WalletActions } from 'src/store/wallet/WalletActions';
-import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
-import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
 
 import {
   Anchor,
-  ButtonLink,
+  Button,
   ButtonRow,
   Content,
   Row,
@@ -16,35 +16,34 @@ import {
   ScreenTitle,
   ParagraphBody,
   SecondaryInfoBox,
-  TextFieldWrapper,
   TextFieldLabel,
-  TextFieldMultiline,
-} from '../components';
-
-import { SecretWordInput, SecretPhraseWrapper } from '../containers';
-
-// TODO Replace ButtonLink with Button after removing link
-//
+  TextFieldMultiline
+} from "../components";
+import { ClipboardCopier } from "../services/misc/ClipboardCopier";
+import { Inject } from "../context/steriotypes/Inject";
+import { SecretPhraseWrapper } from "../containers";
 
 @ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
 class SecretPhraseRoute extends Component {
   static propTypes = {
     spawnSuccessNotification: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    mnemonic: PropTypes.string,
+    mnemonic: PropTypes.string
+  };
+
+  @Inject(ClipboardCopier) clipboardCopier;
+
+  handleCopyClick = () => {
+    this.clipboardCopier.copy(this.props.mnemonic);
+    this.props.spawnSuccessNotification(
+      "Mnemonic was successfully copied to your clipboard"
+    );
   };
 
   _renderMnemonic() {
     if (!this.props.mnemonic) {
       return [];
     }
-
-    // return this.props.mnemonic
-    //   .split(' ')
-    //   .map((item, idx) => (
-    //     <SecretWordInput number={idx + 1} value={item} disabled size="small" />
-    //   ));
-
     return [
       <div>
         <TextFieldLabel>Secret phrase</TextFieldLabel>
@@ -60,15 +59,21 @@ class SecretPhraseRoute extends Component {
           as="button"
           colorScheme="flat"
           size="small"
-          style={{ textDecoration: 'none' }}
+          style={{ textDecoration: "none" }}
         >
           <span onClick={this.handleCopyClick} className="dashed">
             Copy
           </span>
         </Anchor>
-      </div>,
+      </div>
     ];
   }
+
+  updateWallet = async e => {
+    e.preventDefault();
+    await this.props.tryCreateWifFromCandidate(this.props.mnemonic);
+    this.props.history.push("/confirm-phrase");
+  };
 
   render() {
     const mnemonic = this._renderMnemonic();
@@ -99,9 +104,9 @@ class SecretPhraseRoute extends Component {
           </div>
         </Row>
         <ButtonRow>
-          <ButtonLink spread to="/confirm-phrase">
+          <Button spread onClick={this.updateWallet}>
             I've saved it
-          </ButtonLink>
+          </Button>
 
           <SecondaryInfoBox>
             <Anchor spread to="/new-wallet">

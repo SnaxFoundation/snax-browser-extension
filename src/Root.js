@@ -62,6 +62,7 @@ class Root extends React.Component {
 
       const canUse = await this.canUse();
       const hasWallet = await this.hasWallet();
+      const shouldConfirm = await this.shouldConfirm();
 
       if (!hasWallet) {
         browserHistory.push("/new-wallet");
@@ -70,6 +71,11 @@ class Root extends React.Component {
 
       if (!canUse) {
         browserHistory.push("/password");
+        return;
+      }
+
+      if (canUse && shouldConfirm) {
+        browserHistory.push("/confirm-phrase");
         return;
       }
 
@@ -82,8 +88,9 @@ class Root extends React.Component {
   async componentDidMount() {
     const canUse = await this.canUse();
     const hasWallet = await this.hasWallet();
+    const shouldConfirm = await this.shouldConfirm();
 
-    this.setState({ canUse, hasWallet });
+    this.setState({ canUse, hasWallet, shouldConfirm });
 
     if (canUse) {
       this.state.store.dispatch(
@@ -111,10 +118,12 @@ class Root extends React.Component {
             <InjectResetStyle />
             <InjectGlobalStyle />
             {version ? <VersionBox version={version} /> : null}
-
             {this.state.hasWallet &&
               !this.state.canUse && <Redirect to="/password" />}
-            {this.state.canUse && <Redirect to="/wallet" />}
+            {this.state.canUse &&
+              !this.state.shouldConfirm && <Redirect to="/wallet" />}
+            {this.state.canUse &&
+              this.state.shouldConfirm && <Redirect to="/confirm-phrase" />}
             <Switch>
               <Route exact path="/" component={WelcomeRoute} />
               <Route
@@ -146,6 +155,10 @@ class Root extends React.Component {
 
   async canUse() {
     return await this.walletManager.hasWalletAndCanUse();
+  }
+
+  async shouldConfirm() {
+    return !this.state.store.getState().wallet.confirmed;
   }
 }
 export default Root;

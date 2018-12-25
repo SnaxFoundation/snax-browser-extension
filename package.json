@@ -1,6 +1,6 @@
 {
   "name": "snax-browser-extension",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "private": true,
   "dependencies": {
     "@snaxfoundation/snaxjs": "^20.0.0-beta5",

@@ -1,15 +1,18 @@
+import { Action, ThunkAction } from "src/utils/redux/Action";
 import { Actions } from "src/context/redux/Actions";
+import { EncryptedStorage } from "src/services/misc/EncryptedStorage";
 import { Inject } from "src/context/steriotypes/Inject";
 import { PasswordManager } from "src/services/accounts/PasswordManager";
-import { WalletManager } from "src/services/accounts/WalletManager";
-import { EncryptedStorage } from "src/services/misc/EncryptedStorage";
 import {
   UPDATE_MNEMONIC,
   UPDATE_PUBLIC_KEY,
   UPDATE_BALANCE,
   UPDATE_ACCOUNT
 } from "src/store/wallet/WalletConstants";
-import { Action, ThunkAction } from "src/utils/redux/Action";
+import { WalletManager } from "src/services/accounts/WalletManager";
+
+import { PrivateDataOutboundCommunicator } from "../../services/communication/privateData/PrivateDataOutboundCommunicator";
+import { SET_CONFIRMED } from "./WalletConstants";
 
 const WIF_STORAGE_ITEM_NAME = "xf881x";
 
@@ -21,6 +24,16 @@ export class WalletActions {
 
   @Inject(WalletManager) walletManager;
 
+  @Inject(PrivateDataOutboundCommunicator) dataOutboundCommunicator = null;
+
+  setBackgroundPublicKey(publicKey) {
+    return this.dataOutboundCommunicator.sendSetDataMessage(
+      "tx" + Math.random() * 100,
+      "publicKey",
+      publicKey
+    );
+  }
+
   @ThunkAction
   createWifCandidate(passwordCandidate) {
     return async dispatch => {
@@ -28,6 +41,23 @@ export class WalletActions {
       const mnemonic = await this.walletManager.createMnemonic();
       dispatch(this._updateMnemonic(mnemonic));
       return mnemonic;
+    };
+  }
+
+  @ThunkAction
+  createNewMnemonic() {
+    return async dispatch => {
+      const mnemonic = await this.walletManager.createMnemonic();
+      dispatch(this.setConfirmed(false));
+      dispatch(this._updateMnemonic(mnemonic));
+      return mnemonic;
+    };
+  }
+
+  @ThunkAction
+  generateWalletFromMnemonic(mnemonic) {
+    return async dispatch => {
+      return this.walletManager.tryCreateWalletByMnemonic(mnemonic);
     };
   }
 
@@ -50,8 +80,12 @@ export class WalletActions {
       const result = await this.walletManager.tryCreateWalletByMnemonic(
         mnemonic
       );
-      dispatch(this._updatePublicKey(result.wallet.publicKey));
-      this.encryptedStorage.setItem(WIF_STORAGE_ITEM_NAME, result.wallet.wif);
+      dispatch(this.setConfirmed(false));
+      if (result.isCreationSucceed) {
+        this.setBackgroundPublicKey(result.wallet.publicKey);
+        dispatch(this._updatePublicKey(result.wallet.publicKey));
+        this.encryptedStorage.setItem(WIF_STORAGE_ITEM_NAME, result.wallet.wif);
+      }
       return result;
     };
   }
@@ -63,6 +97,7 @@ export class WalletActions {
         mnemonic
       );
       if (result.isCreationSucceed) {
+        this.setBackgroundPublicKey(result.wallet.publicKey);
         dispatch(this._updatePublicKey(result.wallet.publicKey));
         this.encryptedStorage.setItem(WIF_STORAGE_ITEM_NAME, result.wallet.wif);
       }
@@ -78,6 +113,7 @@ export class WalletActions {
       }
       const result = await this.walletManager.getWallet();
       if (result.isExtractionSucceed) {
+        this.setBackgroundPublicKey(result.wallet.publicKey);
         dispatch(this._updatePublicKey(result.wallet.publicKey));
       }
       return result;
@@ -88,20 +124,23 @@ export class WalletActions {
   clearPassword() {
     return async dispatch => {
       await this.passwordManager.clearPassword();
-      dispatch(this._updatePublicKey(""));
-      dispatch(this._updateMnemonic(""));
     };
   }
 
   @ThunkAction
   clearWallet() {
     return async dispatch => {
+      this.setBackgroundPublicKey(null);
       await this.encryptedStorage.removeItem(WIF_STORAGE_ITEM_NAME);
       await this.walletManager.clear();
-      await this.passwordManager.clearPassword();
       dispatch(this._updatePublicKey(""));
       dispatch(this._updateMnemonic(""));
     };
+  }
+
+  @Action(SET_CONFIRMED)
+  setConfirmed(confirmed = true) {
+    return { confirmed };
   }
 
   @Action(UPDATE_PUBLIC_KEY)
