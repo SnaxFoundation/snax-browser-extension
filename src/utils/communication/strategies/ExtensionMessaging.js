@@ -5,19 +5,25 @@ class Inbound {
   }
 
   listenAndAnswer(listener) {
-    const event = chrome.extension.onConnect;
+    if (
+      window.chrome &&
+      window.chrome.extension &&
+      window.chrome.extension.onConnect
+    ) {
+      const event = window.chrome.extension.onConnect;
 
-    event.addListener(port => {
-      if (port.name !== this.connectionName) {
-        return;
-      }
-
-      port.onMessage.addListener(async msg => {
-        if (msg) {
-          port.postMessage(await listener(msg));
+      event.addListener(port => {
+        if (port.name !== this.connectionName) {
+          return;
         }
+
+        port.onMessage.addListener(async msg => {
+          if (msg) {
+            port.postMessage(await listener(msg));
+          }
+        });
       });
-    });
+    }
   }
 }
 
@@ -39,15 +45,21 @@ class Outbound {
   }
 
   _initialize() {
-    this._port = chrome.extension.connect({
-      name: this._connectionName
-    });
+    if (
+      window.chrome &&
+      window.chrome.extension &&
+      typeof window.chrome.extension.connect === "function"
+    ) {
+      this._port = window.chrome.extension.connect({
+        name: this._connectionName
+      });
 
-    if (this._port.onMessage.hasListener(this._handleMessage)) {
-      this._port.onmessage.removeListener(this._handleMessage);
+      if (this._port.onMessage.hasListener(this._handleMessage)) {
+        this._port.onmessage.removeListener(this._handleMessage);
+      }
+
+      this._port.onMessage.addListener(this._handleMessage);
     }
-
-    this._port.onMessage.addListener(this._handleMessage);
   }
 
   _handleMessage = async msg => {
