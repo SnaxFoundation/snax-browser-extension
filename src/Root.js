@@ -104,6 +104,7 @@ class Root extends React.Component {
       (window &&
         window.chrome &&
         window.chrome.runtime &&
+        typeof window.chrome.runtime.getManifest === "function" &&
         (window.chrome.runtime.getManifest() || {}).version) ||
       null
     );
