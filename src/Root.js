@@ -24,6 +24,7 @@ import {
   ErrorRoute,
   PasswordRequestRoute,
   SignRequestRoute,
+  RestoreConfirmationRoute,
   TransactionSignRequestRoute
 } from "./routes";
 
@@ -134,8 +135,13 @@ class Root extends React.Component {
               <Route path="/unknown" component={UnknownDomainRoute} />
               <Route path="/new-wallet" component={PasswordCreateRoute} />
               <Route path="/secret-phrase" component={SecretPhraseRoute} />
+              <Route
+                path="/restore-confirmation"
+                component={RestoreConfirmationRoute}
+              />
               <Route path="/wallet" component={WalletRoute} />
               <Route path="/import-wallet" component={ImportRoute} />
+              <Route path="/import-password" component={PasswordCreateRoute} />
               <Route path="/error" component={ErrorRoute} />
               <Route path="/password" component={PasswordRequestRoute} />
               <Route path="/sign-request" component={SignRequestRoute} />

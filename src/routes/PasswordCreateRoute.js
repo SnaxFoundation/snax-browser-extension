@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { WalletActions } from 'src/store/wallet/WalletActions';
-import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
-import { PasswordValidator } from 'src/utils/validators/PasswordValidator';
-import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
+import { PasswordValidator } from "src/utils/validators/PasswordValidator";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
   ButtonLink,
@@ -17,8 +17,8 @@ import {
   TextFieldWrapper,
   PasswordField,
   SecondaryInfoBox,
-  Anchor,
-} from '../components';
+  Anchor
+} from "../components";
 
 // TODO Replace ButtonLink with Button after removing link
 
@@ -26,14 +26,17 @@ import {
 class PasswordCreateRoute extends Component {
   static propTypes = {
     createWifCandidate: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   };
 
   state = {
     isPasswordVisible: false,
     isInputTouched: false,
-    passwordCandidate: '',
+    passwordCandidate: ""
   };
+
+  isNewWallet = () =>
+    this.props.history.location.pathname !== "/import-password";
 
   render() {
     const validator = new PasswordValidator(this.state.passwordCandidate);
@@ -75,7 +78,7 @@ class PasswordCreateRoute extends Component {
             spread
             to="/secret-phrase"
           >
-            {this.props.publicKey ? 'Import wallet' : 'Create new wallet'}
+            {!this.isNewWallet() ? "Import wallet" : "Create new wallet"}
           </ButtonLink>
 
           <SecondaryInfoBox>
@@ -90,27 +93,23 @@ class PasswordCreateRoute extends Component {
 
   handleInputChange = e => {
     this.setState({
-      passwordCandidate: e.target.value,
+      passwordCandidate: e.target.value
     });
   };
 
   handleCreation = async e => {
     const { passwordCandidate } = this.state;
-    const { publicKey } = this.props;
     e.preventDefault();
 
     const validator = new PasswordValidator(passwordCandidate);
 
     if (validator.isValid) {
-      if (!publicKey) {
+      if (this.isNewWallet()) {
         await this.props.createWifCandidate(passwordCandidate);
-        this.props.history.push('/secret-phrase');
+        this.props.history.push("/secret-phrase");
       } else {
         await this.props.setPassword(passwordCandidate);
-        const redirectUrl = this.props.isCurrentTransactionActive
-          ? '/transaction-sign-request'
-          : '/wallet';
-        this.props.history.push(redirectUrl);
+        this.props.history.push("/import-wallet");
       }
     }
   };
