@@ -69,9 +69,13 @@ class SecretPhraseRoute extends Component {
     ];
   }
 
+  async componentWillMount() {
+    await this.props.tryCreateWifFromCandidate(this.props.mnemonic);
+    this.props.setConfirmed(false);
+  }
+
   updateWallet = async e => {
     e.preventDefault();
-    await this.props.tryCreateWifFromCandidate(this.props.mnemonic);
     this.props.history.push("/confirm-phrase");
   };
 

@@ -13,7 +13,7 @@ export class ClipboardCopier {
 
   clear() {
     const el = document.createElement("textarea");
-    el.value = "";
+    el.value = " ";
     document.body.appendChild(el);
     el.select();
     document.execCommand("copy");
