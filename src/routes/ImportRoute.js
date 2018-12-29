@@ -8,7 +8,6 @@ import { WalletActions } from "src/store/wallet/WalletActions";
 import { WalletSelectors } from "src/store/wallet/WalletSelectors";
 
 import {
-  ButtonLink,
   Button,
   ButtonRow,
   Content,
@@ -22,6 +21,7 @@ import {
   SecondaryInfoBox
 } from "../components";
 import { ClipboardCopier } from "../services/misc/ClipboardCopier";
+import { Inject } from "../context/steriotypes/Inject";
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],

@@ -69,7 +69,7 @@ class SecretPhraseRoute extends Component {
     ];
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     await this.props.tryCreateWifFromCandidate(this.props.mnemonic);
     this.props.setConfirmed(false);
   }
