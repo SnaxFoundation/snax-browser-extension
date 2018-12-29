@@ -35,9 +35,7 @@ class PasswordRequestRoute extends Component {
 
   handleRestoreClick = async e => {
     e.preventDefault();
-    await this.props.clearWallet();
-    await this.props.clearPassword();
-    this.props.history.push("/");
+    this.props.history.push("/restore-confirmation");
   };
 
   render() {

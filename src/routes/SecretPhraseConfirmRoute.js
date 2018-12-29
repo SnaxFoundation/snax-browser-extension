@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
+
 import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
 import { WalletActions } from "src/store/wallet/WalletActions";
 import { WalletSelectors } from "src/store/wallet/WalletSelectors";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
+import { ClipboardCopier } from "../services/misc/ClipboardCopier";
+import { Inject } from "../context/steriotypes/Inject";
 import {
   SecondaryInfoBox,
   Anchor,
@@ -32,6 +35,8 @@ class SecretPhraseConfirmRoute extends Component {
     history: PropTypes.object.isRequired,
     mnemonic: PropTypes.string
   };
+
+  @Inject(ClipboardCopier) clipboardCopier;
 
   constructor(props, context) {
     super(props, context);
@@ -115,6 +120,7 @@ class SecretPhraseConfirmRoute extends Component {
 
     if (await this.checkMnemonic()) {
       this.props.setConfirmed();
+      this.clipboardCopier.clear();
       this.props.history.push(redirectUrl);
     } else {
       this.props.spawnErrorNotification("Invalid mnemonic");
