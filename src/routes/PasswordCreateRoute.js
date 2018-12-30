@@ -1,9 +1,10 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { WalletActions } from "src/store/wallet/WalletActions";
-import { WalletSelectors } from "src/store/wallet/WalletSelectors";
+import React, { Component } from "react";
+
 import { PasswordValidator } from "src/utils/validators/PasswordValidator";
 import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
 
 import {
   ButtonLink,
@@ -19,6 +20,8 @@ import {
   SecondaryInfoBox,
   Anchor
 } from "../components";
+import { Inject } from "../context/steriotypes/Inject";
+import { PasswordManager } from "../services/accounts/PasswordManager";
 
 // TODO Replace ButtonLink with Button after removing link
 
@@ -35,6 +38,15 @@ class PasswordCreateRoute extends Component {
     passwordCandidate: ""
   };
 
+  @Inject(PasswordManager) passwordManager;
+
+  async componentDidMount() {
+    const passwordCandidate = await this.passwordManager.getPassword();
+    if (passwordCandidate) {
+      this.setState({ passwordCandidate });
+    }
+  }
+
   isNewWallet = () =>
     this.props.history.location.pathname !== "/import-password";
 
@@ -50,6 +62,7 @@ class PasswordCreateRoute extends Component {
               <PasswordField
                 error={!validator.isValid}
                 onChange={this.handleInputChange}
+                value={this.state.passwordCandidate}
               />
               <TextFieldMessage error={!validator.areMoreThan7CharactersUsed}>
                 <ListUnordered>
@@ -82,7 +95,12 @@ class PasswordCreateRoute extends Component {
           </ButtonLink>
 
           <SecondaryInfoBox>
-            <Anchor colorScheme="flat" spread to="/">
+            <Anchor
+              colorScheme="flat"
+              spread
+              to="/"
+              onClick={this.props.clearPassword}
+            >
               Back
             </Anchor>
           </SecondaryInfoBox>

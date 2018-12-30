@@ -66,7 +66,7 @@ class ImportRoute extends Component {
             Continue
           </Button>
           <SecondaryInfoBox>
-            <Anchor colorScheme="flat" spread to="/">
+            <Anchor colorScheme="flat" spread to="/import-password">
               Back
             </Anchor>
           </SecondaryInfoBox>
