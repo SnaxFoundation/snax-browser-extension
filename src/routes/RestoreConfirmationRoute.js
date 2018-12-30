@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 import {
   Anchor,
@@ -8,18 +8,18 @@ import {
   Row,
   Screen,
   ScreenTitle,
-  ParagraphBody,
-  SecondaryInfoBox
-} from "../components";
-import { NotificationActions } from "../store/notifications/NotificationActions";
-import { ReduxContainer } from "../utils/redux/ReduxContainer";
-import { TransactionSelectors } from "../store/transaction/TransactionSelectors";
-import { WalletActions } from "../store/wallet/WalletActions";
-import { WalletSelectors } from "../store/wallet/WalletSelectors";
+  ParagraphBody2,
+  SecondaryInfoBox,
+} from '../components';
+import { NotificationActions } from '../store/notifications/NotificationActions';
+import { ReduxContainer } from '../utils/redux/ReduxContainer';
+import { TransactionSelectors } from '../store/transaction/TransactionSelectors';
+import { WalletActions } from '../store/wallet/WalletActions';
+import { WalletSelectors } from '../store/wallet/WalletSelectors';
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],
-  [WalletActions, NotificationActions]
+  [WalletActions, NotificationActions],
 )
 class RestoreConfirmationRoute extends Component {
   static propTypes = {};
@@ -27,7 +27,7 @@ class RestoreConfirmationRoute extends Component {
   restore = async () => {
     await this.props.clearWallet();
     await this.props.clearPassword();
-    this.props.history.push("/");
+    this.props.history.push('/');
   };
 
   render() {
@@ -36,14 +36,16 @@ class RestoreConfirmationRoute extends Component {
         <ScreenTitle>Restore key</ScreenTitle>
         <Content spread centerY>
           <Row className="text-align-center">
-            <ParagraphBody>
-              Are you sure you want to restore your key? Your current key will
-              be discarded.
-            </ParagraphBody>
-            <ParagraphBody>
-              If you need to log into your current wallet you will need your
-              secret key and password.
-            </ParagraphBody>
+            <div>
+              <ParagraphBody2>
+                Are you sure you want to restore your key? Your current key will
+                be discarded.
+              </ParagraphBody2>
+              <ParagraphBody2>
+                To access your current wallet again you will need secret key and
+                password.
+              </ParagraphBody2>
+            </div>
           </Row>
         </Content>
 
