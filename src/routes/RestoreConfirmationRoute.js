@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 import {
   Anchor,
@@ -9,17 +9,17 @@ import {
   Screen,
   ScreenTitle,
   ParagraphBody2,
-  SecondaryInfoBox,
-} from '../components';
-import { NotificationActions } from '../store/notifications/NotificationActions';
-import { ReduxContainer } from '../utils/redux/ReduxContainer';
-import { TransactionSelectors } from '../store/transaction/TransactionSelectors';
-import { WalletActions } from '../store/wallet/WalletActions';
-import { WalletSelectors } from '../store/wallet/WalletSelectors';
+  SecondaryInfoBox
+} from "../components";
+import { NotificationActions } from "../store/notifications/NotificationActions";
+import { ReduxContainer } from "../utils/redux/ReduxContainer";
+import { TransactionSelectors } from "../store/transaction/TransactionSelectors";
+import { WalletActions } from "../store/wallet/WalletActions";
+import { WalletSelectors } from "../store/wallet/WalletSelectors";
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],
-  [WalletActions, NotificationActions],
+  [WalletActions, NotificationActions]
 )
 class RestoreConfirmationRoute extends Component {
   static propTypes = {};
@@ -27,7 +27,7 @@ class RestoreConfirmationRoute extends Component {
   restore = async () => {
     await this.props.clearWallet();
     await this.props.clearPassword();
-    this.props.history.push('/');
+    this.props.history.push("/");
   };
 
   render() {
@@ -55,7 +55,7 @@ class RestoreConfirmationRoute extends Component {
           </Button>
 
           <SecondaryInfoBox>
-            <Anchor spread to="/wallet">
+            <Anchor spread to="/password">
               Cancel
             </Anchor>
           </SecondaryInfoBox>
