@@ -46,10 +46,10 @@ class SecretPhraseConfirmRoute extends Component {
     };
   }
 
-  updateMnemonic = async () => {
-    this.props.setConfirmed(false);
-    await this.props.clearWallet();
+  updateMnemonic = async e => {
+    e.preventDefault();
     await this.props.createNewMnemonic();
+    this.props.history.push("/secret-phrase");
   };
 
   render() {
@@ -75,19 +75,15 @@ class SecretPhraseConfirmRoute extends Component {
         </Content>
 
         <ButtonRow>
-          <Button
-            onClick={this.handleOpenValid}
-            // disabled={!this.areRandomWordsFromMnemonicValid()}
-            spread
-          >
+          <Button onClick={this.handleOpenValid} spread>
             Open wallet
           </Button>
 
           <SecondaryInfoBox>
             <Anchor
               colorScheme="flat"
-              spread
               to="/secret-phrase"
+              spread
               onClick={this.updateMnemonic}
             >
               Generate new key

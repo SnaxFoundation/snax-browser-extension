@@ -45,18 +45,20 @@ export class OutboundCommunicator {
 
     this._strategy.listen(msg => {
       if (!isMessageValid(msg) || !msg) {
-        console.warn("Message has invalid format, please check", msg, this);
+        if (process.env.NODE_ENV === "development")
+          console.warn("Message has invalid format, please check", msg, this);
       }
 
       if (!msg) return;
 
       if (!this._resolversMap.has(msg.id)) {
-        console.warn(
-          "Message with id " +
-            msg.id +
-            " had been reserved but handler was not found, it can be cause my timeout",
-          msg
-        );
+        if (process.env.NODE_ENV === "development")
+          console.warn(
+            "Message with id " +
+              msg.id +
+              " had been reserved but handler was not found, it can be cause my timeout",
+            msg
+          );
         return;
       }
 
@@ -66,7 +68,8 @@ export class OutboundCommunicator {
 
   send(message) {
     if (!(message instanceof AbstractMessage)) {
-      console.warn("Message is not a instance if AbstractMessage", message);
+      if (process.env.NODE_ENV === "development")
+        console.warn("Message is not a instance if AbstractMessage", message);
     }
 
     this._strategy.send(message);
