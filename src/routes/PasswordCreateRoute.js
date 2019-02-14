@@ -54,18 +54,18 @@ class PasswordCreateRoute extends Component {
                 error={!isEmpty && isValid}
                 onChange={this.handleInputChange}
               />
-              <TextFieldMessage error={!isEmpty && !areMoreThan7CharactersUsed}>
+              <TextFieldMessage filled={!isEmpty && areMoreThan7CharactersUsed}>
                 <ListUnordered>
                   <li>8 symbols minimum</li>
                 </ListUnordered>
               </TextFieldMessage>
-              <TextFieldMessage error={!isEmpty && !areUppercaseAndNumberUsed}>
+              <TextFieldMessage filled={!isEmpty && areUppercaseAndNumberUsed}>
                 <ListUnordered>
                   <li>at least 1 uppercase letter and 1 number</li>
                 </ListUnordered>
               </TextFieldMessage>
               <TextFieldMessage
-                error={!isEmpty && !areOnlyAlphanumericAndSpecialCharactersUsed}
+                filled={!isEmpty && areOnlyAlphanumericAndSpecialCharactersUsed}
               >
                 <ListUnordered>
                   <li>0-9, a-z, special characters</li>
