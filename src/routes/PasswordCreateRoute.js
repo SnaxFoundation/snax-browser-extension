@@ -51,7 +51,13 @@ class PasswordCreateRoute extends Component {
     this.props.history.location.pathname !== "/import-password";
 
   render() {
-    const validator = new PasswordValidator(this.state.passwordCandidate);
+    const {
+      isEmpty,
+      isValid,
+      areMoreThan7CharactersUsed,
+      areUppercaseAndNumberUsed,
+      areOnlyAlphanumericAndSpecialCharactersUsed,
+    } = new PasswordValidator(this.state.passwordCandidate);
 
     return (
       <Screen>
@@ -60,22 +66,21 @@ class PasswordCreateRoute extends Component {
           <Row>
             <TextFieldWrapper>
               <PasswordField
-                error={!validator.isValid}
                 onChange={this.handleInputChange}
                 value={this.state.passwordCandidate}
               />
-              <TextFieldMessage error={!validator.areMoreThan7CharactersUsed}>
+              <TextFieldMessage filled={!isEmpty && areMoreThan7CharactersUsed}>
                 <ListUnordered>
                   <li>8 symbols minimum</li>
                 </ListUnordered>
               </TextFieldMessage>
-              <TextFieldMessage error={!validator.areUppercaseAndNumberUsed}>
+              <TextFieldMessage filled={!isEmpty && areUppercaseAndNumberUsed}>
                 <ListUnordered>
                   <li>at least 1 uppercase letter and 1 number</li>
                 </ListUnordered>
               </TextFieldMessage>
               <TextFieldMessage
-                error={!validator.areOnlyAlphanumericAndSpecialCharactersUsed}
+                filled={!isEmpty && areOnlyAlphanumericAndSpecialCharactersUsed}
               >
                 <ListUnordered>
                   <li>0-9, a-z, special characters</li>
@@ -87,7 +92,7 @@ class PasswordCreateRoute extends Component {
         <ButtonRow>
           <ButtonLink
             onClick={this.handleCreation}
-            disabled={!validator.isValid}
+            disabled={!isValid}
             spread
             to="/secret-phrase"
           >
