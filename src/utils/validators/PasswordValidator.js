@@ -8,11 +8,6 @@ export class PasswordValidator {
   constructor(passwordCandidate) {
     this.isEmpty = passwordCandidate.length === 0;
 
-    this.isValid =
-      this.areMoreThan7CharactersUsed &&
-      this.areUppercaseAndNumberUsed &&
-      this.areOnlyAlphanumericAndSpecialCharactersUsed;
-
     this.areMoreThan7CharactersUsed = this.validateThatMoreThan7CharactersExist(
       passwordCandidate
     );
@@ -24,6 +19,11 @@ export class PasswordValidator {
     this.areOnlyAlphanumericAndSpecialCharactersUsed = this.validateThatOnlyAlphanumericAndSpecialCharactersPresent(
       passwordCandidate
     );
+
+    this.isValid =
+      this.areMoreThan7CharactersUsed &&
+      this.areUppercaseAndNumberUsed &&
+      this.areOnlyAlphanumericAndSpecialCharactersUsed;
   }
 
   validateThatMoreThan7CharactersExist(passwordCandidate) {
