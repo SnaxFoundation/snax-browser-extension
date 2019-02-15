@@ -66,7 +66,6 @@ class PasswordCreateRoute extends Component {
           <Row>
             <TextFieldWrapper>
               <PasswordField
-                error={!isEmpty && !isValid}
                 onChange={this.handleInputChange}
                 value={this.state.passwordCandidate}
               />
