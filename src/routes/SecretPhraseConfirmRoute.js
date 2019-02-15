@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
+
 import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
 import { WalletActions } from "src/store/wallet/WalletActions";
 import { WalletSelectors } from "src/store/wallet/WalletSelectors";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
+import { ClipboardCopier } from "../services/misc/ClipboardCopier";
+import { Inject } from "../context/steriotypes/Inject";
 import {
   SecondaryInfoBox,
   Anchor,
@@ -33,6 +36,8 @@ class SecretPhraseConfirmRoute extends Component {
     mnemonic: PropTypes.string
   };
 
+  @Inject(ClipboardCopier) clipboardCopier;
+
   constructor(props, context) {
     super(props, context);
 
@@ -41,10 +46,10 @@ class SecretPhraseConfirmRoute extends Component {
     };
   }
 
-  updateMnemonic = async () => {
-    this.props.setConfirmed(false);
-    await this.props.clearWallet();
+  updateMnemonic = async e => {
+    e.preventDefault();
     await this.props.createNewMnemonic();
+    this.props.history.push("/secret-phrase");
   };
 
   render() {
@@ -70,19 +75,15 @@ class SecretPhraseConfirmRoute extends Component {
         </Content>
 
         <ButtonRow>
-          <Button
-            onClick={this.handleOpenValid}
-            // disabled={!this.areRandomWordsFromMnemonicValid()}
-            spread
-          >
+          <Button onClick={this.handleOpenValid} spread>
             Open wallet
           </Button>
 
           <SecondaryInfoBox>
             <Anchor
               colorScheme="flat"
-              spread
               to="/secret-phrase"
+              spread
               onClick={this.updateMnemonic}
             >
               Generate new key
@@ -115,6 +116,7 @@ class SecretPhraseConfirmRoute extends Component {
 
     if (await this.checkMnemonic()) {
       this.props.setConfirmed();
+      this.clipboardCopier.clear();
       this.props.history.push(redirectUrl);
     } else {
       this.props.spawnErrorNotification("Invalid mnemonic");

@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { WalletActions } from 'src/store/wallet/WalletActions';
-import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
-import { PasswordValidator } from 'src/utils/validators/PasswordValidator';
-import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+
+import { PasswordValidator } from "src/utils/validators/PasswordValidator";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
 
 import {
   ButtonLink,
@@ -17,8 +18,10 @@ import {
   TextFieldWrapper,
   PasswordField,
   SecondaryInfoBox,
-  Anchor,
-} from '../components';
+  Anchor
+} from "../components";
+import { Inject } from "../context/steriotypes/Inject";
+import { PasswordManager } from "../services/accounts/PasswordManager";
 
 // TODO Replace ButtonLink with Button after removing link
 
@@ -26,14 +29,26 @@ import {
 class PasswordCreateRoute extends Component {
   static propTypes = {
     createWifCandidate: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   };
 
   state = {
     isPasswordVisible: false,
     isInputTouched: false,
-    passwordCandidate: '',
+    passwordCandidate: ""
   };
+
+  @Inject(PasswordManager) passwordManager;
+
+  async componentDidMount() {
+    const passwordCandidate = await this.passwordManager.getPassword();
+    if (passwordCandidate) {
+      this.setState({ passwordCandidate });
+    }
+  }
+
+  isNewWallet = () =>
+    this.props.history.location.pathname !== "/import-password";
 
   render() {
     const {
@@ -53,6 +68,7 @@ class PasswordCreateRoute extends Component {
               <PasswordField
                 error={!isEmpty && !isValid}
                 onChange={this.handleInputChange}
+                value={this.state.passwordCandidate}
               />
               <TextFieldMessage filled={!isEmpty && areMoreThan7CharactersUsed}>
                 <ListUnordered>
@@ -81,11 +97,16 @@ class PasswordCreateRoute extends Component {
             spread
             to="/secret-phrase"
           >
-            {this.props.publicKey ? 'Import wallet' : 'Create new wallet'}
+            {!this.isNewWallet() ? "Import wallet" : "Create new wallet"}
           </ButtonLink>
 
           <SecondaryInfoBox>
-            <Anchor colorScheme="flat" spread to="/">
+            <Anchor
+              colorScheme="flat"
+              spread
+              to="/"
+              onClick={this.props.clearPassword}
+            >
               Back
             </Anchor>
           </SecondaryInfoBox>
@@ -96,27 +117,23 @@ class PasswordCreateRoute extends Component {
 
   handleInputChange = e => {
     this.setState({
-      passwordCandidate: e.target.value,
+      passwordCandidate: e.target.value
     });
   };
 
   handleCreation = async e => {
     const { passwordCandidate } = this.state;
-    const { publicKey } = this.props;
     e.preventDefault();
 
     const validator = new PasswordValidator(passwordCandidate);
 
     if (validator.isValid) {
-      if (!publicKey) {
+      if (this.isNewWallet()) {
         await this.props.createWifCandidate(passwordCandidate);
-        this.props.history.push('/secret-phrase');
+        this.props.history.push("/secret-phrase");
       } else {
         await this.props.setPassword(passwordCandidate);
-        const redirectUrl = this.props.isCurrentTransactionActive
-          ? '/transaction-sign-request'
-          : '/wallet';
-        this.props.history.push(redirectUrl);
+        this.props.history.push("/import-wallet");
       }
     }
   };
