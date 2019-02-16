@@ -25,8 +25,6 @@ class BackgroundScript {
 
   popup;
 
-  publicPopup;
-
   run() {
     this.handlePopupRequests();
     this.handleContentRequests();
@@ -83,13 +81,8 @@ class BackgroundScript {
 
           if (value == null) {
             setTimeout(() => {
-              if (!this.publicPopup) {
-                this.publicPopup = window.open(
-                  chrome.extension.getURL("index.html"),
-                  "extension_popup",
-                  "width=360,height=500,status=no,scrollbars=no,resizable=no"
-                );
-              }
+              chrome.browserAction.setBadgeText({ text: "1" });
+              chrome.browserAction.setBadgeBackgroundColor({ color: "red" });
             }, 500);
 
             resolve({

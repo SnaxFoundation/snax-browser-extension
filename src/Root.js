@@ -86,6 +86,8 @@ class Root extends React.Component {
   }
 
   async componentDidMount() {
+    this.clearBadge();
+
     const canUse = await this.canUse();
     const hasWallet = await this.hasWallet();
     const shouldConfirm = await this.shouldConfirm();
@@ -98,6 +100,13 @@ class Root extends React.Component {
       );
     }
   }
+
+  clearBadge = () => {
+    window &&
+      window.chrome &&
+      chrome.browserAction &&
+      chrome.browserAction.setBadgeText({ text: "" });
+  };
 
   getVersion() {
     return (
@@ -119,12 +128,15 @@ class Root extends React.Component {
             <InjectResetStyle />
             <InjectGlobalStyle />
             {version ? <VersionBox version={version} /> : null}
-            {this.state.hasWallet &&
-              !this.state.canUse && <Redirect to="/password" />}
-            {this.state.canUse &&
-              !this.state.shouldConfirm && <Redirect to="/wallet" />}
-            {this.state.canUse &&
-              this.state.shouldConfirm && <Redirect to="/confirm-phrase" />}
+            {this.state.hasWallet && !this.state.canUse && (
+              <Redirect to="/password" />
+            )}
+            {this.state.canUse && !this.state.shouldConfirm && (
+              <Redirect to="/wallet" />
+            )}
+            {this.state.canUse && this.state.shouldConfirm && (
+              <Redirect to="/confirm-phrase" />
+            )}
             <Switch>
               <Route exact path="/" component={WelcomeRoute} />
               <Route
