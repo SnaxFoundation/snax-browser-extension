@@ -17,6 +17,7 @@ module.exports = env => {
 
   return {
     devtool: 'cheap-module-source-map',
+    mode: 'development',
     entry: {
       index: indexEntries,
       background: path.join(paths.appSrc, 'background.js'),
