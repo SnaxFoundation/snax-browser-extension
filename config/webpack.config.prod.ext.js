@@ -5,7 +5,7 @@ const paths = require('./paths');
 module.exports = {
   bail: true,
   devtool: false,
-  mode: 'production',
+  mode: 'development',
   entry: {
     background: path.join(paths.appSrc, 'background.js'),
     injected: path.join(paths.appSrc, 'injected.js'),
