@@ -45,13 +45,22 @@ class Root extends React.Component {
   state = {
     store: null,
     hasWallet: false,
-    canUse: false
+    canUse: false,
+    loading: true
   };
 
   constructor(props, context) {
     super(props, context);
 
     this.state.store = getStore();
+  }
+
+  async componentDidMount() {
+    this.clearBadge();
+
+    const canUse = await this.canUse();
+    const hasWallet = await this.hasWallet();
+    const shouldConfirm = await this.shouldConfirm();
 
     this.transactionManager.listen(async transaction => {
       const preparedTransaction = await this.transactionActions.prepareTransaction(
@@ -60,10 +69,6 @@ class Root extends React.Component {
         transaction.to,
         transaction.amount
       )(this.state.store.dispatch);
-
-      const canUse = await this.canUse();
-      const hasWallet = await this.hasWallet();
-      const shouldConfirm = await this.shouldConfirm();
 
       if (!hasWallet) {
         browserHistory.push("/new-wallet");
@@ -88,16 +93,8 @@ class Root extends React.Component {
     window.chrome.runtime.sendMessage({
       loaded: true
     });
-  }
 
-  async componentDidMount() {
-    this.clearBadge();
-
-    const canUse = await this.canUse();
-    const hasWallet = await this.hasWallet();
-    const shouldConfirm = await this.shouldConfirm();
-
-    this.setState({ canUse, hasWallet, shouldConfirm });
+    this.setState({ canUse, hasWallet, shouldConfirm, loading: false });
 
     if (canUse) {
       this.state.store.dispatch(
@@ -125,7 +122,14 @@ class Root extends React.Component {
   }
 
   render() {
-    console.log(this.state);
+    const { hasWallet, canUse, shouldConfirm, loading } = this.state;
+
+    const redirectToPassword = hasWallet && !canUse;
+    const redirectToWallet = canUse && !shouldConfirm;
+    const redirectToConfirmPhrase = canUse && shouldConfirm;
+
+    if (loading) return null;
+
     const version = this.getVersion();
     return (
       <Provider store={this.state.store}>
@@ -134,15 +138,6 @@ class Root extends React.Component {
             <InjectResetStyle />
             <InjectGlobalStyle />
             {version ? <VersionBox version={version} /> : null}
-            {this.state.hasWallet && !this.state.canUse && (
-              <Redirect to="/password" />
-            )}
-            {this.state.canUse && !this.state.shouldConfirm && (
-              <Redirect to="/wallet" />
-            )}
-            {this.state.canUse && this.state.shouldConfirm && (
-              <Redirect to="/confirm-phrase" />
-            )}
             <Switch>
               <Route exact path="/" component={WelcomeRoute} />
               <Route
@@ -163,6 +158,9 @@ class Root extends React.Component {
               />
               <Route path="*" render={() => <Redirect to="/" />} />
             </Switch>
+            {redirectToPassword && <Redirect to="/password" />}
+            {redirectToWallet && <Redirect to="/wallet" />}
+            {redirectToConfirmPhrase && <Redirect to="/confirm-phrase" />}
           </App>
         </NavigableRouter>
       </Provider>
