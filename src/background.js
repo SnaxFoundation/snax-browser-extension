@@ -47,9 +47,13 @@ class BackgroundScript {
         return new Promise((resolve, reject) => {
           this.setBadge();
 
-          const onLoadedMessage = message => {
+          const onLoadedMessage = async message => {
             if (message.loaded) {
-              this.listenTransactionConfirmation(payload, resolve, reject);
+              await this.listenTransactionConfirmation(
+                payload,
+                resolve,
+                reject
+              );
             }
             chrome.runtime.onMessage.removeListener(onLoadedMessage);
           };
