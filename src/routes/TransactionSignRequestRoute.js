@@ -61,7 +61,7 @@ class TransactionSignRequestRoute extends Component {
   }
 
   _renderBalance() {
-    return <Row> Your balance is: 685{this.props.currentAccountBalance}</Row>;
+    return <Row> Your balance is: {this.props.currentAccountBalance}</Row>;
   }
 
   _handleConfirmClick = async () => {

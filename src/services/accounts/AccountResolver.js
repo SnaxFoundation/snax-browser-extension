@@ -22,7 +22,6 @@ export class AccountResolver {
     });
 
     userPage = await userPage.text();
-    console.log(userPage);
     const id = this.extractIdFromPage(userPage);
     return id;
   }

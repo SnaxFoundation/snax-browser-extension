@@ -43,13 +43,18 @@ class BackgroundScript {
   handleContentRequests() {
     this.privateTransactionInboundCommunicator.handleRequestConfirmationTransaction(
       payload => {
+        console.log("payload", payload);
         return new Promise((resolve, reject) => {
           this.setBadge();
-          chrome.runtime.onMessage.addListener(request => {
-            if (request.loaded) {
+
+          const onLoadedMessage = message => {
+            if (message.loaded) {
               this.listenTransactionConfirmation(payload, resolve, reject);
             }
-          });
+            chrome.runtime.onMessage.removeListener(onLoadedMessage);
+          };
+
+          chrome.runtime.onMessage.addListener(onLoadedMessage);
         });
       }
     );
