@@ -90,9 +90,11 @@ class Root extends React.Component {
       return preparedTransaction;
     });
 
-    window.chrome.runtime.sendMessage({
-      loaded: true
-    });
+    if (this.isValidChromeRuntime()) {
+      window.chrome.runtime.sendMessage({
+        loaded: true
+      });
+    }
 
     this.setState({ canUse, hasWallet, shouldConfirm, loading: false });
 
@@ -118,6 +120,15 @@ class Root extends React.Component {
         typeof window.chrome.runtime.getManifest === "function" &&
         (window.chrome.runtime.getManifest() || {}).version) ||
       null
+    );
+  }
+
+  isValidChromeRuntime() {
+    return (
+      window &&
+      window.chrome &&
+      window.chrome.runtime &&
+      typeof window.chrome.runtime.getManifest === "function"
     );
   }
 
