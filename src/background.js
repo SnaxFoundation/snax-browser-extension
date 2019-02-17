@@ -23,8 +23,6 @@ class BackgroundScript {
 
   @Inject(Holder) holder;
 
-  popup;
-
   run() {
     this.handlePopupRequests();
     this.handleContentRequests();
@@ -46,21 +44,13 @@ class BackgroundScript {
     this.privateTransactionInboundCommunicator.handleRequestConfirmationTransaction(
       payload => {
         return new Promise((resolve, reject) => {
-          if (this.popup) {
-            this.popup.close();
-          }
-
-          setTimeout(() => {
-            this.popup = window.open(
-              chrome.extension.getURL("index.html"),
-              "extension_popup",
-              "width=360,height=500,status=no,scrollbars=no,resizable=no"
-            );
-            this.popup.addEventListener(
-              "load",
-              this.listenTransactionConfirmation(payload, resolve, reject)
-            );
-          }, 500); //TODO check what we can do with timeout
+          this.setBadge();
+          chrome.storage.sync.set(
+            {
+              currentTransaction: JSON.stringify(payload)
+            },
+            () => resolve(payload)
+          );
         });
       }
     );
@@ -80,11 +70,7 @@ class BackgroundScript {
           const value = this.holder.get(name);
 
           if (value == null) {
-            setTimeout(() => {
-              chrome.browserAction.setBadgeText({ text: "1" });
-              chrome.browserAction.setBadgeBackgroundColor({ color: "red" });
-            }, 500);
-
+            this.setBadge();
             resolve({
               name,
               data: this.holder.get(name)
@@ -98,6 +84,11 @@ class BackgroundScript {
         })
     );
   }
+
+  setBadge = () => {
+    chrome.browserAction.setBadgeText({ text: "1" });
+    chrome.browserAction.setBadgeBackgroundColor({ color: "red" });
+  };
 
   listenTransactionConfirmation(payload, resolve, reject) {
     return async () => {
