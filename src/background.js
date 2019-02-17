@@ -45,12 +45,11 @@ class BackgroundScript {
       payload => {
         return new Promise((resolve, reject) => {
           this.setBadge();
-          chrome.storage.sync.set(
-            {
-              currentTransaction: JSON.stringify(payload)
-            },
-            () => resolve(payload)
-          );
+          chrome.runtime.onMessage.addListener(request => {
+            if (request.loaded) {
+              this.listenTransactionConfirmation(payload, resolve, reject);
+            }
+          });
         });
       }
     );
@@ -90,18 +89,16 @@ class BackgroundScript {
     chrome.browserAction.setBadgeBackgroundColor({ color: "red" });
   };
 
-  listenTransactionConfirmation(payload, resolve, reject) {
-    return async () => {
-      try {
-        const result = await this.privateTransactionOutboundCommunicator.sendConfirmTransaction(
-          payload
-        );
-        resolve(result);
-      } catch (e) {
-        console.error(e);
-        reject(e);
-      }
-    };
+  async listenTransactionConfirmation(payload, resolve, reject) {
+    try {
+      const result = await this.privateTransactionOutboundCommunicator.sendConfirmTransaction(
+        payload
+      );
+      resolve(result);
+    } catch (e) {
+      console.error(e);
+      reject(e);
+    }
   }
 }
 

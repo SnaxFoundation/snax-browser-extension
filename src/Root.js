@@ -6,6 +6,7 @@ import { Inject } from "src/context/steriotypes/Inject";
 import SecretPhraseConfirmRoute from "src/routes/SecretPhraseConfirmRoute";
 import { WalletManager } from "src/services/accounts/WalletManager";
 import { getStore } from "src/store/store";
+import { TransactionManager } from "src/services/transaction/TransactionManager";
 import { TransactionActions } from "src/store/transaction/TransactionActions";
 import { WalletActions } from "src/store/wallet/WalletActions";
 
@@ -37,6 +38,8 @@ class Root extends React.Component {
 
   @Inject(WalletActions) walletActions;
 
+  @Inject(TransactionManager) transactionManager;
+
   @Inject(TransactionActions) transactionActions;
 
   state = {
@@ -49,17 +52,46 @@ class Root extends React.Component {
     super(props, context);
 
     this.state.store = getStore();
+
+    this.transactionManager.listen(async transaction => {
+      const preparedTransaction = await this.transactionActions.prepareTransaction(
+        transaction.id,
+        transaction.from,
+        transaction.to,
+        transaction.amount
+      )(this.state.store.dispatch);
+
+      const canUse = await this.canUse();
+      const hasWallet = await this.hasWallet();
+      const shouldConfirm = await this.shouldConfirm();
+
+      if (!hasWallet) {
+        browserHistory.push("/new-wallet");
+        return;
+      }
+
+      if (!canUse) {
+        browserHistory.push("/password");
+        return;
+      }
+
+      if (canUse && shouldConfirm) {
+        browserHistory.push("/confirm-phrase");
+        return;
+      }
+
+      browserHistory.push("/transaction-sign-request");
+
+      return preparedTransaction;
+    });
+
+    window.chrome.runtime.sendMessage({
+      loaded: true
+    });
   }
 
   async componentDidMount() {
     this.clearBadge();
-
-    window.chrome.storage.sync.get(["currentTransaction"], storage => {
-      if (storage.currentTransaction) {
-        const transaction = JSON.parse(storage.currentTransaction);
-        this.handleRequestTransaction(transaction);
-      }
-    });
 
     const canUse = await this.canUse();
     const hasWallet = await this.hasWallet();
@@ -73,36 +105,6 @@ class Root extends React.Component {
       );
     }
   }
-
-  handleRequestTransaction = async transaction => {
-    await this.transactionActions.prepareTransaction(
-      transaction.id,
-      transaction.from,
-      transaction.to,
-      transaction.amount
-    )(this.state.store.dispatch);
-
-    const canUse = await this.canUse();
-    const hasWallet = await this.hasWallet();
-    const shouldConfirm = await this.shouldConfirm();
-
-    if (!hasWallet) {
-      browserHistory.push("/new-wallet");
-      return;
-    }
-
-    if (!canUse) {
-      browserHistory.push("/password");
-      return;
-    }
-
-    if (canUse && shouldConfirm) {
-      browserHistory.push("/confirm-phrase");
-      return;
-    }
-
-    browserHistory.push("/transaction-sign-request");
-  };
 
   clearBadge = () => {
     window &&
@@ -123,6 +125,7 @@ class Root extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     const version = this.getVersion();
     return (
       <Provider store={this.state.store}>

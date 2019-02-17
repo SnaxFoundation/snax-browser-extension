@@ -66,10 +66,12 @@ class TransactionSignRequestRoute extends Component {
 
   _handleConfirmClick = async () => {
     await this.props.signTransaction();
+    this.props.history.push("/wallet");
   };
 
   _handleCancelClick = async () => {
     await this.props.discardTransaction();
+    this.props.history.push("/wallet");
   };
 }
 
