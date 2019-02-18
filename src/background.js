@@ -25,8 +25,6 @@ class BackgroundScript {
 
   @Inject(Holder) holder;
 
-  // isAllowedTab;
-
   run() {
     this.handlePopupRequests();
     this.handleContentRequests();
