@@ -50,6 +50,7 @@ class Root extends React.Component {
     hasWallet: false,
     canUse: false,
     loading: true,
+    preparingTransaction: false,
     snaxDomain: true,
   };
 
@@ -67,12 +68,16 @@ class Root extends React.Component {
     const shouldConfirm = await this.shouldConfirm();
 
     this.transactionManager.listen(async transaction => {
+      this.setState({ preparingTransaction: true });
+
       const preparedTransaction = await this.transactionActions.prepareTransaction(
         transaction.id,
         transaction.from,
         transaction.to,
         transaction.amount
       )(this.state.store.dispatch);
+
+      this.setState({ preparingTransaction: false });
 
       if (!hasWallet) {
         browserHistory.push('/new-wallet');
@@ -144,6 +149,7 @@ class Root extends React.Component {
       shouldConfirm,
       snaxDomain,
       loading,
+      preparingTransaction,
     } = this.state;
 
     const redirectToPassword = hasWallet && !canUse;
@@ -151,6 +157,7 @@ class Root extends React.Component {
     const redirectToConfirmPhrase = canUse && shouldConfirm;
 
     if (loading) return null;
+    if (preparingTransaction) return null;
 
     const version = this.getVersion();
     return (
