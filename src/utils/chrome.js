@@ -12,3 +12,11 @@ export const setBadgeColor = (active = true) => {
 export const clearBadge = () => {
   chrome.browserAction.setBadgeText({ text: '' });
 };
+
+export const getActiveTabUrlAsync = async () => {
+  return new Promise(resolve => {
+    window.chrome.tabs.query({ active: true }, tabs => {
+      resolve(tabs[0].url);
+    });
+  });
+};

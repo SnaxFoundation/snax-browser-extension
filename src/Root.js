@@ -27,7 +27,8 @@ import {
   TransactionSignRequestRoute,
 } from './routes';
 
-import { clearBadge } from 'src/utils/chrome';
+import { clearBadge, getActiveTabUrlAsync } from 'src/utils/chrome';
+import { isSnaxDomain } from 'src/utils/misc';
 
 export const browserHistory = createBrowserHistory();
 
@@ -49,6 +50,7 @@ class Root extends React.Component {
     hasWallet: false,
     canUse: false,
     loading: true,
+    snaxDomain: true,
   };
 
   constructor(props, context) {
@@ -59,10 +61,6 @@ class Root extends React.Component {
 
   async componentDidMount() {
     const isValidRuntime = this.isValidChromeRuntime();
-
-    if (isValidRuntime) {
-      clearBadge();
-    }
 
     const canUse = await this.canUse();
     const hasWallet = await this.hasWallet();
@@ -102,6 +100,14 @@ class Root extends React.Component {
       });
     }
 
+    if (isValidRuntime) {
+      clearBadge();
+      const url = await getActiveTabUrlAsync();
+      if (!isSnaxDomain(url)) {
+        this.setState({ snaxDomain: false });
+      }
+    }
+
     this.setState({ canUse, hasWallet, shouldConfirm, loading: false });
 
     if (canUse) {
@@ -132,7 +138,13 @@ class Root extends React.Component {
   }
 
   render() {
-    const { hasWallet, canUse, shouldConfirm, loading } = this.state;
+    const {
+      hasWallet,
+      canUse,
+      shouldConfirm,
+      snaxDomain,
+      loading,
+    } = this.state;
 
     const redirectToPassword = hasWallet && !canUse;
     const redirectToWallet = canUse && !shouldConfirm;
@@ -171,6 +183,7 @@ class Root extends React.Component {
             {redirectToPassword && <Redirect to="/password" />}
             {redirectToWallet && <Redirect to="/wallet" />}
             {redirectToConfirmPhrase && <Redirect to="/confirm-phrase" />}
+            {!snaxDomain && <Redirect to="/unknown" />}
           </App>
         </NavigableRouter>
       </Provider>

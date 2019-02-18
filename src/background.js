@@ -65,7 +65,6 @@ class BackgroundScript {
   handleContentRequests() {
     this.privateTransactionInboundCommunicator.handleRequestConfirmationTransaction(
       payload => {
-        console.log('payload', payload);
         return new Promise((resolve, reject) => {
           setBadge();
 
