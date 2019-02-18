@@ -55,7 +55,10 @@ class PasswordCreateRoute extends Component {
               </TextFieldMessage>
               <TextFieldMessage error={!validator.areUppercaseAndNumberUsed}>
                 <ListUnordered>
-                  <li>at least 1 uppercase letter and 1 number</li>
+                  <li>
+                    at least 1 uppercase letter and 1 number or special
+                    character
+                  </li>
                 </ListUnordered>
               </TextFieldMessage>
               <TextFieldMessage
