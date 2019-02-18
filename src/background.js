@@ -6,6 +6,8 @@ import { PrivateDataOutboundCommunicator } from 'src/services/communication/priv
 import { PrivateDataInboundCommunicator } from 'src/services/communication/privateData/PrivateDataInboundCommunicator';
 import { PrivateTransactionOutboundCommunicator } from 'src/services/communication/privateTransaction/PrivateTransactionOutboundCommunicator';
 import { Holder } from 'src/services/misc/Holder';
+import { setBadge, setBadgeColor, clearBadge } from 'src/utils/chrome';
+
 const PASSWORD_HOLDER_TOKEN = 'password';
 
 class BackgroundScript {
@@ -23,9 +25,26 @@ class BackgroundScript {
 
   @Inject(Holder) holder;
 
+  // isAllowedTab;
+
   run() {
     this.handlePopupRequests();
     this.handleContentRequests();
+    this.listenTabChange();
+  }
+
+  listenTabChange() {
+    chrome.tabs.onActivated.addListener(data => {
+      chrome.tabs.get(data.tabId, tab => {
+        if (tab.url) {
+          // this.isAllowedTab = true;
+          setBadgeColor(true);
+        } else {
+          // this.isAllowedTab = false;
+          setBadgeColor(false);
+        }
+      });
+    });
   }
 
   handlePopupRequests() {
@@ -39,7 +58,7 @@ class BackgroundScript {
 
     this.privateDataInboundCommunicator.handleSetData(({ name, data }) => {
       this.holder.hold(name, data);
-      this.clearBadge();
+      clearBadge();
     });
   }
 
@@ -48,7 +67,7 @@ class BackgroundScript {
       payload => {
         console.log('payload', payload);
         return new Promise((resolve, reject) => {
-          this.setBadge();
+          setBadge();
 
           const onLoadedMessage = async message => {
             if (message.loaded) {
@@ -80,7 +99,8 @@ class BackgroundScript {
 
           const value = this.holder.get(name);
           if (value == null) {
-            this.setBadge();
+            setBadge();
+
             resolve({
               name,
               data: this.holder.get(name),
@@ -94,15 +114,6 @@ class BackgroundScript {
         })
     );
   }
-
-  setBadge = () => {
-    chrome.browserAction.setBadgeText({ text: '1' });
-    chrome.browserAction.setBadgeBackgroundColor({ color: 'red' });
-  };
-
-  clearBadge = () => {
-    chrome.browserAction.setBadgeText({ text: '' });
-  };
 
   async listenTransactionConfirmation(payload, resolve, reject) {
     try {

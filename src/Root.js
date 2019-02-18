@@ -1,18 +1,18 @@
-import React from "react";
-import { Provider } from "react-redux";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import { createBrowserHistory } from "history";
-import { Inject } from "src/context/steriotypes/Inject";
-import SecretPhraseConfirmRoute from "src/routes/SecretPhraseConfirmRoute";
-import { WalletManager } from "src/services/accounts/WalletManager";
-import { getStore } from "src/store/store";
-import { TransactionManager } from "src/services/transaction/TransactionManager";
-import { TransactionActions } from "src/store/transaction/TransactionActions";
-import { WalletActions } from "src/store/wallet/WalletActions";
+import React from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { Inject } from 'src/context/steriotypes/Inject';
+import SecretPhraseConfirmRoute from 'src/routes/SecretPhraseConfirmRoute';
+import { WalletManager } from 'src/services/accounts/WalletManager';
+import { getStore } from 'src/store/store';
+import { TransactionManager } from 'src/services/transaction/TransactionManager';
+import { TransactionActions } from 'src/store/transaction/TransactionActions';
+import { WalletActions } from 'src/store/wallet/WalletActions';
 
-import { App } from "./components";
-import { VersionBox } from "./containers";
-import { InjectResetStyle, InjectGlobalStyle } from "./styles";
+import { App } from './components';
+import { VersionBox } from './containers';
+import { InjectResetStyle, InjectGlobalStyle } from './styles';
 
 import {
   UnknownDomainRoute,
@@ -24,8 +24,10 @@ import {
   ErrorRoute,
   PasswordRequestRoute,
   SignRequestRoute,
-  TransactionSignRequestRoute
-} from "./routes";
+  TransactionSignRequestRoute,
+} from './routes';
+
+import { clearBadge } from 'src/utils/chrome';
 
 export const browserHistory = createBrowserHistory();
 
@@ -46,7 +48,7 @@ class Root extends React.Component {
     store: null,
     hasWallet: false,
     canUse: false,
-    loading: true
+    loading: true,
   };
 
   constructor(props, context) {
@@ -56,7 +58,11 @@ class Root extends React.Component {
   }
 
   async componentDidMount() {
-    this.clearBadge();
+    const isValidRuntime = this.isValidChromeRuntime();
+
+    if (isValidRuntime) {
+      clearBadge();
+    }
 
     const canUse = await this.canUse();
     const hasWallet = await this.hasWallet();
@@ -71,28 +77,28 @@ class Root extends React.Component {
       )(this.state.store.dispatch);
 
       if (!hasWallet) {
-        browserHistory.push("/new-wallet");
+        browserHistory.push('/new-wallet');
         return;
       }
 
       if (!canUse) {
-        browserHistory.push("/password");
+        browserHistory.push('/password');
         return;
       }
 
       if (canUse && shouldConfirm) {
-        browserHistory.push("/confirm-phrase");
+        browserHistory.push('/confirm-phrase');
         return;
       }
 
-      browserHistory.push("/transaction-sign-request");
+      browserHistory.push('/transaction-sign-request');
 
       return preparedTransaction;
     });
 
     if (this.isValidChromeRuntime()) {
       window.chrome.runtime.sendMessage({
-        loaded: true
+        loaded: true,
       });
     }
 
@@ -105,19 +111,12 @@ class Root extends React.Component {
     }
   }
 
-  clearBadge = () => {
-    window &&
-      window.chrome &&
-      chrome.browserAction &&
-      chrome.browserAction.setBadgeText({ text: "" });
-  };
-
   getVersion() {
     return (
       (window &&
         window.chrome &&
         window.chrome.runtime &&
-        typeof window.chrome.runtime.getManifest === "function" &&
+        typeof window.chrome.runtime.getManifest === 'function' &&
         (window.chrome.runtime.getManifest() || {}).version) ||
       null
     );
@@ -128,7 +127,7 @@ class Root extends React.Component {
       window &&
       window.chrome &&
       window.chrome.runtime &&
-      typeof window.chrome.runtime.getManifest === "function"
+      typeof window.chrome.runtime.getManifest === 'function'
     );
   }
 
