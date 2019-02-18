@@ -1,12 +1,12 @@
-import "babel-polyfill";
-import { Inject } from "src/context/steriotypes/Inject";
-import { PasswordInboundCommunicator } from "src/services/communication/password/PasswordInboundCommunicator";
-import { PrivateTransactionInboundCommunicator } from "src/services/communication/privateTransaction/PrivateTransactionInboundCommunicator";
-import { PrivateDataOutboundCommunicator } from "src/services/communication/privateData/PrivateDataOutboundCommunicator";
-import { PrivateDataInboundCommunicator } from "src/services/communication/privateData/PrivateDataInboundCommunicator";
-import { PrivateTransactionOutboundCommunicator } from "src/services/communication/privateTransaction/PrivateTransactionOutboundCommunicator";
-import { Holder } from "src/services/misc/Holder";
-const PASSWORD_HOLDER_TOKEN = "password";
+import 'babel-polyfill';
+import { Inject } from 'src/context/steriotypes/Inject';
+import { PasswordInboundCommunicator } from 'src/services/communication/password/PasswordInboundCommunicator';
+import { PrivateTransactionInboundCommunicator } from 'src/services/communication/privateTransaction/PrivateTransactionInboundCommunicator';
+import { PrivateDataOutboundCommunicator } from 'src/services/communication/privateData/PrivateDataOutboundCommunicator';
+import { PrivateDataInboundCommunicator } from 'src/services/communication/privateData/PrivateDataInboundCommunicator';
+import { PrivateTransactionOutboundCommunicator } from 'src/services/communication/privateTransaction/PrivateTransactionOutboundCommunicator';
+import { Holder } from 'src/services/misc/Holder';
+const PASSWORD_HOLDER_TOKEN = 'password';
 
 class BackgroundScript {
   @Inject(PasswordInboundCommunicator) passwordInboundCommunicator;
@@ -32,18 +32,21 @@ class BackgroundScript {
     this.passwordInboundCommunicator.handleGetPassword(() =>
       this.holder.get(PASSWORD_HOLDER_TOKEN)
     );
-    this.passwordInboundCommunicator.handleSavePassword(payload =>
-      this.holder.hold(PASSWORD_HOLDER_TOKEN, payload.password)
-    );
-    this.privateDataInboundCommunicator.handleSetData(({ name, data }) =>
-      this.holder.hold(name, data)
-    );
+
+    this.passwordInboundCommunicator.handleSavePassword(payload => {
+      this.holder.hold(PASSWORD_HOLDER_TOKEN, payload.password);
+    });
+
+    this.privateDataInboundCommunicator.handleSetData(({ name, data }) => {
+      this.holder.hold(name, data);
+      this.clearBadge();
+    });
   }
 
   handleContentRequests() {
     this.privateTransactionInboundCommunicator.handleRequestConfirmationTransaction(
       payload => {
-        console.log("payload", payload);
+        console.log('payload', payload);
         return new Promise((resolve, reject) => {
           this.setBadge();
 
@@ -71,22 +74,21 @@ class BackgroundScript {
             String(name) === PASSWORD_HOLDER_TOKEN
           ) {
             return {
-              name
+              name,
             };
           }
 
           const value = this.holder.get(name);
-
           if (value == null) {
             this.setBadge();
             resolve({
               name,
-              data: this.holder.get(name)
+              data: this.holder.get(name),
             });
           } else {
             resolve({
               name,
-              data: value
+              data: value,
             });
           }
         })
@@ -94,8 +96,12 @@ class BackgroundScript {
   }
 
   setBadge = () => {
-    chrome.browserAction.setBadgeText({ text: "1" });
-    chrome.browserAction.setBadgeBackgroundColor({ color: "red" });
+    chrome.browserAction.setBadgeText({ text: '1' });
+    chrome.browserAction.setBadgeBackgroundColor({ color: 'red' });
+  };
+
+  clearBadge = () => {
+    chrome.browserAction.setBadgeText({ text: '' });
   };
 
   async listenTransactionConfirmation(payload, resolve, reject) {
