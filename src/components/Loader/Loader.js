@@ -85,7 +85,7 @@ const Text = styled.div`
   color: ${constants.color.medium};
   text-align: center;
   font-weight: ${constants.fontWeight.semibold};
-  font-size: 32px;
+  font-size: 24px;
 
   ${flashing};
 `;
