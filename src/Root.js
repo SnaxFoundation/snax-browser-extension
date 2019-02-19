@@ -157,9 +157,6 @@ class Root extends React.Component {
     const redirectToWallet = canUse && !shouldConfirm;
     const redirectToConfirmPhrase = canUse && shouldConfirm;
 
-    if (loading) return null;
-    if (preparingTransaction) return null;
-
     const version = this.getVersion();
     return (
       <Provider store={this.state.store}>
@@ -167,6 +164,8 @@ class Root extends React.Component {
           <App>
             <InjectResetStyle />
             <InjectGlobalStyle />
+            {loading && <div id="loading" />}
+            {preparingTransaction && <div id="preparing transaction" />}
             {version ? <VersionBox version={version} /> : null}
             <Switch>
               <Route exact path="/" component={WelcomeRoute} />
