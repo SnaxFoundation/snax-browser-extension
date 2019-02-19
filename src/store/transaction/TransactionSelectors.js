@@ -15,6 +15,11 @@ export class TransactionSelectors {
   }
 
   @Selector
+  currentTransactionDisplayName(state) {
+    return state.displayName;
+  }
+
+  @Selector
   currentTransactionPlatform(state) {
     return state.platform;
   }
