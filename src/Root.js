@@ -10,7 +10,7 @@ import { TransactionManager } from 'src/services/transaction/TransactionManager'
 import { TransactionActions } from 'src/store/transaction/TransactionActions';
 import { WalletActions } from 'src/store/wallet/WalletActions';
 
-import { App } from './components';
+import { App, Loader } from './components';
 import { VersionBox } from './containers';
 import { InjectResetStyle, InjectGlobalStyle } from './styles';
 
@@ -157,7 +157,7 @@ class Root extends React.Component {
     const redirectToWallet = canUse && !shouldConfirm;
     const redirectToConfirmPhrase = canUse && shouldConfirm;
 
-    if (loading) return null;
+    if (loading) return <Loader hasSpinner />;
     if (preparingTransaction) return null;
 
     const version = this.getVersion();
