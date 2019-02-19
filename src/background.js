@@ -1,12 +1,14 @@
-import "babel-polyfill";
-import { Inject } from "src/context/steriotypes/Inject";
-import { PasswordInboundCommunicator } from "src/services/communication/password/PasswordInboundCommunicator";
-import { PrivateTransactionInboundCommunicator } from "src/services/communication/privateTransaction/PrivateTransactionInboundCommunicator";
-import { PrivateDataOutboundCommunicator } from "src/services/communication/privateData/PrivateDataOutboundCommunicator";
-import { PrivateDataInboundCommunicator } from "src/services/communication/privateData/PrivateDataInboundCommunicator";
-import { PrivateTransactionOutboundCommunicator } from "src/services/communication/privateTransaction/PrivateTransactionOutboundCommunicator";
-import { Holder } from "src/services/misc/Holder";
-const PASSWORD_HOLDER_TOKEN = "password";
+import 'babel-polyfill';
+import { Inject } from 'src/context/steriotypes/Inject';
+import { PasswordInboundCommunicator } from 'src/services/communication/password/PasswordInboundCommunicator';
+import { PrivateTransactionInboundCommunicator } from 'src/services/communication/privateTransaction/PrivateTransactionInboundCommunicator';
+import { PrivateDataOutboundCommunicator } from 'src/services/communication/privateData/PrivateDataOutboundCommunicator';
+import { PrivateDataInboundCommunicator } from 'src/services/communication/privateData/PrivateDataInboundCommunicator';
+import { PrivateTransactionOutboundCommunicator } from 'src/services/communication/privateTransaction/PrivateTransactionOutboundCommunicator';
+import { Holder } from 'src/services/misc/Holder';
+import { setBadge, setBadgeColor, clearBadge } from 'src/utils/chrome';
+
+const PASSWORD_HOLDER_TOKEN = 'password';
 
 class BackgroundScript {
   @Inject(PasswordInboundCommunicator) passwordInboundCommunicator;
@@ -23,46 +25,59 @@ class BackgroundScript {
 
   @Inject(Holder) holder;
 
-  popup;
-
-  publicPopup;
-
   run() {
     this.handlePopupRequests();
     this.handleContentRequests();
+    this.listenTabChange();
+  }
+
+  listenTabChange() {
+    chrome.tabs.onActivated.addListener(data => {
+      chrome.tabs.get(data.tabId, tab => {
+        if (tab.url) {
+          // this.isAllowedTab = true;
+          setBadgeColor(true);
+        } else {
+          // this.isAllowedTab = false;
+          setBadgeColor(false);
+        }
+      });
+    });
   }
 
   handlePopupRequests() {
     this.passwordInboundCommunicator.handleGetPassword(() =>
       this.holder.get(PASSWORD_HOLDER_TOKEN)
     );
-    this.passwordInboundCommunicator.handleSavePassword(payload =>
-      this.holder.hold(PASSWORD_HOLDER_TOKEN, payload.password)
-    );
-    this.privateDataInboundCommunicator.handleSetData(({ name, data }) =>
-      this.holder.hold(name, data)
-    );
+
+    this.passwordInboundCommunicator.handleSavePassword(payload => {
+      this.holder.hold(PASSWORD_HOLDER_TOKEN, payload.password);
+    });
+
+    this.privateDataInboundCommunicator.handleSetData(({ name, data }) => {
+      this.holder.hold(name, data);
+      clearBadge();
+    });
   }
 
   handleContentRequests() {
     this.privateTransactionInboundCommunicator.handleRequestConfirmationTransaction(
       payload => {
         return new Promise((resolve, reject) => {
-          if (this.popup) {
-            this.popup.close();
-          }
+          setBadge();
 
-          setTimeout(() => {
-            this.popup = window.open(
-              chrome.extension.getURL("index.html"),
-              "extension_popup",
-              "width=360,height=500,status=no,scrollbars=no,resizable=no"
-            );
-            this.popup.addEventListener(
-              "load",
-              this.listenTransactionConfirmation(payload, resolve, reject)
-            );
-          }, 500); //TODO check what we can do with timeout
+          const onLoadedMessage = async message => {
+            if (message.loaded) {
+              await this.listenTransactionConfirmation(
+                payload,
+                resolve,
+                reject
+              );
+            }
+            chrome.runtime.onMessage.removeListener(onLoadedMessage);
+          };
+
+          chrome.runtime.onMessage.addListener(onLoadedMessage);
         });
       }
     );
@@ -75,49 +90,38 @@ class BackgroundScript {
             String(name) === PASSWORD_HOLDER_TOKEN
           ) {
             return {
-              name
+              name,
             };
           }
 
           const value = this.holder.get(name);
-
           if (value == null) {
-            setTimeout(() => {
-              if (!this.publicPopup) {
-                this.publicPopup = window.open(
-                  chrome.extension.getURL("index.html"),
-                  "extension_popup",
-                  "width=360,height=500,status=no,scrollbars=no,resizable=no"
-                );
-              }
-            }, 500);
+            setBadge();
 
             resolve({
               name,
-              data: this.holder.get(name)
+              data: this.holder.get(name),
             });
           } else {
             resolve({
               name,
-              data: value
+              data: value,
             });
           }
         })
     );
   }
 
-  listenTransactionConfirmation(payload, resolve, reject) {
-    return async () => {
-      try {
-        const result = await this.privateTransactionOutboundCommunicator.sendConfirmTransaction(
-          payload
-        );
-        resolve(result);
-      } catch (e) {
-        console.error(e);
-        reject(e);
-      }
-    };
+  async listenTransactionConfirmation(payload, resolve, reject) {
+    try {
+      const result = await this.privateTransactionOutboundCommunicator.sendConfirmTransaction(
+        payload
+      );
+      resolve(result);
+    } catch (e) {
+      console.error(e);
+      reject(e);
+    }
   }
 }
 

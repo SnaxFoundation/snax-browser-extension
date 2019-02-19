@@ -9,7 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   bail: true,
   devtool: false,
-  mode: 'production',
+  mode: 'development',
   entry: {
     index: path.join(paths.appSrc, 'index.js'),
   },

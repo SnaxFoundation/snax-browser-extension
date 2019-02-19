@@ -1,1 +1,1 @@
-export * from './LoaderBox';
+export * from './Loader';

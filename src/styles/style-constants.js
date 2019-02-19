@@ -74,6 +74,7 @@ export default {
     button: 16,
     heading: 20,
     heading2: 24,
+    heading3: 32,
     title: 24,
     display1: 45,
   },

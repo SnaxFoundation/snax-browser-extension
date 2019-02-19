@@ -11,14 +11,14 @@ export const Wrapper = styled.div`
   align-items: flex-start;
   max-width: 100%;
   min-width: 0;
-  font-size: ${constants.fontSize.body}px;
   line-height: 1.2;
 `;
 
 export const Icon = styled.div`
   width: ${iconSize};
   height: ${iconSize};
-  margin-right: ${constants.baseModule}px;
+  margin-right: 0.3em;
+  margin-left: -0.15em;
   display: inline-flex;
   align-items: center;
   justify-content: center;

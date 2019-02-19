@@ -27,8 +27,8 @@ class TransactionSignRequestRoute extends Component {
           </Row>
           <Row>
             <TransactionRecipient
-              type="twitter"
-              name={this.props.currentTransactionRecipient.platformAccountName}
+              type={this.props.currentTransactionPlatform}
+              name={this.props.currentTransactionRecipient}
             />
           </Row>
           {this._renderBalance()}
@@ -61,17 +61,17 @@ class TransactionSignRequestRoute extends Component {
   }
 
   _renderBalance() {
-    return <Row> Your balance is: 685{this.props.currentAccountBalance}</Row>;
+    return <Row> Your balance is: {this.props.currentAccountBalance}</Row>;
   }
 
   _handleConfirmClick = async () => {
     await this.props.signTransaction();
-    window.close();
+    this.props.history.push('/wallet');
   };
 
   _handleCancelClick = async () => {
     await this.props.discardTransaction();
-    window.close();
+    this.props.history.push('/wallet');
   };
 }
 
