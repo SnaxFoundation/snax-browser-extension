@@ -1,13 +1,13 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
+
 import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
 import { WalletActions } from "src/store/wallet/WalletActions";
 import { WalletSelectors } from "src/store/wallet/WalletSelectors";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
 
 import {
-  ButtonLink,
   Button,
   ButtonRow,
   Content,
@@ -20,6 +20,8 @@ import {
   Anchor,
   SecondaryInfoBox
 } from "../components";
+import { ClipboardCopier } from "../services/misc/ClipboardCopier";
+import { Inject } from "../context/steriotypes/Inject";
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],
@@ -31,6 +33,8 @@ class ImportRoute extends Component {
     tryCreateWalletByMnemonic: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   };
+
+  @Inject(ClipboardCopier) clipboardCopier;
 
   state = {
     mnemonic: ""
@@ -62,7 +66,7 @@ class ImportRoute extends Component {
             Continue
           </Button>
           <SecondaryInfoBox>
-            <Anchor colorScheme="flat" spread to="/">
+            <Anchor colorScheme="flat" spread to="/import-password">
               Back
             </Anchor>
           </SecondaryInfoBox>
@@ -85,8 +89,12 @@ class ImportRoute extends Component {
         this.state.mnemonic
       );
       if (result.isCreationSucceed) {
-        await this.props.setPassword("");
-        this.props.history.push("/new-wallet");
+        this.props.setConfirmed();
+        this.clipboardCopier.clear();
+        const redirectUrl = this.props.isCurrentTransactionActive
+          ? "/transaction-sign-request"
+          : "/wallet";
+        this.props.history.push(redirectUrl);
       } else {
         this.props.spawnErrorNotification("Recovering failed");
       }

@@ -21,6 +21,6 @@ export class PasswordManager {
   }
 
   async clearPassword() {
-    await this.passwordOutboundCommunicator.savePassword(null);
+    await this.passwordOutboundCommunicator.savePassword("");
   }
 }

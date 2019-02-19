@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
@@ -45,6 +46,8 @@ class Root extends React.Component {
 
   @Inject(TransactionActions) transactionActions;
 
+  @Inject(PasswordManager) passwordManager;
+
   state = {
     store: null,
     hasWallet: false,
@@ -77,8 +80,9 @@ class Root extends React.Component {
         transaction.amount,
         transaction.platform
       )(this.state.store.dispatch);
-
+      
       this.setState({ preparingTransaction: false });
+
 
       if (!hasWallet) {
         browserHistory.push('/new-wallet');
@@ -178,8 +182,13 @@ class Root extends React.Component {
               <Route path="/unknown" component={UnknownDomainRoute} />
               <Route path="/new-wallet" component={PasswordCreateRoute} />
               <Route path="/secret-phrase" component={SecretPhraseRoute} />
+              <Route
+                path="/restore-confirmation"
+                component={RestoreConfirmationRoute}
+              />
               <Route path="/wallet" component={WalletRoute} />
               <Route path="/import-wallet" component={ImportRoute} />
+              <Route path="/import-password" component={PasswordCreateRoute} />
               <Route path="/error" component={ErrorRoute} />
               <Route path="/password" component={PasswordRequestRoute} />
               <Route path="/sign-request" component={SignRequestRoute} />
@@ -198,6 +207,11 @@ class Root extends React.Component {
       </Provider>
     );
   }
+
+  async hasPassword() {
+    return await this.passwordManager.hasPassword();
+  }
+
   async hasWallet() {
     return await this.walletManager.hasWallet();
   }

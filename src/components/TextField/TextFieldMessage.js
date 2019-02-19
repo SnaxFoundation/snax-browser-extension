@@ -13,7 +13,7 @@ const defaultProps = {
 export const TextFieldMessage = styled.div`
   font-size: ${constants.fontSize.small}px;
   color: ${props =>
-    props.error ? constants.color.error : constants.textColor.medium};
+    props.filled ? constants.textColor.body : constants.textColor.medium};
   margin-top: ${constants.baseModule}px;
 `;
 

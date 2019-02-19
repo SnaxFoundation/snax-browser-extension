@@ -5,12 +5,15 @@ export class PasswordValidator {
   areOnlyAlphanumericAndSpecialCharactersUsed = false;
 
   constructor(passwordCandidate) {
+
     this.areMoreThan7CharactersUsed = this.validateThatMoreThan7CharactersExist(
       passwordCandidate
     );
+    
     this.areUppercaseAndNumberUsed = this.validateThatUppercaseAndNumberExist(
       passwordCandidate
     );
+    
     this.areOnlyAlphanumericAndSpecialCharactersUsed = this.validateThatOnlyAlphanumericAndSpecialCharactersPresent(
       passwordCandidate
     );

@@ -34,23 +34,26 @@ export class InboundCommunicator {
   ) {
     strategy.getInbound().listenAndAnswer(async msg => {
       if (!isMessageValid(msg)) {
-        console.warn("Reserved invalid message", msg);
+        if (process.env.NODE_ENV === "development")
+          console.warn("Reserved invalid message", msg);
       }
 
       if (!this.handlerContainersMap.has(msg.type)) {
-        console.warn(
-          "Message with type " +
-            msg.type +
-            " is reserved, but no handler defined ",
-          msg
-        );
+        if (process.env.NODE_ENV === "development")
+          console.warn(
+            "Message with type " +
+              msg.type +
+              " is reserved, but no handler defined ",
+            msg
+          );
         return;
       }
 
       const result = await this.handlerContainersMap.get(msg.type).handle(msg);
 
       if (!isMessageValid(result)) {
-        console.warn("Trying to send invalid message", result, this);
+        if (process.env.NODE_ENV === "development")
+          console.warn("Trying to send invalid message", result, this);
       }
 
       return result;

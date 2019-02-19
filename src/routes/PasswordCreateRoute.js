@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { WalletActions } from 'src/store/wallet/WalletActions';
-import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
-import { PasswordValidator } from 'src/utils/validators/PasswordValidator';
-import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+
+import { PasswordValidator } from "src/utils/validators/PasswordValidator";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
 
 import {
   ButtonLink,
@@ -17,8 +18,10 @@ import {
   TextFieldWrapper,
   PasswordField,
   SecondaryInfoBox,
-  Anchor,
-} from '../components';
+  Anchor
+} from "../components";
+import { Inject } from "../context/steriotypes/Inject";
+import { PasswordManager } from "../services/accounts/PasswordManager";
 
 // TODO Replace ButtonLink with Button after removing link
 
@@ -26,17 +29,35 @@ import {
 class PasswordCreateRoute extends Component {
   static propTypes = {
     createWifCandidate: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   };
 
   state = {
     isPasswordVisible: false,
     isInputTouched: false,
-    passwordCandidate: '',
+    passwordCandidate: ""
   };
 
+  @Inject(PasswordManager) passwordManager;
+
+  async componentDidMount() {
+    const passwordCandidate = await this.passwordManager.getPassword();
+    if (passwordCandidate) {
+      this.setState({ passwordCandidate });
+    }
+  }
+
+  isNewWallet = () =>
+    this.props.history.location.pathname !== "/import-password";
+
   render() {
-    const validator = new PasswordValidator(this.state.passwordCandidate);
+    const {
+      isEmpty,
+      isValid,
+      areMoreThan7CharactersUsed,
+      areUppercaseAndNumberUsed,
+      areOnlyAlphanumericAndSpecialCharactersUsed,
+    } = new PasswordValidator(this.state.passwordCandidate);
 
     return (
       <Screen>
@@ -45,15 +66,15 @@ class PasswordCreateRoute extends Component {
           <Row>
             <TextFieldWrapper>
               <PasswordField
-                error={!validator.isValid}
                 onChange={this.handleInputChange}
+                value={this.state.passwordCandidate}
               />
-              <TextFieldMessage error={!validator.areMoreThan7CharactersUsed}>
+              <TextFieldMessage filled={!isEmpty && areMoreThan7CharactersUsed}>
                 <ListUnordered>
                   <li>8 symbols minimum</li>
                 </ListUnordered>
               </TextFieldMessage>
-              <TextFieldMessage error={!validator.areUppercaseAndNumberUsed}>
+              <TextFieldMessage filled={!isEmpty && areUppercaseAndNumberUsed}>
                 <ListUnordered>
                   <li>
                     at least 1 uppercase letter and 1 number or special
@@ -62,7 +83,7 @@ class PasswordCreateRoute extends Component {
                 </ListUnordered>
               </TextFieldMessage>
               <TextFieldMessage
-                error={!validator.areOnlyAlphanumericAndSpecialCharactersUsed}
+                filled={!isEmpty && areOnlyAlphanumericAndSpecialCharactersUsed}
               >
                 <ListUnordered>
                   <li>0-9, a-z, special characters</li>
@@ -74,15 +95,20 @@ class PasswordCreateRoute extends Component {
         <ButtonRow>
           <ButtonLink
             onClick={this.handleCreation}
-            disabled={!validator.isValid}
+            disabled={!isValid}
             spread
             to="/secret-phrase"
           >
-            {this.props.publicKey ? 'Import wallet' : 'Create new wallet'}
+            {!this.isNewWallet() ? "Import wallet" : "Create new wallet"}
           </ButtonLink>
 
           <SecondaryInfoBox>
-            <Anchor colorScheme="flat" spread to="/">
+            <Anchor
+              colorScheme="flat"
+              spread
+              to="/"
+              onClick={this.props.clearPassword}
+            >
               Back
             </Anchor>
           </SecondaryInfoBox>
@@ -93,27 +119,23 @@ class PasswordCreateRoute extends Component {
 
   handleInputChange = e => {
     this.setState({
-      passwordCandidate: e.target.value,
+      passwordCandidate: e.target.value
     });
   };
 
   handleCreation = async e => {
     const { passwordCandidate } = this.state;
-    const { publicKey } = this.props;
     e.preventDefault();
 
     const validator = new PasswordValidator(passwordCandidate);
 
     if (validator.isValid) {
-      if (!publicKey) {
+      if (this.isNewWallet()) {
         await this.props.createWifCandidate(passwordCandidate);
-        this.props.history.push('/secret-phrase');
+        this.props.history.push("/secret-phrase");
       } else {
         await this.props.setPassword(passwordCandidate);
-        const redirectUrl = this.props.isCurrentTransactionActive
-          ? '/transaction-sign-request'
-          : '/wallet';
-        this.props.history.push(redirectUrl);
+        this.props.history.push("/import-wallet");
       }
     }
   };
