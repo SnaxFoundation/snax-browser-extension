@@ -10,7 +10,7 @@ import { TransactionManager } from 'src/services/transaction/TransactionManager'
 import { TransactionActions } from 'src/store/transaction/TransactionActions';
 import { WalletActions } from 'src/store/wallet/WalletActions';
 
-import { App } from './components';
+import { App, Loader } from './components';
 import { VersionBox } from './containers';
 import { InjectResetStyle, InjectGlobalStyle } from './styles';
 
@@ -164,8 +164,10 @@ class Root extends React.Component {
           <App>
             <InjectResetStyle />
             <InjectGlobalStyle />
-            {loading && <div id="loading" />}
-            {preparingTransaction && <div id="preparing transaction" />}
+            {loading && <Loader hasSpinner />}
+            {preparingTransaction && (
+              <Loader hasSpinner text="Preparing transaction" />
+            )}
             {version ? <VersionBox version={version} /> : null}
             <Switch>
               <Route exact path="/" component={WelcomeRoute} />
