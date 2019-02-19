@@ -1,16 +1,16 @@
-import { Actions } from "src/context/redux/Actions";
-import { Inject } from "src/context/steriotypes/Inject";
-import { PrivateSnaxProvider } from "src/services/snax/PrivateSnaxProvider";
-import { TransactionManager } from "src/services/transaction/TransactionManager";
-import { AccountResolver } from "src/services/accounts/AccountResolver";
+import { Actions } from 'src/context/redux/Actions';
+import { Inject } from 'src/context/steriotypes/Inject';
+import { PrivateSnaxProvider } from 'src/services/snax/PrivateSnaxProvider';
+import { TransactionManager } from 'src/services/transaction/TransactionManager';
+import { AccountResolver } from 'src/services/accounts/AccountResolver';
 import {
   SET_TRANSACTION_AS_DISCARDED,
   SET_TRANSACTION_AS_FAILED,
   SET_TRANSACTION_AS_FINISHED,
   SET_TRANSACTION_AS_SIGNED,
-  SET_TRANSACTION_TO_SIGN
-} from "src/store/transaction/TransactionConstants";
-import { Action, ThunkAction } from "src/utils/redux/Action";
+  SET_TRANSACTION_TO_SIGN,
+} from 'src/store/transaction/TransactionConstants';
+import { Action, ThunkAction } from 'src/utils/redux/Action';
 
 @Actions
 export class TransactionActions {
@@ -24,10 +24,12 @@ export class TransactionActions {
   signTransaction() {
     return async dispatch => {
       const transaction = this.transactionManager.getCurrentTransaction();
+
       const result = await this.privateSnaxProvider.transfer(
         transaction.from,
-        transaction.to.platformId,
-        transaction.amount
+        transaction.to,
+        transaction.amount,
+        transaction.platform
       );
 
       if (result.isSucceed) {
@@ -49,42 +51,69 @@ export class TransactionActions {
   }
 
   @ThunkAction
-  prepareTransaction(id, from, to, amount) {
+  prepareTransaction(id, from, to, amount, platform) {
     return async dispatch => {
-      const toId = await this.accountResolver.getIdByAccountName(to);
-      const accountName = await this.accountResolver.getAccountNameById(toId);
-      if (accountName !== to) {
-        throw new Error('Can\'t resolve "to" account');
-      }
+      let transaction;
+
       const currentBalance = await this.privateSnaxProvider.getBalance(from);
-      const transaction = {
-        balance: currentBalance,
-        id,
-        from,
-        to: { platformId: toId, platformAccountName: to },
-        amount
-      };
-      dispatch(
-        this.setTransactionToSign(
-          currentBalance,
+
+      if (platform === 'twitter') {
+        const toId = await this.accountResolver.getIdByAccountName(to);
+        const accountName = await this.accountResolver.getAccountNameById(toId);
+
+        if (accountName !== to) {
+          throw new Error('Can\'t resolve "to" account');
+        }
+
+        transaction = {
+          balance: currentBalance,
           id,
           from,
-          { platformId: toId, platformAccountName: to },
-          amount
-        )
-      );
+          to: toId,
+          displayName: accountName,
+          amount,
+          platform,
+        };
+      } else if (platform === 'snax') {
+        if (from === to) {
+          throw new Error("Can't send transaction to the self");
+        }
+        transaction = {
+          balance: currentBalance,
+          id,
+          from,
+          to,
+          displayName: to,
+          amount,
+          platform,
+        };
+      } else {
+        throw new Error('Platform is required');
+      }
+
+      dispatch(this.setTransactionToSign(transaction));
       return transaction;
     };
   }
 
   @Action(SET_TRANSACTION_TO_SIGN)
-  setTransactionToSign(balance, id, from, to, amount) {
+  setTransactionToSign({
+    balance,
+    id,
+    from,
+    to,
+    displayName,
+    amount,
+    platform,
+  }) {
     return {
       balance,
       id,
       to,
       from,
-      amount
+      amount,
+      displayName,
+      platform,
     };
   }
 
@@ -106,7 +135,7 @@ export class TransactionActions {
   @Action(SET_TRANSACTION_AS_FAILED)
   _setTransactionAsFailed(error) {
     return {
-      error
+      error,
     };
   }
 }

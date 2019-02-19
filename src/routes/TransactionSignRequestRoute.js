@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { TransactionActions } from "src/store/transaction/TransactionActions";
-import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import React, { Component } from 'react';
+import { TransactionActions } from 'src/store/transaction/TransactionActions';
+import { TransactionSelectors } from 'src/store/transaction/TransactionSelectors';
+import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
 
 import {
   Button,
@@ -10,10 +10,10 @@ import {
   ParagraphError,
   Row,
   Screen,
-  ScreenTitle
-} from "../components";
+  ScreenTitle,
+} from '../components';
 
-import { TransactionAmount, TransactionRecipient } from "../containers";
+import { TransactionAmount, TransactionRecipient } from '../containers';
 
 @ReduxContainer(TransactionSelectors, TransactionActions)
 class TransactionSignRequestRoute extends Component {
@@ -27,8 +27,8 @@ class TransactionSignRequestRoute extends Component {
           </Row>
           <Row>
             <TransactionRecipient
-              type="twitter"
-              name={this.props.currentTransactionRecipient.platformAccountName}
+              type={this.props.currentTransactionPlatform}
+              name={this.props.currentTransactionRecipient}
             />
           </Row>
           {this._renderBalance()}
@@ -66,12 +66,12 @@ class TransactionSignRequestRoute extends Component {
 
   _handleConfirmClick = async () => {
     await this.props.signTransaction();
-    this.props.history.push("/wallet");
+    this.props.history.push('/wallet');
   };
 
   _handleCancelClick = async () => {
     await this.props.discardTransaction();
-    this.props.history.push("/wallet");
+    this.props.history.push('/wallet');
   };
 }
 

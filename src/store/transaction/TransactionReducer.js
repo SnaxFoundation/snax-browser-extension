@@ -1,12 +1,12 @@
-import { Reducer } from "src/context/redux/Reducer";
+import { Reducer } from 'src/context/redux/Reducer';
 import {
   SET_TRANSACTION_AS_DISCARDED,
   SET_TRANSACTION_AS_FAILED,
   SET_TRANSACTION_AS_FINISHED,
   SET_TRANSACTION_AS_SIGNED,
-  SET_TRANSACTION_TO_SIGN
-} from "src/store/transaction/TransactionConstants";
-import { Reduce } from "src/utils/redux/Reduce";
+  SET_TRANSACTION_TO_SIGN,
+} from 'src/store/transaction/TransactionConstants';
+import { Reduce } from 'src/utils/redux/Reduce';
 
 @Reducer()
 export class TransactionReducer {
@@ -17,12 +17,14 @@ export class TransactionReducer {
       balance: payload.balance,
       from: payload.from,
       amount: payload.amount,
+      platform: payload.platform,
+      displayName: payload.displayName,
       id: payload.id,
       to: payload.to,
       isActive: true,
       isFailed: false,
       isDiscarded: false,
-      isSigned: false
+      isSigned: false,
     };
   }
 
@@ -30,7 +32,7 @@ export class TransactionReducer {
   handleSettingTransactionAsSigned(state) {
     return {
       ...state,
-      isSigned: true
+      isSigned: true,
     };
   }
 
@@ -38,7 +40,7 @@ export class TransactionReducer {
   handleSettingTransactionAsDiscarded(state) {
     return {
       ...state,
-      isDiscarded: true
+      isDiscarded: true,
     };
   }
 
@@ -46,7 +48,7 @@ export class TransactionReducer {
   handleSettingTransactionAsFinished(state) {
     return {
       ...state,
-      isActive: false
+      isActive: false,
     };
   }
   @Reduce(SET_TRANSACTION_AS_FAILED)
@@ -54,21 +56,23 @@ export class TransactionReducer {
     return {
       ...state,
       isFailed: true,
-      error: payload.error
+      error: payload.error,
     };
   }
 
   @Reduce.Default
   defaultState() {
     return {
-      balance: "",
+      balance: '',
       id: null,
-      from: "",
-      to: "",
-      amount: "",
+      from: '',
+      to: '',
+      displayName: '',
+      platform: '',
+      amount: '',
       isRejected: false,
       isSucceed: false,
-      isActive: false
+      isActive: false,
     };
   }
 }

@@ -1,6 +1,6 @@
-import { Selectors } from "src/context/redux/Selectors";
-import { TransactionReducer } from "src/store/transaction/TransactionReducer";
-import { Selector } from "src/utils/redux/Selector";
+import { Selectors } from 'src/context/redux/Selectors';
+import { TransactionReducer } from 'src/store/transaction/TransactionReducer';
+import { Selector } from 'src/utils/redux/Selector';
 
 @Selectors(TransactionReducer)
 export class TransactionSelectors {
@@ -12,6 +12,11 @@ export class TransactionSelectors {
   @Selector
   currentTransactionRecipient(state) {
     return state.to;
+  }
+
+  @Selector
+  currentTransactionPlatform(state) {
+    return state.platform;
   }
 
   @Selector

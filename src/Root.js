@@ -74,7 +74,8 @@ class Root extends React.Component {
         transaction.id,
         transaction.from,
         transaction.to,
-        transaction.amount
+        transaction.amount,
+        transaction.platform
       )(this.state.store.dispatch);
 
       this.setState({ preparingTransaction: false });
