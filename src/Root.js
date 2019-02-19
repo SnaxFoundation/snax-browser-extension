@@ -165,7 +165,9 @@ class Root extends React.Component {
             <InjectResetStyle />
             <InjectGlobalStyle />
             {loading && <Loader hasSpinner />}
-            {true && <Loader hasSpinner text="Preparing transaction" />}
+            {preparingTransaction && (
+              <Loader hasSpinner text="Preparing transaction" />
+            )}
             {version ? <VersionBox version={version} /> : null}
             <Switch>
               <Route exact path="/" component={WelcomeRoute} />
