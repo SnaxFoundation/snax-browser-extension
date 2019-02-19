@@ -57,6 +57,22 @@ export class TransactionActions {
 
       const currentBalance = await this.privateSnaxProvider.getBalance(from);
 
+      if (!from) {
+        throw new Error('Sender is not defined');
+      }
+
+      if (!to) {
+        throw new Error('Recipient is not defined');
+      }
+
+      if (!amount) {
+        throw new Error('Transaction amount is no defined');
+      }
+
+      if (!platform) {
+        throw new Error('Transaction platform is not defined');
+      }
+
       if (platform === 'twitter') {
         const toId = await this.accountResolver.getIdByAccountName(to);
         const accountName = await this.accountResolver.getAccountNameById(toId);
@@ -88,7 +104,7 @@ export class TransactionActions {
           platform,
         };
       } else {
-        throw new Error('Platform is required');
+        throw new Error(`Platform ${platform} is not supported`);
       }
 
       dispatch(this.setTransactionToSign(transaction));
