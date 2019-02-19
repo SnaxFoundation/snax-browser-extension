@@ -1,18 +1,35 @@
-import { Inject } from "src/context/steriotypes/Inject";
-import { Singleton } from "src/context/steriotypes/Singleton";
+import { Inject } from 'src/context/steriotypes/Inject';
+import { Singleton } from 'src/context/steriotypes/Singleton';
 
 @Singleton
 export class AccountResolver {
   async getAccountNameById(id) {
-    let userPage = await fetch(`https://twitter.com/intent/user?user_id=${id}`);
-    userPage = await userPage.text();
+    const response = await fetch(
+      `https://twitter.com/intent/user?user_id=${id}`,
+      {
+        credentials: 'omit',
+      }
+    );
+
+    if (response.status !== 200) {
+      return null;
+    }
+
+    const userPage = await response.text();
     const userName = this.extractNameFromPage(userPage);
     return userName;
   }
 
   async getIdByAccountName(accountName) {
-    let userPage = await fetch(`https://twitter.com/${accountName}`);
-    userPage = await userPage.text();
+    const response = await fetch(`https://twitter.com/${accountName}`, {
+      credentials: 'omit',
+    });
+
+    if (response.status !== 200) {
+      return null;
+    }
+
+    const userPage = await response.text();
     const id = this.extractIdFromPage(userPage);
     return id;
   }

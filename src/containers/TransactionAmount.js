@@ -1,12 +1,12 @@
-import React from "react";
-import styled from "styled-components";
-import { ParagraphCaption } from "../components";
-import styleConstants from "../styles/style-constants";
+import React from 'react';
+import styled from 'styled-components';
+import { ParagraphCaption } from '../components';
+import styleConstants from '../styles/style-constants';
 
 const Wrapper = styled.div``;
 
 const Amount = styled.div`
-  font-size: ${styleConstants.fontSize.display1}px;
+  font-size: ${styleConstants.fontSize.heading3}px;
   font-weight: ${styleConstants.fontWeight.light};
   line-height: 1;
 `;

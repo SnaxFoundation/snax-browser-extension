@@ -1,19 +1,20 @@
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import { Provider } from "react-redux";
-import { createBrowserHistory } from "history";
-import React from "react";
 
-import { Inject } from "src/context/steriotypes/Inject";
-import { TransactionActions } from "src/store/transaction/TransactionActions";
-import { TransactionManager } from "src/services/transaction/TransactionManager";
-import { WalletActions } from "src/store/wallet/WalletActions";
-import { WalletManager } from "src/services/accounts/WalletManager";
-import { getStore } from "src/store/store";
-import SecretPhraseConfirmRoute from "src/routes/SecretPhraseConfirmRoute";
+import React from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { Inject } from 'src/context/steriotypes/Inject';
+import SecretPhraseConfirmRoute from 'src/routes/SecretPhraseConfirmRoute';
+import { WalletManager } from 'src/services/accounts/WalletManager';
+import { getStore } from 'src/store/store';
+import { TransactionManager } from 'src/services/transaction/TransactionManager';
+import { TransactionActions } from 'src/store/transaction/TransactionActions';
+import { WalletActions } from 'src/store/wallet/WalletActions';
 
-import { App } from "./components";
-import { InjectResetStyle, InjectGlobalStyle } from "./styles";
-import { PasswordManager } from "./services/accounts/PasswordManager";
+import { App, Loader } from './components';
+import { VersionBox } from './containers';
+import { InjectResetStyle, InjectGlobalStyle } from './styles';
+
 import {
   UnknownDomainRoute,
   WelcomeRoute,
@@ -24,10 +25,11 @@ import {
   ErrorRoute,
   PasswordRequestRoute,
   SignRequestRoute,
-  RestoreConfirmationRoute,
-  TransactionSignRequestRoute
-} from "./routes";
-import { VersionBox } from "./containers";
+  TransactionSignRequestRoute,
+} from './routes';
+
+import { clearBadge, getActiveTabUrlAsync } from 'src/utils/chrome';
+import { isSnaxDomain } from 'src/utils/misc';
 
 export const browserHistory = createBrowserHistory();
 
@@ -49,59 +51,74 @@ class Root extends React.Component {
   state = {
     store: null,
     hasWallet: false,
-    canUse: false
+    canUse: false,
+    loading: true,
+    preparingTransaction: false,
+    snaxDomain: true,
   };
 
   constructor(props, context) {
     super(props, context);
 
     this.state.store = getStore();
+  }
+
+  async componentDidMount() {
+    const isValidRuntime = this.isValidChromeRuntime();
+
+    const canUse = await this.canUse();
+    const hasWallet = await this.hasWallet();
+    const shouldConfirm = await this.shouldConfirm();
+
     this.transactionManager.listen(async transaction => {
+      this.setState({ preparingTransaction: true });
+
       const preparedTransaction = await this.transactionActions.prepareTransaction(
         transaction.id,
         transaction.from,
         transaction.to,
-        transaction.amount
+        transaction.amount,
+        transaction.platform
       )(this.state.store.dispatch);
+      
+      this.setState({ preparingTransaction: false });
 
-      const canUse = await this.canUse();
-      const hasWallet = await this.hasWallet();
-      const shouldConfirm = await this.shouldConfirm();
-      const hasPassword = await this.hasPassword();
 
       if (!hasWallet) {
-        browserHistory.push("/new-wallet");
+        browserHistory.push('/new-wallet');
         return;
       }
 
       if (!canUse) {
-        browserHistory.push("/password");
+        browserHistory.push('/password');
         return;
       }
 
       if (canUse && shouldConfirm) {
-        browserHistory.push("/confirm-phrase");
+        browserHistory.push('/confirm-phrase');
         return;
       }
 
-      if (!hasWallet && hasPassword) {
-        browserHistory.push("/import-wallet");
-        return;
-      }
-
-      browserHistory.push("/transaction-sign-request");
+      browserHistory.push('/transaction-sign-request');
 
       return preparedTransaction;
     });
-  }
 
-  async componentDidMount() {
-    const canUse = await this.canUse();
-    const hasWallet = await this.hasWallet();
-    const shouldConfirm = await this.shouldConfirm();
-    const hasPassword = await this.hasPassword();
+    if (this.isValidChromeRuntime()) {
+      window.chrome.runtime.sendMessage({
+        loaded: true,
+      });
+    }
 
-    this.setState({ canUse, hasWallet, shouldConfirm, hasPassword });
+    if (isValidRuntime) {
+      clearBadge();
+      const url = await getActiveTabUrlAsync();
+      if (!isSnaxDomain(url)) {
+        this.setState({ snaxDomain: false });
+      }
+    }
+
+    this.setState({ canUse, hasWallet, shouldConfirm, loading: false });
 
     if (canUse) {
       this.state.store.dispatch(
@@ -115,13 +132,35 @@ class Root extends React.Component {
       (window &&
         window.chrome &&
         window.chrome.runtime &&
-        typeof window.chrome.runtime.getManifest === "function" &&
+        typeof window.chrome.runtime.getManifest === 'function' &&
         (window.chrome.runtime.getManifest() || {}).version) ||
       null
     );
   }
 
+  isValidChromeRuntime() {
+    return (
+      window &&
+      window.chrome &&
+      window.chrome.runtime &&
+      typeof window.chrome.runtime.getManifest === 'function'
+    );
+  }
+
   render() {
+    const {
+      hasWallet,
+      canUse,
+      shouldConfirm,
+      snaxDomain,
+      loading,
+      preparingTransaction,
+    } = this.state;
+
+    const redirectToPassword = hasWallet && !canUse;
+    const redirectToWallet = canUse && !shouldConfirm;
+    const redirectToConfirmPhrase = canUse && shouldConfirm;
+
     const version = this.getVersion();
     return (
       <Provider store={this.state.store}>
@@ -129,15 +168,11 @@ class Root extends React.Component {
           <App>
             <InjectResetStyle />
             <InjectGlobalStyle />
+            {loading && <Loader hasSpinner />}
+            {preparingTransaction && (
+              <Loader hasSpinner text="Preparing transaction" />
+            )}
             {version ? <VersionBox version={version} /> : null}
-            {this.state.hasWallet &&
-              !this.state.canUse && <Redirect to="/password" />}
-            {this.state.canUse &&
-              !this.state.shouldConfirm && <Redirect to="/wallet" />}
-            {this.state.canUse &&
-              this.state.shouldConfirm && <Redirect to="/confirm-phrase" />}
-            {!this.state.hasWallet &&
-              this.state.hasPassword && <Redirect to="/import-wallet" />}
             <Switch>
               <Route exact path="/" component={WelcomeRoute} />
               <Route
@@ -163,6 +198,10 @@ class Root extends React.Component {
               />
               <Route path="*" render={() => <Redirect to="/" />} />
             </Switch>
+            {redirectToPassword && <Redirect to="/password" />}
+            {redirectToWallet && <Redirect to="/wallet" />}
+            {redirectToConfirmPhrase && <Redirect to="/confirm-phrase" />}
+            {!snaxDomain && <Redirect to="/unknown" />}
           </App>
         </NavigableRouter>
       </Provider>
