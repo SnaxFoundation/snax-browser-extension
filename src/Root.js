@@ -107,15 +107,15 @@ class Root extends React.Component {
       });
     }
 
+    let snaxDomain = true;
+
     if (isValidRuntime) {
       clearBadge();
       const url = await getActiveTabUrlAsync();
-      if (!isSnaxDomain(url)) {
-        this.setState({ snaxDomain: false });
-      }
+      snaxDomain = isSnaxDomain(url)
     }
 
-    this.setState({ canUse, hasWallet, shouldConfirm, loading: false });
+    this.setState({ canUse, hasWallet, shouldConfirm, loading: false, snaxDomain });
 
     if (canUse) {
       this.state.store.dispatch(
