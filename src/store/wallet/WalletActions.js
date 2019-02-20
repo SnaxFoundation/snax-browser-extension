@@ -62,6 +62,17 @@ export class WalletActions {
   }
 
   @ThunkAction
+  getWifFromStorage() {
+    return async () => {
+      const {
+        wallet: { wif: privateKey },
+      } = await this.walletManager.getWallet()
+      
+      return privateKey;
+    }
+  }
+
+  @ThunkAction
   setPassword(passwordCandidate) {
     return async (dispatch, getState) => {
       const result = await this.walletManager.getWallet();

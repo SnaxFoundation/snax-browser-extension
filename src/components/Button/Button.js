@@ -30,7 +30,7 @@ const sizeMap = {
     lineHeight: 1.4,
     borderRadius: `${constants.borderRadius}px`,
     fontSize: constants.fontSize.body,
-    padding: '0.5em 1.5em',
+    padding: '0.5em 1em',
   },
 };
 
