@@ -10,6 +10,7 @@ import PasswordRequestRoute from './PasswordRequestRoute';
 import SignRequestRoute from './SignRequestRoute';
 import TransactionSignRequestRoute from './TransactionSignRequestRoute';
 import RestoreConfirmationRoute from './RestoreConfirmationRoute';
+import PrivateExportRoute from './PrivateExportRoute';
 
 export {
   WelcomeRoute,
@@ -24,4 +25,5 @@ export {
   SignRequestRoute,
   TransactionSignRequestRoute,
   RestoreConfirmationRoute,
+  PrivateExportRoute,
 };
