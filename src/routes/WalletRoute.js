@@ -31,6 +31,22 @@ class WalletRoute extends Component {
 
   @Inject(ClipboardCopier) clipboardCopier;
 
+  handleCopyClick = () => {
+    this.clipboardCopier.copy(this.props.publicKey);
+    this.props.spawnSuccessNotification(
+      'Public key was successfully copied to your clipboard'
+    );
+  };
+
+  handleLogout = () => {
+    this.props.clearPassword();
+    this.props.history.push('/password');
+  };
+
+  handleExportKey = () => {
+    this.props.history.push('/private-export');
+  }
+
   render() {
     return (
       <Screen>
@@ -83,7 +99,7 @@ class WalletRoute extends Component {
             colorScheme="flat"
             size="small"
             as="a"
-            href="/private-export"
+            onClick={this.handleExportKey}
           >
             Export private key
           </ButtonWithIcon>
@@ -91,18 +107,6 @@ class WalletRoute extends Component {
       </Screen>
     );
   }
-
-  handleCopyClick = () => {
-    this.clipboardCopier.copy(this.props.publicKey);
-    this.props.spawnSuccessNotification(
-      'Public key was successfully copied to your clipboard'
-    );
-  };
-
-  handleLogout = () => {
-    this.props.clearPassword();
-    this.props.history.push('/password');
-  };
 }
 
 export default WalletRoute;

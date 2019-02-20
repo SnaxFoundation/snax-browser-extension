@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Inject } from 'src/context/steriotypes/Inject';
 import { ClipboardCopier } from 'src/services/misc/ClipboardCopier';
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
+import { NotificationActions } from "src/store/notifications/NotificationActions";
 
 import {
   BrandBox,
@@ -14,17 +18,28 @@ import {
   IconDownload,
   IconLogOut,
   HeadingSmall,
+  SecondaryInfoBox,
   ParagraphBody2,
   Row,
   Screen,
 } from '../components';
 
+@ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
 class PrivateExportRoute extends Component {
   static propTypes = {
     spawnSuccessNotification: PropTypes.func.isRequired,
   };
 
   @Inject(ClipboardCopier) clipboardCopier;
+
+  handleExport = async () => {
+    const privateKey = await this.props.getWifFromStorage();
+    this.clipboardCopier.copy(privateKey);
+
+    this.props.spawnSuccessNotification(
+      "Private key was successfully copied to your clipboard"
+    );
+  }
 
   render() {
     return (
@@ -45,22 +60,20 @@ class PrivateExportRoute extends Component {
         <ButtonRow>
           <ButtonWithIcon
             icon={<IconDownload />}
-            onClick={this.handleCopyClick}
             colorScheme="red"
+            onClick={this.handleExport}
           >
             I understand. Export.
           </ButtonWithIcon>
+          <SecondaryInfoBox>
+            <Anchor spread to="/wallet">
+              Back
+            </Anchor>
+          </SecondaryInfoBox>
         </ButtonRow>
       </Screen>
     );
   }
-
-  handleCopyClick = () => {
-    this.clipboardCopier.copy(this.props.publicKey);
-    this.props.spawnSuccessNotification(
-      'Public key was successfully copied to your clipboard'
-    );
-  };
 }
 
 export default PrivateExportRoute;
