@@ -154,8 +154,6 @@ class Root extends React.Component {
       preparingTransaction,
     } = this.state;
 
-    console.log(this.state);
-
     const redirectToPassword = hasWallet && !canUse;
     const redirectToWallet = canUse && !shouldConfirm;
     const redirectToConfirmPhrase = canUse && shouldConfirm;
