@@ -25,6 +25,7 @@ import {
   PasswordRequestRoute,
   SignRequestRoute,
   TransactionSignRequestRoute,
+  PrivateExportRoute,
 } from './routes';
 
 import { clearBadge, getActiveTabUrlAsync } from 'src/utils/chrome';
@@ -184,6 +185,7 @@ class Root extends React.Component {
               <Route path="/error" component={ErrorRoute} />
               <Route path="/password" component={PasswordRequestRoute} />
               <Route path="/sign-request" component={SignRequestRoute} />
+              <Route path="/private-export" component={PrivateExportRoute} />
               <Route
                 path="/transaction-sign-request"
                 component={TransactionSignRequestRoute}

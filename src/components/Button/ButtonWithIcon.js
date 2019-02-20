@@ -18,7 +18,7 @@ const IconWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: -0.75em;
-  margin-left: -0.75em;
+  margin-left: -0.25em;
   margin-bottom: -0.75em;
 
   > * {

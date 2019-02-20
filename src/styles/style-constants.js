@@ -11,6 +11,7 @@ export default {
     lighter: '#d2cdc7',
     medium: '#6b788e',
     yellow: '#fabb08',
+    red: '#b1190f',
     error: '#FF4538',
     success: '#8BC53F',
     info: '#62a3d4',

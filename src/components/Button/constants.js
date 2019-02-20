@@ -14,6 +14,12 @@ export default {
     color: '#fff',
   },
 
+  red: {
+    bgColor: constants.color.red,
+    bgColorHover: Color(constants.color.red).darken(0.1),
+    color: '#fff',
+  },
+
   flat: {
     bgColor: 'rgba(0,0,0,0)',
     bgColorHover: 'rgba(255,255,255,0.1)',
