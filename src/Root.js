@@ -10,7 +10,7 @@ import { TransactionManager } from 'src/services/transaction/TransactionManager'
 import { TransactionActions } from 'src/store/transaction/TransactionActions';
 import { WalletActions } from 'src/store/wallet/WalletActions';
 
-import { App, Loader } from './components';
+import { App, Loader, SecondaryInfoBox, Anchor } from './components';
 import { VersionBox } from './containers';
 import { InjectResetStyle, InjectGlobalStyle } from './styles';
 
@@ -112,10 +112,16 @@ class Root extends React.Component {
     if (isValidRuntime) {
       clearBadge();
       const url = await getActiveTabUrlAsync();
-      snaxDomain = isSnaxDomain(url)
+      snaxDomain = isSnaxDomain(url);
     }
 
-    this.setState({ canUse, hasWallet, shouldConfirm, loading: false, snaxDomain });
+    this.setState({
+      canUse,
+      hasWallet,
+      shouldConfirm,
+      loading: false,
+      snaxDomain,
+    });
 
     if (canUse) {
       this.state.store.dispatch(
@@ -167,7 +173,24 @@ class Root extends React.Component {
             <InjectGlobalStyle />
             {loading && <Loader hasSpinner />}
             {preparingTransaction && (
-              <Loader hasSpinner text="Preparing transaction" />
+              <Loader
+                hasSpinner
+                text="Preparing transaction"
+                bottomSlot={
+                  <SecondaryInfoBox>
+                    <Anchor
+                      spread
+                      as="button"
+                      onClick={() => {
+                        this.transactionActions.discardTransaction();
+                        window.close();
+                      }}
+                    >
+                      Cancel
+                    </Anchor>
+                  </SecondaryInfoBox>
+                }
+              />
             )}
             {version ? <VersionBox version={version} /> : null}
             <Switch>
