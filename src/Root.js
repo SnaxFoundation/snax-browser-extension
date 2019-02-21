@@ -130,6 +130,14 @@ class Root extends React.Component {
     }
   }
 
+  cancelTransaction = () => {
+    if (this.isValidChromeRuntime()) {
+      window.chrome.runtime.sendMessage({
+        cancelTransaction: true,
+      });
+    }
+  };
+
   getVersion() {
     return (
       (window &&
@@ -182,8 +190,7 @@ class Root extends React.Component {
                       spread
                       as="button"
                       onClick={() => {
-                        this.transactionActions.discardTransaction();
-                        window.close();
+                        this.cancelTransaction();
                       }}
                     >
                       Cancel
