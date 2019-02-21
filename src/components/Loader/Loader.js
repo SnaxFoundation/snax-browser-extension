@@ -90,10 +90,28 @@ const Text = styled.div`
   ${flashing};
 `;
 
-export const Loader = ({ text, hasSpinner, ...props }) => (
+const SpinnerBox = styled.div`
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const BottomSlot = styled.div`
+  width: 100%;
+  align-self: flex-end;
+  padding: ${constants.grid.appPaddingY + 5}px ${constants.grid.appPaddingX}px;
+`;
+
+export const Loader = ({ text, hasSpinner, bottomSlot, ...props }) => (
   <Wrapper {...props}>
-    {hasSpinner && <Spinner />}
-    <Text flashing={!hasSpinner}>{text}</Text>
+    <SpinnerBox>
+      {hasSpinner && <Spinner />}
+      <Text flashing={!hasSpinner}>{text}</Text>
+    </SpinnerBox>
+    {bottomSlot && <BottomSlot>{bottomSlot}</BottomSlot>}
   </Wrapper>
 );
 

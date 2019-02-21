@@ -114,6 +114,19 @@ class BackgroundScript {
 
   async listenTransactionConfirmation(payload, resolve, reject) {
     try {
+      const onDiscardTransactionMessage = async message => {
+        if (message.cancelTransaction) {
+          chrome.runtime.onMessage.removeListener(onDiscardTransactionMessage);
+          reject(new Error('Transaction has been canceled'));
+
+          chrome.runtime.sendMessage({
+            closePopup: true,
+          });
+        }
+      };
+
+      chrome.runtime.onMessage.addListener(onDiscardTransactionMessage);
+
       const result = await this.privateTransactionOutboundCommunicator.sendConfirmTransaction(
         payload
       );
