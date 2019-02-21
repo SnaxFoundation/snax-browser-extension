@@ -85,7 +85,7 @@ class PasswordCreateRoute extends Component {
                 filled={areOnlyAlphanumericAndSpecialCharactersUsed}
               >
                 <ListUnordered>
-                  <li>0-9, a-z, special characters</li>
+                  <li>only 0-9, A-Z, a-z, special characters are allowed</li>
                 </ListUnordered>
               </TextFieldMessage>
             </TextFieldWrapper>
