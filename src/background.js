@@ -118,6 +118,10 @@ class BackgroundScript {
         if (message.cancelTransaction) {
           chrome.runtime.onMessage.removeListener(onDiscardTransactionMessage);
           reject(new Error('Transaction has been canceled'));
+
+          chrome.runtime.sendMessage({
+            closePopup: true,
+          });
         }
       };
 

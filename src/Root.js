@@ -68,6 +68,13 @@ class Root extends React.Component {
     const hasWallet = await this.hasWallet();
     const shouldConfirm = await this.shouldConfirm();
 
+    chrome.runtime.onMessage.addListener(message => {
+      if (message.closePopup) {
+        console.log('close');
+        window.close();
+      }
+    });
+
     this.transactionManager.listen(async transaction => {
       this.setState({ preparingTransaction: true });
 
