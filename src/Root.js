@@ -70,7 +70,6 @@ class Root extends React.Component {
 
     chrome.runtime.onMessage.addListener(message => {
       if (message.closePopup) {
-        console.log('close');
         window.close();
       }
     });
