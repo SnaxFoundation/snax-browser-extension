@@ -54,8 +54,8 @@ class PasswordCreateRoute extends Component {
     const {
       isValid,
       areMoreThan7CharactersUsed,
-      areUppercaseAndNumberUsed,
       areOnlyAlphanumericAndSpecialCharactersUsed,
+      areAtLeastOneUppercaseAndNumberOrCharacter,
     } = new PasswordValidator(this.state.passwordCandidate);
 
     return (
@@ -73,7 +73,9 @@ class PasswordCreateRoute extends Component {
                   <li>8 symbols minimum</li>
                 </ListUnordered>
               </TextFieldMessage>
-              <TextFieldMessage filled={areUppercaseAndNumberUsed}>
+              <TextFieldMessage
+                filled={areAtLeastOneUppercaseAndNumberOrCharacter}
+              >
                 <ListUnordered>
                   <li>
                     at least 1 uppercase letter and 1 number or special
