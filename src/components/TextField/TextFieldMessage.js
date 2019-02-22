@@ -15,6 +15,8 @@ export const TextFieldMessage = styled.div`
   color: ${props =>
     props.filled ? constants.textColor.body : constants.textColor.medium};
   margin-top: ${constants.baseModule}px;
+
+  ${props => props.error && `color: ${constants.color.error};`};
 `;
 
 TextFieldMessage.propTypes = propTypes;
