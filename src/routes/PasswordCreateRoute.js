@@ -36,6 +36,7 @@ class PasswordCreateRoute extends Component {
     isPasswordVisible: false,
     isInputTouched: false,
     passwordCandidate: '',
+    passwordError: false,
   };
 
   @Inject(PasswordManager) passwordManager;
@@ -49,6 +50,39 @@ class PasswordCreateRoute extends Component {
 
   isNewWallet = () =>
     this.props.history.location.pathname !== '/import-password';
+
+  handleInputChange = e => {
+    const { value } = e.target;
+    const {
+      areOnlyAlphanumericAndSpecialCharactersUsed,
+    } = new PasswordValidator(value);
+
+    if (areOnlyAlphanumericAndSpecialCharactersUsed) {
+      this.setState({
+        passwordCandidate: value,
+        passwordError: false,
+      });
+    } else {
+      this.setState({ passwordError: true });
+    }
+  };
+
+  handleCreation = async e => {
+    const { passwordCandidate } = this.state;
+    e.preventDefault();
+
+    const validator = new PasswordValidator(passwordCandidate);
+
+    if (validator.isValid) {
+      if (this.isNewWallet()) {
+        await this.props.createWifCandidate(passwordCandidate);
+        this.props.history.push('/secret-phrase');
+      } else {
+        await this.props.setPassword(passwordCandidate);
+        this.props.history.push('/import-wallet');
+      }
+    }
+  };
 
   render() {
     const {
@@ -84,6 +118,7 @@ class PasswordCreateRoute extends Component {
                 </ListUnordered>
               </TextFieldMessage>
               <TextFieldMessage
+                error={this.state.passwordError}
                 filled={areOnlyAlphanumericAndSpecialCharactersUsed}
               >
                 <ListUnordered>
@@ -117,29 +152,6 @@ class PasswordCreateRoute extends Component {
       </Screen>
     );
   }
-
-  handleInputChange = e => {
-    this.setState({
-      passwordCandidate: e.target.value,
-    });
-  };
-
-  handleCreation = async e => {
-    const { passwordCandidate } = this.state;
-    e.preventDefault();
-
-    const validator = new PasswordValidator(passwordCandidate);
-
-    if (validator.isValid) {
-      if (this.isNewWallet()) {
-        await this.props.createWifCandidate(passwordCandidate);
-        this.props.history.push('/secret-phrase');
-      } else {
-        await this.props.setPassword(passwordCandidate);
-        this.props.history.push('/import-wallet');
-      }
-    }
-  };
 }
 
 export default PasswordCreateRoute;
