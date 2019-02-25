@@ -75,10 +75,18 @@ describe('validation functions test', () => {
     expect(areOnlyAlphanumericAndSpecialCharactersUsed).toBe(false);
   });
 
-  it('password can\t contain pound russian letter', () => {
+  it('password can\t contain russian letter', () => {
     const {
       areOnlyAlphanumericAndSpecialCharactersUsed,
     } = new PasswordValidator('ффф');
+
+    expect(areOnlyAlphanumericAndSpecialCharactersUsed).toBe(false);
+  });
+
+  it('password can\t contain china word', () => {
+    const {
+      areOnlyAlphanumericAndSpecialCharactersUsed,
+    } = new PasswordValidator('简');
 
     expect(areOnlyAlphanumericAndSpecialCharactersUsed).toBe(false);
   });
