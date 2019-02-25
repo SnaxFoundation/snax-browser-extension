@@ -18,12 +18,67 @@ describe('validation functions test', () => {
       true
     );
     expect(eightCharacterValidationResult.isValid).toBe(false);
+
+    const eightCharacterWithCappitalsValidationResult = new PasswordValidator(
+      'AAbbccdd'
+    );
+
+    expect(
+      eightCharacterWithCappitalsValidationResult.areMoreThan7CharactersUsed
+    ).toBe(true);
+    expect(eightCharacterWithCappitalsValidationResult.isValid).toBe(false);
+
+    const eightCharacterWithCappitalsAndNumberValidationResult = new PasswordValidator(
+      'AAbbccdd1'
+    );
+
+    expect(
+      eightCharacterWithCappitalsAndNumberValidationResult.areMoreThan7CharactersUsed
+    ).toBe(true);
+    expect(eightCharacterWithCappitalsAndNumberValidationResult.isValid).toBe(
+      true
+    );
+
+    const eightCharacterWithCappitalsAndSymbolValidationResult = new PasswordValidator(
+      'AAbbccdd%'
+    );
+
+    expect(
+      eightCharacterWithCappitalsAndSymbolValidationResult.areMoreThan7CharactersUsed
+    ).toBe(true);
+    expect(eightCharacterWithCappitalsAndSymbolValidationResult.isValid).toBe(
+      true
+    );
   });
 
-  it('passwordd can\t contain emoji', () => {
+  it('password can\t contain emoji', () => {
     const {
       areOnlyAlphanumericAndSpecialCharactersUsed,
     } = new PasswordValidator('😎');
+
+    expect(areOnlyAlphanumericAndSpecialCharactersUsed).toBe(false);
+  });
+
+  it('password can\t contain space', () => {
+    const {
+      areOnlyAlphanumericAndSpecialCharactersUsed,
+    } = new PasswordValidator(' ');
+
+    expect(areOnlyAlphanumericAndSpecialCharactersUsed).toBe(false);
+  });
+
+  it('password can\t contain pound symbol', () => {
+    const {
+      areOnlyAlphanumericAndSpecialCharactersUsed,
+    } = new PasswordValidator('£');
+
+    expect(areOnlyAlphanumericAndSpecialCharactersUsed).toBe(false);
+  });
+
+  it('password can\t contain pound russian letter', () => {
+    const {
+      areOnlyAlphanumericAndSpecialCharactersUsed,
+    } = new PasswordValidator('ффф');
 
     expect(areOnlyAlphanumericAndSpecialCharactersUsed).toBe(false);
   });
