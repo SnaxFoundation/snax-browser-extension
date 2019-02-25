@@ -57,7 +57,7 @@ class PasswordCreateRoute extends Component {
       areOnlyAlphanumericAndSpecialCharactersUsed,
     } = new PasswordValidator(value);
 
-    if (areOnlyAlphanumericAndSpecialCharactersUsed) {
+    if (value.length === 0 || areOnlyAlphanumericAndSpecialCharactersUsed) {
       this.setState({
         passwordCandidate: value,
         passwordError: false,

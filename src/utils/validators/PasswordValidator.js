@@ -28,7 +28,7 @@ export class PasswordValidator {
   }
 
   validateThatOnlyAlphanumericAndSpecialCharactersPresent(passwordCandidate) {
-    return /^([A-Z]|[0-9]|[a-z]|[-!#@$%^&*()_+|~=`{}[\]:";'<>?,.]){0,}$/.test(
+    return /^([A-Z]|[0-9]|[a-z]|[-!#@$%^&*()_+|~=`{}[\]:";'<>?,.]){1,}$/.test(
       passwordCandidate
     );
   }
