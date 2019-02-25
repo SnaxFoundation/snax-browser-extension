@@ -6,7 +6,14 @@ import { PrivateDataOutboundCommunicator } from 'src/services/communication/priv
 import { PrivateDataInboundCommunicator } from 'src/services/communication/privateData/PrivateDataInboundCommunicator';
 import { PrivateTransactionOutboundCommunicator } from 'src/services/communication/privateTransaction/PrivateTransactionOutboundCommunicator';
 import { Holder } from 'src/services/misc/Holder';
-import { setBadge, setBadgeColor, clearBadge } from 'src/utils/chrome';
+import { isSnaxDomain } from 'src/utils/misc';
+
+import {
+  setBadge,
+  setBadgeColor,
+  clearBadge,
+  getActiveTabUrlAsync,
+} from 'src/utils/chrome';
 
 const PASSWORD_HOLDER_TOKEN = 'password';
 
@@ -31,17 +38,22 @@ class BackgroundScript {
     this.listenTabChange();
   }
 
-  listenTabChange() {
-    chrome.tabs.onActivated.addListener(data => {
-      chrome.tabs.get(data.tabId, tab => {
-        if (tab.url) {
-          // this.isAllowedTab = true;
-          setBadgeColor(true);
-        } else {
-          // this.isAllowedTab = false;
-          setBadgeColor(false);
-        }
-      });
+  async handleSnaxDomain() {
+    const url = await getActiveTabUrlAsync();
+    if (isSnaxDomain(url)) {
+      setBadgeColor(true);
+    } else {
+      setBadgeColor(false);
+    }
+  }
+
+  async listenTabChange() {
+    chrome.tabs.onActivated.addListener(() => {
+      this.handleSnaxDomain();
+    });
+
+    chrome.tabs.onUpdated.addListener(() => {
+      this.handleSnaxDomain();
     });
   }
 
