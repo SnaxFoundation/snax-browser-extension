@@ -68,6 +68,16 @@ describe('validation functions test', () => {
     const {
       areAtLeastOneUppercaseAndNumberOrCharacter,
       isValid,
+    } = new PasswordValidator('A1234567_');
+
+    expect(areAtLeastOneUppercaseAndNumberOrCharacter).toBe(false);
+    expect(isValid).toBe(false);
+  });
+
+  it('at least one uppercase and number or special character', () => {
+    const {
+      areAtLeastOneUppercaseAndNumberOrCharacter,
+      isValid,
     } = new PasswordValidator('Qw#');
 
     expect(areAtLeastOneUppercaseAndNumberOrCharacter).toBe(true);

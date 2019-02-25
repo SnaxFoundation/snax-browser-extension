@@ -112,8 +112,8 @@ class PasswordCreateRoute extends Component {
               >
                 <ListUnordered>
                   <li>
-                    at least 1 uppercase letter and 1 number or special
-                    character
+                    at least 1 lowercase, 1 uppercase letter and 1 number or
+                    special character
                   </li>
                 </ListUnordered>
               </TextFieldMessage>
