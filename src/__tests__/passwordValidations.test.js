@@ -58,6 +58,36 @@ describe('validation functions test', () => {
     const {
       areAtLeastOneUppercaseAndNumberOrCharacter,
       isValid,
+    } = new PasswordValidator('ssffsF2');
+
+    expect(areAtLeastOneUppercaseAndNumberOrCharacter).toBe(true);
+    expect(isValid).toBe(false);
+  });
+
+  it('at least one uppercase and number or special character', () => {
+    const {
+      areAtLeastOneUppercaseAndNumberOrCharacter,
+      isValid,
+    } = new PasswordValidator('Qw#');
+
+    expect(areAtLeastOneUppercaseAndNumberOrCharacter).toBe(true);
+    expect(isValid).toBe(false);
+  });
+
+  it('at least one uppercase and number or special character', () => {
+    const {
+      areAtLeastOneUppercaseAndNumberOrCharacter,
+      isValid,
+    } = new PasswordValidator('qq#');
+
+    expect(areAtLeastOneUppercaseAndNumberOrCharacter).toBe(false);
+    expect(isValid).toBe(false);
+  });
+
+  it('at least one uppercase and number or special character', () => {
+    const {
+      areAtLeastOneUppercaseAndNumberOrCharacter,
+      isValid,
     } = new PasswordValidator('Qwerty%!@');
 
     expect(areAtLeastOneUppercaseAndNumberOrCharacter).toBe(true);
