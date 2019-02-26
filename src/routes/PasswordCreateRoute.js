@@ -36,6 +36,7 @@ class PasswordCreateRoute extends Component {
     isPasswordVisible: false,
     isInputTouched: false,
     passwordCandidate: '',
+    passwordError: false,
   };
 
   @Inject(PasswordManager) passwordManager;
@@ -50,12 +51,45 @@ class PasswordCreateRoute extends Component {
   isNewWallet = () =>
     this.props.history.location.pathname !== '/import-password';
 
+  handleInputChange = e => {
+    const { value } = e.target;
+    const {
+      areOnlyAlphanumericAndSpecialCharactersUsed,
+    } = new PasswordValidator(value);
+
+    if (value.length === 0 || areOnlyAlphanumericAndSpecialCharactersUsed) {
+      this.setState({
+        passwordCandidate: value,
+        passwordError: false,
+      });
+    } else {
+      this.setState({ passwordError: true });
+    }
+  };
+
+  handleCreation = async e => {
+    const { passwordCandidate } = this.state;
+    e.preventDefault();
+
+    const validator = new PasswordValidator(passwordCandidate);
+
+    if (validator.isValid) {
+      if (this.isNewWallet()) {
+        await this.props.createWifCandidate(passwordCandidate);
+        this.props.history.push('/secret-phrase');
+      } else {
+        await this.props.setPassword(passwordCandidate);
+        this.props.history.push('/import-wallet');
+      }
+    }
+  };
+
   render() {
     const {
       isValid,
       areMoreThan7CharactersUsed,
-      areUppercaseAndNumberUsed,
       areOnlyAlphanumericAndSpecialCharactersUsed,
+      areAtLeastOneUppercaseAndNumberOrCharacter,
     } = new PasswordValidator(this.state.passwordCandidate);
 
     return (
@@ -73,15 +107,18 @@ class PasswordCreateRoute extends Component {
                   <li>8 symbols minimum</li>
                 </ListUnordered>
               </TextFieldMessage>
-              <TextFieldMessage filled={areUppercaseAndNumberUsed}>
+              <TextFieldMessage
+                filled={areAtLeastOneUppercaseAndNumberOrCharacter}
+              >
                 <ListUnordered>
                   <li>
-                    at least 1 uppercase letter and 1 number or special
-                    character
+                    at least 1 lowercase, 1 uppercase letter and 1 number or
+                    special character
                   </li>
                 </ListUnordered>
               </TextFieldMessage>
               <TextFieldMessage
+                error={this.state.passwordError}
                 filled={areOnlyAlphanumericAndSpecialCharactersUsed}
               >
                 <ListUnordered>
@@ -115,29 +152,6 @@ class PasswordCreateRoute extends Component {
       </Screen>
     );
   }
-
-  handleInputChange = e => {
-    this.setState({
-      passwordCandidate: e.target.value,
-    });
-  };
-
-  handleCreation = async e => {
-    const { passwordCandidate } = this.state;
-    e.preventDefault();
-
-    const validator = new PasswordValidator(passwordCandidate);
-
-    if (validator.isValid) {
-      if (this.isNewWallet()) {
-        await this.props.createWifCandidate(passwordCandidate);
-        this.props.history.push('/secret-phrase');
-      } else {
-        await this.props.setPassword(passwordCandidate);
-        this.props.history.push('/import-wallet');
-      }
-    }
-  };
 }
 
 export default PasswordCreateRoute;
