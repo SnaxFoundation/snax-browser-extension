@@ -18,6 +18,9 @@ export const getActiveTabUrlAsync = async () => {
     window.chrome.tabs.query(
       { active: true, lastFocusedWindow: true },
       tabs => {
+        if (!tabs || tabs.length === 0) {
+          resolve(null);
+        }
         resolve(tabs[0].url);
       }
     );
