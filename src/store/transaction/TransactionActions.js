@@ -77,11 +77,7 @@ export class TransactionActions {
         const toId = await this.accountResolver.getIdByAccountName(to);
         const accountName = await this.accountResolver.getAccountNameById(toId);
 
-        if (from.toLowerCase() === accountName.toLowerCase()) {
-          throw new Error("Can't send transaction to the self");
-        }
-
-        if (accountName.toLowerCase() !== to.toLowerCase()) {
+        if (accountName.toLowerCase().trim() !== to.toLowerCase().trim()) {
           throw new Error('Can\'t resolve "to" account');
         }
 
@@ -95,7 +91,7 @@ export class TransactionActions {
           platform,
         };
       } else if (platform === 'snax') {
-        if (from.toLowerCase() === to.toLowerCase()) {
+        if (from.toLowerCase().trim() === to.toLowerCase().trim()) {
           throw new Error("Can't send transaction to the self");
         }
 
