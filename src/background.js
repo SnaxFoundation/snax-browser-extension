@@ -129,7 +129,7 @@ class BackgroundScript {
       const onDiscardTransactionMessage = async message => {
         if (message.cancelTransaction) {
           chrome.runtime.onMessage.removeListener(onDiscardTransactionMessage);
-          reject(new Error('Transaction has been canceled'));
+          reject(new Error(message.error));
 
           chrome.runtime.sendMessage({
             closePopup: true,
