@@ -15,8 +15,14 @@ export const clearBadge = () => {
 
 export const getActiveTabUrlAsync = async () => {
   return new Promise(resolve => {
-    window.chrome.tabs.query({ active: true }, tabs => {
-      resolve(tabs[0].url);
-    });
+    window.chrome.tabs.query(
+      { active: true, lastFocusedWindow: true },
+      tabs => {
+        if (!tabs || tabs.length === 0) {
+          resolve(null);
+        }
+        resolve(tabs[0].url);
+      }
+    );
   });
 };
