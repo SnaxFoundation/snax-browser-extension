@@ -46,6 +46,8 @@ class Root extends React.Component {
 
   @Inject(TransactionActions) transactionActions;
 
+  prepareTransactionTimeout = null;
+
   state = {
     store: null,
     hasWallet: false,
@@ -79,6 +81,11 @@ class Root extends React.Component {
     this.transactionManager.listen(async transaction => {
       this.setState({ preparingTransaction: true });
 
+      this.prepareTransactionTimeout = setTimeout(
+        () => this.cancelTransaction('Transaction has been expired'),
+        30000
+      );
+
       const preparedTransaction = await this.transactionActions.prepareTransaction(
         transaction.id,
         transaction.from,
@@ -86,6 +93,8 @@ class Root extends React.Component {
         transaction.amount,
         transaction.platform
       )(this.state.store.dispatch);
+
+      clearTimeout(this.prepareTransactionTimeout);
 
       this.setState({ preparingTransaction: false });
 
@@ -138,10 +147,13 @@ class Root extends React.Component {
     }
   }
 
-  cancelTransaction = () => {
+  cancelTransaction = (message = 'Transaction has been canceled') => {
+    clearTimeout(this.prepareTransactionTimeout);
+
     if (this.isValidChromeRuntime()) {
       window.chrome.runtime.sendMessage({
         cancelTransaction: true,
+        error: message,
       });
     }
   };
