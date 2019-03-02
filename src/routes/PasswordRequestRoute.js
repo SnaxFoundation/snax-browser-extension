@@ -1,10 +1,10 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import styled from "styled-components";
-import { NotificationActions } from "src/store/notifications/NotificationActions";
-import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
-import { WalletActions } from "src/store/wallet/WalletActions";
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import { NotificationActions } from 'src/store/notifications/NotificationActions';
+import { TransactionSelectors } from 'src/store/transaction/TransactionSelectors';
+import { WalletActions } from 'src/store/wallet/WalletActions';
+import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
 
 import {
   Button,
@@ -16,8 +16,8 @@ import {
   ScreenTitle,
   TextFieldWrapper,
   PasswordField,
-  SecondaryInfoBox
-} from "../components";
+  SecondaryInfoBox,
+} from '../components';
 
 @ReduxContainer(TransactionSelectors, [WalletActions, NotificationActions])
 class PasswordRequestRoute extends Component {
@@ -25,17 +25,12 @@ class PasswordRequestRoute extends Component {
     spawnErrorNotification: PropTypes.func.isRequired,
     tryExtractWalletFromStorage: PropTypes.func.isRequired,
     isCurrentTransactionActive: PropTypes.bool,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
   };
 
   state = {
     isPasswordVisible: false,
-    password: ""
-  };
-
-  handleRestoreClick = async e => {
-    e.preventDefault();
-    this.props.history.push("/restore-confirmation");
+    password: '',
   };
 
   render() {
@@ -54,12 +49,7 @@ class PasswordRequestRoute extends Component {
             Unlock wallet
           </Button>
           <SecondaryInfoBox>
-            <Anchor
-              colorScheme="flat"
-              spread
-              onClick={this.handleRestoreClick}
-              to="/"
-            >
+            <Anchor colorScheme="flat" spread to="/restore-confirmation">
               Restore wallet
             </Anchor>
           </SecondaryInfoBox>
@@ -70,13 +60,13 @@ class PasswordRequestRoute extends Component {
 
   handlePasswordButtonClick = () => {
     this.setState({
-      isPasswordVisible: !this.state.isPasswordVisible
+      isPasswordVisible: !this.state.isPasswordVisible,
     });
   };
 
   handlePasswordChange = e => {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   };
 
@@ -91,24 +81,24 @@ class PasswordRequestRoute extends Component {
         );
       } catch (e) {
         this.props.spawnErrorNotification(
-          "Cannot decrypt wallet, please check your password"
+          'Cannot decrypt wallet, please check your password'
         );
       }
 
       const redirectUrl = this.props.isCurrentTransactionActive
-        ? "/transaction-sign-request"
-        : "/wallet";
+        ? '/transaction-sign-request'
+        : '/wallet';
 
       if (!result.isExtractionSucceed) {
         this.props.spawnErrorNotification(
-          "Cannot decrypt wallet, please check your password"
+          'Cannot decrypt wallet, please check your password'
         );
       } else {
         this.props.history.push(redirectUrl);
       }
     } else {
       this.props.spawnErrorNotification(
-        "Cannot decrypt wallet, please check your password"
+        'Cannot decrypt wallet, please check your password'
       );
     }
   };

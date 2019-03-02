@@ -26,6 +26,7 @@ import {
   SignRequestRoute,
   TransactionSignRequestRoute,
   PrivateExportRoute,
+  RestoreConfirmationRoute,
 } from './routes';
 
 import { clearBadge, getActiveTabUrlAsync } from 'src/utils/chrome';
@@ -232,6 +233,10 @@ class Root extends React.Component {
               <Route path="/wallet" component={WalletRoute} />
               <Route path="/import-wallet" component={ImportRoute} />
               <Route path="/import-password" component={PasswordCreateRoute} />
+              <Route
+                path="/restore-confirmation"
+                component={RestoreConfirmationRoute}
+              />
               <Route path="/error" component={ErrorRoute} />
               <Route path="/password" component={PasswordRequestRoute} />
               <Route path="/sign-request" component={SignRequestRoute} />
