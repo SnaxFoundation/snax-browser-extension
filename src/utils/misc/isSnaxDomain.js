@@ -1,7 +1,7 @@
 import snaxDomains from 'config/snaxDomains';
 
 const isSnaxDomain = url => {
-  if (!url) return false;
+  if (!url) return true;
 
   const match = url.match(
     /^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/
