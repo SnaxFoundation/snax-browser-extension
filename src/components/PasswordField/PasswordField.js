@@ -1,26 +1,26 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { ButtonIconOnly } from "src/components/Button";
-import { IconEyeClosed, IconEyeOpened } from "src/components/Icon";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { ButtonIconOnly } from 'src/components/Button';
+import { IconEyeClosed, IconEyeOpened } from 'src/components/Icon';
 import {
   TextField,
   TextFieldIconRow,
-  TextFieldLabel
-} from "src/components/TextField";
+  TextFieldLabel,
+} from 'src/components/TextField';
 
 export class PasswordField extends React.Component {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
     error: PropTypes.bool,
-    value: PropTypes.string
+    value: PropTypes.string,
   };
 
   static defaultProps = {
-    error: false
+    error: false,
   };
 
   state = {
-    isInputTouched: false
+    isInputTouched: false,
   };
 
   render() {
@@ -32,8 +32,9 @@ export class PasswordField extends React.Component {
           <TextField
             error={hasError}
             value={this.props.value}
-            type={this.state.isPasswordVisible ? "text" : "password"}
+            type={this.state.isPasswordVisible ? 'text' : 'password'}
             onChange={this.handleInputChange}
+            data-test-id={this.props['data-test-id']}
           />
           <ButtonIconOnly
             type="button"
@@ -59,7 +60,7 @@ export class PasswordField extends React.Component {
 
   handlePasswordButtonClick = () => {
     this.setState({
-      isPasswordVisible: !this.state.isPasswordVisible
+      isPasswordVisible: !this.state.isPasswordVisible,
     });
   };
 }
