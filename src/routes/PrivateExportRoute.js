@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Inject } from 'src/context/steriotypes/Inject';
 import { ClipboardCopier } from 'src/services/misc/ClipboardCopier';
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
-import { WalletActions } from "src/store/wallet/WalletActions";
-import { WalletSelectors } from "src/store/wallet/WalletSelectors";
-import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
+import { WalletActions } from 'src/store/wallet/WalletActions';
+import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
+import { NotificationActions } from 'src/store/notifications/NotificationActions';
 
 import {
   BrandBox,
@@ -16,8 +16,6 @@ import {
   ButtonRow,
   Content,
   IconDownload,
-  IconLogOut,
-  HeadingSmall,
   SecondaryInfoBox,
   ParagraphBody2,
   Row,
@@ -37,9 +35,9 @@ class PrivateExportRoute extends Component {
     this.clipboardCopier.copy(privateKey);
 
     this.props.spawnSuccessNotification(
-      "Private key was successfully copied to your clipboard"
+      'Private key was successfully copied to your clipboard'
     );
-  }
+  };
 
   render() {
     return (

@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
 
 import {
-  Error,
   Content,
+  Success,
   Screen,
+  ParagraphBody2,
   Button,
   ButtonRow,
-  ParagraphBody2,
 } from '../components';
 
-class ErrorRoute extends Component {
+class SuccessRoute extends Component {
   render() {
     return (
       <Screen>
         <Content spread centerY>
-          <Error title="502">
-            <ParagraphBody2>error text</ParagraphBody2>
-          </Error>
+          <Success title="Success!">
+            <ParagraphBody2>Transaction was sucessfuly sent</ParagraphBody2>
+          </Success>
         </Content>
-        {/* <ButtonRow>
+        <ButtonRow>
           <Button>Back to wallet</Button>
-        </ButtonRow> */}
+        </ButtonRow>
       </Screen>
     );
   }
 }
 
-export default ErrorRoute;
+export default SuccessRoute;
