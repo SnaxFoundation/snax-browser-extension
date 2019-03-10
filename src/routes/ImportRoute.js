@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 
-import { NotificationActions } from 'src/store/notifications/NotificationActions';
-import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
-import { TransactionSelectors } from 'src/store/transaction/TransactionSelectors';
-import { WalletActions } from 'src/store/wallet/WalletActions';
-import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
 
 import {
   Button,
@@ -18,10 +18,10 @@ import {
   TextFieldMultiline,
   TextFieldWrapper,
   Anchor,
-  SecondaryInfoBox,
-} from '../components';
-import { ClipboardCopier } from '../services/misc/ClipboardCopier';
-import { Inject } from '../context/steriotypes/Inject';
+  SecondaryInfoBox
+} from "../components";
+import { ClipboardCopier } from "../services/misc/ClipboardCopier";
+import { Inject } from "../context/steriotypes/Inject";
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],
@@ -31,13 +31,13 @@ class ImportRoute extends Component {
   static propTypes = {
     spawnErrorNotification: PropTypes.func.isRequired,
     tryCreateWalletByMnemonic: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   };
 
   @Inject(ClipboardCopier) clipboardCopier;
 
   state = {
-    mnemonic: '',
+    mnemonic: ""
   };
 
   render() {
@@ -53,7 +53,6 @@ class ImportRoute extends Component {
                 placeholder="Enter your 12 word secret phrase to unlock wallet"
                 onChange={this.handleMnemonicChange}
                 rows={3}
-                data-test-id="import-wallet__secret__input-text-field"
               />
             </TextFieldWrapper>
           </Row>
@@ -63,17 +62,11 @@ class ImportRoute extends Component {
             onClick={this.handleContinueClick}
             disabled={!this.isMnemonicValid()}
             spread
-            data-test-id="import-wallet__action__continue"
           >
             Continue
           </Button>
           <SecondaryInfoBox>
-            <Anchor
-              colorScheme="flat"
-              spread
-              to="/import-password"
-              data-test-id="import-wallet__action__back"
-            >
+            <Anchor colorScheme="flat" spread to="/import-password">
               Back
             </Anchor>
           </SecondaryInfoBox>
@@ -84,7 +77,7 @@ class ImportRoute extends Component {
 
   handleMnemonicChange = e => {
     this.setState({
-      mnemonic: e.target.value,
+      mnemonic: e.target.value
     });
   };
 
@@ -99,11 +92,11 @@ class ImportRoute extends Component {
         this.props.setConfirmed();
         this.clipboardCopier.clear();
         const redirectUrl = this.props.isCurrentTransactionActive
-          ? '/transaction-sign-request'
-          : '/wallet';
+          ? "/transaction-sign-request"
+          : "/wallet";
         this.props.history.push(redirectUrl);
       } else {
-        this.props.spawnErrorNotification('Recovering failed');
+        this.props.spawnErrorNotification("Recovering failed");
       }
     }
   };
@@ -112,7 +105,7 @@ class ImportRoute extends Component {
     return (
       this.state.mnemonic &&
       this.state.mnemonic
-        .split(' ')
+        .split(" ")
         .reduce(
           (count, word) =>
             /^[a-zA-Z0-9]+$/.test(word) ? count + 1 : -Infinity,

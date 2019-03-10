@@ -101,7 +101,6 @@ class PasswordCreateRoute extends Component {
               <PasswordField
                 onChange={this.handleInputChange}
                 value={this.state.passwordCandidate}
-                data-test-id="password-create__form__input"
               />
               <TextFieldMessage filled={areMoreThan7CharactersUsed}>
                 <ListUnordered>
@@ -135,7 +134,6 @@ class PasswordCreateRoute extends Component {
             disabled={!isValid}
             spread
             to="/secret-phrase"
-            data-test-id="password-create__create-wallet__button"
           >
             {!this.isNewWallet() ? 'Import wallet' : 'Create new wallet'}
           </ButtonLink>
@@ -146,7 +144,6 @@ class PasswordCreateRoute extends Component {
               spread
               to="/"
               onClick={this.props.clearPassword}
-              data-test-id="password-create__back__button"
             >
               Back
             </Anchor>

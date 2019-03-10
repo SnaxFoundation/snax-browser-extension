@@ -865,11 +865,6 @@ babel-plugin-jest-hoist@^23.2.0:
   version "23.2.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-jest-hoist/-/babel-plugin-jest-hoist-23.2.0.tgz#e61fae05a1ca8801aadee57a6d66b8cefaf44167"
 
-babel-plugin-jsx-remove-data-test-id@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-jsx-remove-data-test-id/-/babel-plugin-jsx-remove-data-test-id-2.0.0.tgz#18d324954f0d4b63292fd9ed870d7a09b80c9ecc"
-  integrity sha512-Hjwd5KnKtUlv9WgS9wMYIfd8G16hBLfi3Nq2axLkRt754sj5mRYlZ5WJzbXE3967NDjjDIx0PrHhwQHukBs0Dw==
-
 "babel-plugin-styled-components@>= 1":
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-styled-components/-/babel-plugin-styled-components-1.10.0.tgz#ff1f42ad2cc78c21f26b62266b8f564dbc862939"

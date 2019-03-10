@@ -69,7 +69,6 @@
     "write-file-webpack-plugin": "4.4.1"
   },
   "devDependencies": {
-    "babel-plugin-jsx-remove-data-test-id": "^2.0.0",
     "remote-redux-devtools": "^0.5.13",
     "webpack-cli": "^3.2.3"
   },
@@ -78,7 +77,6 @@
     "integration-test": "jest --projects selenium",
     "start": "node scripts/start.js",
     "build": "webpack --config ./config/webpack.config.prod.js && webpack --config ./config/webpack.config.prod.ext.js",
-    "build:test": "webpack --config ./config/webpack.config.test.js && webpack --config ./config/webpack.config.test.ext.js",
     "package": "webpack --config ./config/webpack.config.dev.js --env.packaging=true"
   },
   "babel": {

@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 
-import { NotificationActions } from 'src/store/notifications/NotificationActions';
-import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
-import { WalletActions } from 'src/store/wallet/WalletActions';
-import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
 
 import {
   Anchor,
@@ -17,18 +17,18 @@ import {
   ParagraphBody,
   SecondaryInfoBox,
   TextFieldLabel,
-  TextFieldMultiline,
-} from '../components';
-import { ClipboardCopier } from '../services/misc/ClipboardCopier';
-import { Inject } from '../context/steriotypes/Inject';
-import { SecretPhraseWrapper } from '../containers';
+  TextFieldMultiline
+} from "../components";
+import { ClipboardCopier } from "../services/misc/ClipboardCopier";
+import { Inject } from "../context/steriotypes/Inject";
+import { SecretPhraseWrapper } from "../containers";
 
 @ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
 class SecretPhraseRoute extends Component {
   static propTypes = {
     spawnSuccessNotification: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    mnemonic: PropTypes.string,
+    mnemonic: PropTypes.string
   };
 
   @Inject(ClipboardCopier) clipboardCopier;
@@ -36,7 +36,7 @@ class SecretPhraseRoute extends Component {
   handleCopyClick = () => {
     this.clipboardCopier.copy(this.props.mnemonic);
     this.props.spawnSuccessNotification(
-      'Mnemonic was successfully copied to your clipboard'
+      "Mnemonic was successfully copied to your clipboard"
     );
   };
 
@@ -52,7 +52,6 @@ class SecretPhraseRoute extends Component {
           disabled
           value={this.props.mnemonic}
           rows={3}
-          data-test-id="secret-phrase__secret__text-field"
         />
       </div>,
       <div className="text-align-right">
@@ -60,14 +59,13 @@ class SecretPhraseRoute extends Component {
           as="button"
           colorScheme="flat"
           size="small"
-          style={{ textDecoration: 'none' }}
-          data-test-id="secret-phrase__secret__copy-button"
+          style={{ textDecoration: "none" }}
         >
           <span onClick={this.handleCopyClick} className="dashed">
             Copy
           </span>
         </Anchor>
-      </div>,
+      </div>
     ];
   }
 
@@ -78,7 +76,7 @@ class SecretPhraseRoute extends Component {
 
   updateWallet = async e => {
     e.preventDefault();
-    this.props.history.push('/confirm-phrase');
+    this.props.history.push("/confirm-phrase");
   };
 
   render() {
@@ -110,20 +108,12 @@ class SecretPhraseRoute extends Component {
           </div>
         </Row>
         <ButtonRow>
-          <Button
-            spread
-            onClick={this.updateWallet}
-            data-test-id="secret-phrase__actions__confirm-button"
-          >
+          <Button spread onClick={this.updateWallet}>
             I've saved it
           </Button>
 
           <SecondaryInfoBox>
-            <Anchor
-              spread
-              to="/new-wallet"
-              data-test-id="secret-phrase__actions__back-button"
-            >
+            <Anchor spread to="/new-wallet">
               Back
             </Anchor>
           </SecondaryInfoBox>
