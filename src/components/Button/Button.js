@@ -182,6 +182,8 @@ export const Button = styled.button`
   ${size};
   ${loader};
   ${style};
+
+  ${props => props.spread && 'flex-grow: 1;'}
 `;
 
 Button.propTypes = propTypes;

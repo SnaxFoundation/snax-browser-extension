@@ -1,14 +1,15 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {
   BrandBox,
   BrandBoxTitle,
   BrandBoxSubtitle,
-  ButtonLink,
+  Button,
   Content,
   DividerWithText,
   Row,
-  Screen
-} from "../components";
+  Screen,
+} from '../components';
 
 class WelcomeRoute extends Component {
   render() {
@@ -20,17 +21,17 @@ class WelcomeRoute extends Component {
         </BrandBox>
         <Content spread centerY>
           <Row>
-            <ButtonLink spread to="/new-wallet">
+            <Button as={Link} spread to="/new-wallet">
               Create new wallet
-            </ButtonLink>
+            </Button>
           </Row>
           <Row>
             <DividerWithText>or</DividerWithText>
           </Row>
           <Row>
-            <ButtonLink spread to="/import-password">
+            <Button as={Link} spread to="/import-password">
               I already have wallet
-            </ButtonLink>
+            </Button>
           </Row>
         </Content>
       </Screen>
