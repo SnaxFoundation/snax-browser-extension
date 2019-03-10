@@ -41,7 +41,6 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
               compact: true,
-              plugins: ['babel-plugin-jsx-remove-data-test-id'],
             },
           },
           {
