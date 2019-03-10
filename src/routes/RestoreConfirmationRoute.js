@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 import {
   Anchor,
@@ -9,13 +9,13 @@ import {
   Screen,
   ScreenTitle,
   ParagraphBody2,
-  SecondaryInfoBox,
-} from '../components';
-import { NotificationActions } from '../store/notifications/NotificationActions';
-import { ReduxContainer } from '../utils/redux/ReduxContainer';
-import { TransactionSelectors } from '../store/transaction/TransactionSelectors';
-import { WalletActions } from '../store/wallet/WalletActions';
-import { WalletSelectors } from '../store/wallet/WalletSelectors';
+  SecondaryInfoBox
+} from "../components";
+import { NotificationActions } from "../store/notifications/NotificationActions";
+import { ReduxContainer } from "../utils/redux/ReduxContainer";
+import { TransactionSelectors } from "../store/transaction/TransactionSelectors";
+import { WalletActions } from "../store/wallet/WalletActions";
+import { WalletSelectors } from "../store/wallet/WalletSelectors";
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],
@@ -27,7 +27,7 @@ class RestoreConfirmationRoute extends Component {
   restore = async () => {
     await this.props.clearWallet();
     await this.props.clearPassword();
-    this.props.history.push('/');
+    this.props.history.push("/");
   };
 
   render() {
@@ -50,20 +50,12 @@ class RestoreConfirmationRoute extends Component {
         </Content>
 
         <ButtonRow>
-          <Button
-            spread
-            onClick={this.restore}
-            data-test-id="confirm-restore__actions__restore-wallet"
-          >
+          <Button spread onClick={this.restore}>
             Restore
           </Button>
 
           <SecondaryInfoBox>
-            <Anchor
-              spread
-              to="/password"
-              data-test-id="confirm-restore__actions__cancel"
-            >
+            <Anchor spread to="/password">
               Cancel
             </Anchor>
           </SecondaryInfoBox>

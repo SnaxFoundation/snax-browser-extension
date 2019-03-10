@@ -45,7 +45,7 @@ class WalletRoute extends Component {
 
   handleExportKey = () => {
     this.props.history.push('/private-export');
-  };
+  }
 
   render() {
     return (
@@ -91,7 +91,6 @@ class WalletRoute extends Component {
             icon={<IconLogOut />}
             size="small"
             style={{ textAlign: 'left' }}
-            data-test-id="wallet__actions__lock-wallet"
           >
             Lock my wallet
           </ButtonWithIcon>
@@ -101,7 +100,6 @@ class WalletRoute extends Component {
             size="small"
             as="a"
             onClick={this.handleExportKey}
-            data-test-id="wallet__actions__export-private-key"
           >
             Export private key
           </ButtonWithIcon>
