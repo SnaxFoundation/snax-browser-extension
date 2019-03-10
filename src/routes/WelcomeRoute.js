@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   BrandBox,
   BrandBoxTitle,
@@ -7,8 +7,8 @@ import {
   Content,
   DividerWithText,
   Row,
-  Screen
-} from "../components";
+  Screen,
+} from '../components';
 
 class WelcomeRoute extends Component {
   render() {
@@ -20,7 +20,11 @@ class WelcomeRoute extends Component {
         </BrandBox>
         <Content spread centerY>
           <Row>
-            <ButtonLink spread to="/new-wallet">
+            <ButtonLink
+              spread
+              to="/new-wallet"
+              data-test-id="welcome__new-wallet__button"
+            >
               Create new wallet
             </ButtonLink>
           </Row>
@@ -28,7 +32,11 @@ class WelcomeRoute extends Component {
             <DividerWithText>or</DividerWithText>
           </Row>
           <Row>
-            <ButtonLink spread to="/import-password">
+            <ButtonLink
+              spread
+              to="/import-password"
+              data-test-id="welcome__import-wallet__button"
+            >
               I already have wallet
             </ButtonLink>
           </Row>
