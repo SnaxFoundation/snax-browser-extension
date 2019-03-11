@@ -79,7 +79,7 @@ class TransactionSignRequestRoute extends Component {
     return (
       <ButtonRow>
         <Button onClick={this._handleGoBackClick} spread>
-          Back
+          Back to wallet
         </Button>
       </ButtonRow>
     );
@@ -87,7 +87,7 @@ class TransactionSignRequestRoute extends Component {
 
   _isEnoughBalance = () => {
     return (
-      parseFloat(this.props.currentAccountBalance) >
+      parseFloat(this.props.currentAccountBalance) >=
       parseFloat(this.props.currentTransactionAmount)
     );
   };
