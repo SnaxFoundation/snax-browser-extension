@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import { PasswordValidator } from 'src/utils/validators/PasswordValidator';
 import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
@@ -7,7 +8,7 @@ import { WalletActions } from 'src/store/wallet/WalletActions';
 import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
 
 import {
-  ButtonLink,
+  Button,
   ButtonRow,
   Content,
   ListUnordered,
@@ -22,8 +23,6 @@ import {
 } from '../components';
 import { Inject } from '../context/steriotypes/Inject';
 import { PasswordManager } from '../services/accounts/PasswordManager';
-
-// TODO Replace ButtonLink with Button after removing link
 
 @ReduxContainer(WalletSelectors, WalletActions)
 class PasswordCreateRoute extends Component {
@@ -129,14 +128,16 @@ class PasswordCreateRoute extends Component {
           </Row>
         </Content>
         <ButtonRow>
-          <ButtonLink
+          <Button
             onClick={this.handleCreation}
             disabled={!isValid}
             spread
             to="/secret-phrase"
+            as={Link}
+            data-test-id="password-create__create-wallet__button"
           >
             {!this.isNewWallet() ? 'Import wallet' : 'Create new wallet'}
-          </ButtonLink>
+          </Button>
 
           <SecondaryInfoBox>
             <Anchor

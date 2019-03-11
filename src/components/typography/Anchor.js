@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import constants from '../../styles/style-constants';
 
 export const Anchor = styled(Link)`
   font-size: inherit;
@@ -11,7 +12,8 @@ export const Anchor = styled(Link)`
   &,
   &:hover,
   &:focus {
-    color: currentColor;
+    color: ${props =>
+      props.accent ? constants.color.primary : 'currentColor'};
     background-color: transparent;
     border: 0;
     outline: 0;

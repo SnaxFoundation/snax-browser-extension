@@ -55,6 +55,11 @@ export class TransactionSelectors {
   }
 
   @Selector
+  isCurrentTransactionSigned(state) {
+    return state.isSigned;
+  }
+
+  @Selector
   isCurrentTransactionActive(state) {
     return state.isActive;
   }

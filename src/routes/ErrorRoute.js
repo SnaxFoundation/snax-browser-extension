@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
 
-import { Error, Screen } from '../components';
+import {
+  Error,
+  Content,
+  Screen,
+  Button,
+  ButtonRow,
+  ParagraphBody2,
+} from '../components';
 
 class ErrorRoute extends Component {
   render() {
     return (
       <Screen>
-        <Error title="502">error text</Error>
+        <Content spread centerY>
+          <Error title="502">
+            <ParagraphBody2>error text</ParagraphBody2>
+          </Error>
+        </Content>
+        {/* <ButtonRow>
+          <Button>Back to wallet</Button>
+        </ButtonRow> */}
       </Screen>
     );
   }
