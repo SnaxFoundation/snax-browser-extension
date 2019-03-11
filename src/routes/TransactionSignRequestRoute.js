@@ -128,7 +128,7 @@ class TransactionSignRequestRoute extends Component {
       this.props.currentTransactionError.json.error &&
       this.props.currentTransactionError.json.error.name;
 
-    const success = this.props.isCurrentTransactionSucceed;
+    const success = this.props.isCurrentTransactionSigned;
     const failed = this.props.isCurrentTransactionFailed;
 
     if (failed) {
