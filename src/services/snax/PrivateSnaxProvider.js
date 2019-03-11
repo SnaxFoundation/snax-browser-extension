@@ -2,12 +2,12 @@ import { Singleton } from 'src/context/steriotypes/Singleton';
 import { JsonRpc, JsSignatureProvider, Api } from '@snaxfoundation/snaxjs';
 import { WalletManager } from 'src/services/accounts/WalletManager';
 import { Inject } from 'src/context/steriotypes/Inject';
-
+import { config } from 'src/config';
 @Singleton
 export class PrivateSnaxProvider {
   @Inject(WalletManager) walletManager;
 
-  rpc = new JsonRpc(process.env.SNAXNODE || 'https://testnetcdn.snax.one', {
+  rpc = new JsonRpc(config.chainUrl || 'https://testnetcdn.snax.one', {
     fetch,
   });
 

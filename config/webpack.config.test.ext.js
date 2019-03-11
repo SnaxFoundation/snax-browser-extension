@@ -1,17 +1,15 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const paths = require('./paths');
-
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   bail: true,
   devtool: false,
   mode: 'development',
   entry: {
-    index: path.join(paths.appSrc, 'index.js'),
+    background: path.join(paths.appSrc, 'background.js'),
+    injected: path.join(paths.appSrc, 'injected.js'),
+    contentscript: path.join(paths.appSrc, 'contentscript.js'),
   },
   output: {
     path: paths.appBuild,
@@ -41,7 +39,6 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
               compact: true,
-              plugins: ['babel-plugin-jsx-remove-data-test-id'],
             },
           },
           {
@@ -55,40 +52,5 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new CleanWebpackPlugin(['build']),
-    new CopyWebpackPlugin([
-      { from: 'manifest.json' },
-      { from: 'public/icon16.png' },
-      { from: 'public/icon32.png' },
-      { from: 'public/icon48.png' },
-      { from: 'public/icon128.png' },
-    ]),
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: paths.appHtml,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: false,
-        minifyURLs: true,
-      },
-    }),
-    /*new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        comparisons: false,
-      },
-      output: {
-        comments: false,
-        ascii_only: true,
-      }
-  }),*/
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-  ],
+  plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
 };

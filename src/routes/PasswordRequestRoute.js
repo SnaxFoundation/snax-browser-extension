@@ -40,16 +40,29 @@ class PasswordRequestRoute extends Component {
         <Content spread centerY>
           <Row>
             <TextFieldWrapper>
-              <PasswordField onChange={this.handlePasswordChange} />
+              <PasswordField
+                onChange={this.handlePasswordChange}
+                data-test-id="password-request__password__input-text-field"
+              />
             </TextFieldWrapper>
           </Row>
         </Content>
         <ButtonRow>
-          <Button type="submit" disabled={!this.isPasswordValid()} spread>
+          <Button
+            type="submit"
+            disabled={!this.isPasswordValid()}
+            spread
+            data-test-id="password-request__actions__unlock-wallet"
+          >
             Unlock wallet
           </Button>
           <SecondaryInfoBox>
-            <Anchor colorScheme="flat" spread to="/restore-confirmation">
+            <Anchor
+              colorScheme="flat"
+              spread
+              to="/restore-confirmation"
+              data-test-id="password-request__actions__restore-wallet"
+            >
               Restore wallet
             </Anchor>
           </SecondaryInfoBox>
