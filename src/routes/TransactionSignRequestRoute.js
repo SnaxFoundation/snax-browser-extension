@@ -27,7 +27,10 @@ class TransactionSignRequestRoute extends Component {
         <ScreenTitle>Transaction request</ScreenTitle>
         <Content spread>
           <Row>
-            <TransactionAmount amount={this.props.currentTransactionAmount} />
+            <TransactionAmount
+              data-test-id="transaction-confirm__view__amount"
+              amount={this.props.currentTransactionAmount}
+            />
           </Row>
           <Row>
             <TransactionRecipient
@@ -43,10 +46,16 @@ class TransactionSignRequestRoute extends Component {
             onClick={this._handleConfirmClick}
             spread
             loading={this.state.processing}
+            data-test-id="transaction-confirm__actions__confirm"
           >
             Confirm
           </Button>
-          <Button onClick={this._handleCancelClick} colorScheme="flat" spread>
+          <Button
+            data-test-id="transaction-confirm__actions__cancel"
+            onClick={this._handleCancelClick}
+            colorScheme="flat"
+            spread
+          >
             Cancel
           </Button>
         </ButtonRow>

@@ -1,11 +1,11 @@
 import { Inject } from 'src/context/steriotypes/Inject';
 import { Singleton } from 'src/context/steriotypes/Singleton';
-
+import { config } from 'src/config';
 @Singleton
 export class AccountResolver {
   async getAccountNameById(id) {
     const response = await fetch(
-      `https://twitter.com/intent/user?user_id=${id}`,
+      `${config.twitterUrl}/intent/user?user_id=${id}`,
       {
         credentials: 'omit',
       }
@@ -21,7 +21,7 @@ export class AccountResolver {
   }
 
   async getIdByAccountName(accountName) {
-    const response = await fetch(`https://twitter.com/${accountName}`, {
+    const response = await fetch(`${config.twitterUrl}/${accountName}`, {
       credentials: 'omit',
     });
 

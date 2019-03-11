@@ -60,11 +60,16 @@ class PrivateExportRoute extends Component {
             icon={<IconDownload />}
             colorScheme="red"
             onClick={this.handleExport}
+            data-test-id="export-private__actions__handle-export"
           >
             I understand. Export.
           </ButtonWithIcon>
           <SecondaryInfoBox>
-            <Anchor spread to="/wallet">
+            <Anchor
+              spread
+              to="/wallet"
+              data-test-id="export-private__actions__back"
+            >
               Back
             </Anchor>
           </SecondaryInfoBox>
