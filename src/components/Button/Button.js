@@ -29,7 +29,7 @@ const sizeMap = {
     lineHeight: 1.4,
     borderRadius: `${constants.borderRadius}px`,
     fontSize: constants.fontSize.button,
-    padding: '0.5em 1.5em',
+    padding: '0.5em 1em',
     minHeight: 0,
   },
 
@@ -37,7 +37,7 @@ const sizeMap = {
     lineHeight: 1.4,
     borderRadius: `${constants.borderRadius}px`,
     fontSize: constants.fontSize.body,
-    padding: '0.5em 1.5em',
+    padding: '0.5em 1em',
     minHeight: 0,
   },
 
@@ -45,7 +45,7 @@ const sizeMap = {
     lineHeight: 1.4,
     borderRadius: `${constants.borderRadius}px`,
     fontSize: 22,
-    padding: '0.75em 2em',
+    padding: '0.75em 1.5em',
     minHeight: 0,
   },
 };
@@ -174,10 +174,6 @@ export const Button = styled.button`
   transition: 150ms ease-in;
   transition-property: opacity, background, border, box-shadow;
   position: relative;
-
-  > * + * {
-    margin-left: 0.75em;
-  }
 
   ${size};
   ${loader};
