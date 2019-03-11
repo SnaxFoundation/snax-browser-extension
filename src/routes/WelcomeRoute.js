@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -9,8 +10,8 @@ import {
   Content,
   DividerWithText,
   Row,
-  Screen,
-} from '../components';
+  Screen
+} from "../components";
 
 class WelcomeRoute extends Component {
   render() {

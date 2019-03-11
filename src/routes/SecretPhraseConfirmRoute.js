@@ -1,14 +1,14 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 
-import { NotificationActions } from 'src/store/notifications/NotificationActions';
-import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
-import { TransactionSelectors } from 'src/store/transaction/TransactionSelectors';
-import { WalletActions } from 'src/store/wallet/WalletActions';
-import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
+import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { ReduxContainer } from "src/utils/redux/ReduxContainer";
+import { TransactionSelectors } from "src/store/transaction/TransactionSelectors";
+import { WalletActions } from "src/store/wallet/WalletActions";
+import { WalletSelectors } from "src/store/wallet/WalletSelectors";
 
-import { ClipboardCopier } from '../services/misc/ClipboardCopier';
-import { Inject } from '../context/steriotypes/Inject';
+import { ClipboardCopier } from "../services/misc/ClipboardCopier";
+import { Inject } from "../context/steriotypes/Inject";
 import {
   SecondaryInfoBox,
   Anchor,
@@ -21,8 +21,8 @@ import {
   ParagraphBody,
   TextFieldWrapper,
   TextFieldLabel,
-  TextFieldMultiline,
-} from '../components';
+  TextFieldMultiline
+} from "../components";
 
 @ReduxContainer(
   [WalletSelectors, TransactionSelectors],
@@ -33,7 +33,7 @@ class SecretPhraseConfirmRoute extends Component {
     tryCreateWifFromCandidate: PropTypes.func.isRequired,
     spawnErrorNotification: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    mnemonic: PropTypes.string,
+    mnemonic: PropTypes.string
   };
 
   @Inject(ClipboardCopier) clipboardCopier;
@@ -42,14 +42,14 @@ class SecretPhraseConfirmRoute extends Component {
     super(props, context);
 
     this.state = {
-      mnemonic: '',
+      mnemonic: ""
     };
   }
 
   updateMnemonic = async e => {
     e.preventDefault();
     await this.props.createNewMnemonic();
-    this.props.history.push('/secret-phrase');
+    this.props.history.push("/secret-phrase");
   };
 
   render() {
@@ -69,18 +69,13 @@ class SecretPhraseConfirmRoute extends Component {
                 onChange={this.handleMnemonicChange}
                 rows={3}
                 value={this.state.mnemonic}
-                data-test-id="secret-phrase-confirm__secret__input-text-field"
               />
             </TextFieldWrapper>
           </Row>
         </Content>
 
         <ButtonRow>
-          <Button
-            onClick={this.handleOpenValid}
-            spread
-            data-test-id="secret-phrase-confirm__actions__open-wallet"
-          >
+          <Button onClick={this.handleOpenValid} spread>
             Open wallet
           </Button>
 
@@ -89,7 +84,6 @@ class SecretPhraseConfirmRoute extends Component {
               colorScheme="flat"
               to="/secret-phrase"
               spread
-              data-test-id="secret-phrase-confirm__actions__generate-new-key"
               onClick={this.updateMnemonic}
             >
               Generate new key
@@ -102,7 +96,7 @@ class SecretPhraseConfirmRoute extends Component {
 
   handleMnemonicChange = e => {
     this.setState({
-      mnemonic: e.target.value,
+      mnemonic: e.target.value
     });
   };
 
@@ -117,15 +111,15 @@ class SecretPhraseConfirmRoute extends Component {
   handleOpenValid = async e => {
     e.preventDefault();
     const redirectUrl = this.props.isCurrentTransactionActive
-      ? '/transaction-sign-request'
-      : '/wallet';
+      ? "/transaction-sign-request"
+      : "/wallet";
 
     if (await this.checkMnemonic()) {
       this.props.setConfirmed();
       this.clipboardCopier.clear();
       this.props.history.push(redirectUrl);
     } else {
-      this.props.spawnErrorNotification('Invalid mnemonic');
+      this.props.spawnErrorNotification("Invalid mnemonic");
     }
   };
 }
