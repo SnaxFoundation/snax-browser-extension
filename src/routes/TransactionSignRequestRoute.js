@@ -19,6 +19,7 @@ import { TransactionAmount, TransactionRecipient } from '../containers';
 class TransactionSignRequestRoute extends Component {
   state = {
     processing: false,
+    error: null,
   };
 
   render() {
@@ -40,41 +41,76 @@ class TransactionSignRequestRoute extends Component {
           </Row>
           {this._renderBalance()}
           {this._renderErrorIfNeeded()}
+          {this._renderResourcesErrorIfNeeded()}
         </Content>
-        <ButtonRow>
-          <Button
-            onClick={this._handleConfirmClick}
-            spread
-            loading={this.state.processing}
-            data-test-id="transaction-confirm__actions__confirm"
-          >
-            Confirm
-          </Button>
-          <Button
-            data-test-id="transaction-confirm__actions__cancel"
-            onClick={this._handleCancelClick}
-            colorScheme="flat"
-            spread
-          >
-            Cancel
-          </Button>
-        </ButtonRow>
+        {!this.state.error
+          ? this._renderActiveTransactionsButtons()
+          : this._renderFailedTransactionsButtons()}
       </Screen>
     );
   }
 
-  _renderErrorIfNeeded() {
-    if (
+  _renderActiveTransactionsButtons = () => {
+    const isButtonDisables = !this._isEnoughBalance() || this.state.error;
+    return (
+      <ButtonRow>
+        <Button
+          disabled={isButtonDisables}
+          onClick={this._handleConfirmClick}
+          spread
+          loading={this.state.processing}
+          data-test-id="transaction-confirm__actions__confirm"
+        >
+          Confirm
+        </Button>
+        <Button
+          data-test-id="transaction-confirm__actions__cancel"
+          onClick={this._handleCancelClick}
+          colorScheme="flat"
+          spread
+        >
+          Cancel
+        </Button>
+      </ButtonRow>
+    );
+  };
+
+  _renderFailedTransactionsButtons = () => {
+    return (
+      <ButtonRow>
+        <Button onClick={this._handleGoBackClick} spread>
+          Back
+        </Button>
+      </ButtonRow>
+    );
+  };
+
+  _isEnoughBalance = () => {
+    return (
       parseFloat(this.props.currentAccountBalance) >
       parseFloat(this.props.currentTransactionAmount)
-    )
-      return null;
+    );
+  };
+
+  _renderErrorIfNeeded = () => {
+    if (this._isEnoughBalance()) return null;
     else
       return (
         <Row>
           <ParagraphError>Not enough tokens</ParagraphError>
         </Row>
       );
+  };
+
+  _renderResourcesErrorIfNeeded() {
+    if (this.state.error) {
+      return (
+        <Row>
+          <ParagraphError>{this.state.error}</ParagraphError>
+        </Row>
+      );
+    }
+    return null;
   }
 
   _renderBalance() {
@@ -82,16 +118,49 @@ class TransactionSignRequestRoute extends Component {
   }
 
   _handleConfirmClick = async () => {
-    this.setState({ processing: true });
+    this.setState({ processing: true, error: null });
 
     await this.props.signTransaction();
 
-    this.setState({ processing: false });
-    this.props.history.push('/transaction-success');
+    const error =
+      this.props.currentTransactionError &&
+      this.props.currentTransactionError.json.error.name;
+
+    const success = this.props.isCurrentTransactionSucceed;
+    const failed = this.props.isCurrentTransactionFailed;
+
+    if (failed) {
+      let errorMessage;
+
+      if (
+        error === 'ram_usage_exceeded' ||
+        error === 'tx_net_usage_exceeded' ||
+        error === 'tx_cpu_usage_exceeded'
+      ) {
+        errorMessage =
+          'Seems you made a lot of transactions in the last 24 hours. Try again later.';
+      } else {
+        errorMessage = 'Something wrong, try again';
+      }
+
+      this.setState({
+        processing: false,
+        error: errorMessage,
+      });
+    }
+
+    if (success) {
+      this.setState({ processing: false });
+      this.props.history.push('/transaction-success');
+    }
   };
 
   _handleCancelClick = async () => {
     await this.props.discardTransaction();
+    this.props.history.push('/wallet');
+  };
+
+  _handleGoBackClick = () => {
     this.props.history.push('/wallet');
   };
 }
