@@ -17,6 +17,10 @@ import { TransactionAmount, TransactionRecipient } from '../containers';
 
 @ReduxContainer(TransactionSelectors, TransactionActions)
 class TransactionSignRequestRoute extends Component {
+  state = {
+    processing: false,
+  };
+
   render() {
     return (
       <Screen>
@@ -35,7 +39,11 @@ class TransactionSignRequestRoute extends Component {
           {this._renderErrorIfNeeded()}
         </Content>
         <ButtonRow>
-          <Button onClick={this._handleConfirmClick} spread>
+          <Button
+            onClick={this._handleConfirmClick}
+            spread
+            loading={this.state.processing}
+          >
             Confirm
           </Button>
           <Button onClick={this._handleCancelClick} colorScheme="flat" spread>
@@ -65,8 +73,12 @@ class TransactionSignRequestRoute extends Component {
   }
 
   _handleConfirmClick = async () => {
+    this.setState({ processing: true });
+
     await this.props.signTransaction();
-    this.props.history.push('/wallet');
+
+    this.setState({ processing: false });
+    this.props.history.push('/transaction-success');
   };
 
   _handleCancelClick = async () => {
