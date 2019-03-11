@@ -15,8 +15,8 @@ const Title = styled.div`
   color: ${constants.textColor.medium};
   text-align: center;
   font-weight: ${constants.fontWeight.light};
-  font-size: 54px;
-  letter-spacing: 0.05em;
+  font-size: 44px;
+  margin-bottom: 0.25em;
 `;
 
 const Text = styled.div`
@@ -25,7 +25,7 @@ const Text = styled.div`
   font-size: ${constants.fontSize.body2}px;
 `;
 
-export const Error = ({ title, children }) => (
+export const Success = ({ title, children }) => (
   <Wrapper>
     <Title>{title}</Title>
     <Text>{children}</Text>

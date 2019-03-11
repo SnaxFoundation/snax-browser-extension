@@ -16,8 +16,6 @@ import {
   ButtonRow,
   Content,
   IconDownload,
-  IconLogOut,
-  HeadingSmall,
   SecondaryInfoBox,
   ParagraphBody2,
   Row,

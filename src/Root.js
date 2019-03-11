@@ -27,6 +27,7 @@ import {
   TransactionSignRequestRoute,
   PrivateExportRoute,
   RestoreConfirmationRoute,
+  SuccessRoute,
 } from './routes';
 
 import { clearBadge, getActiveTabUrlAsync } from 'src/utils/chrome';
@@ -245,6 +246,7 @@ class Root extends React.Component {
                 path="/transaction-sign-request"
                 component={TransactionSignRequestRoute}
               />
+              <Route path="/transaction-success" component={SuccessRoute} />
               <Route path="*" render={() => <Redirect to="/" />} />
             </Switch>
             {redirectToPassword && <Redirect to="/password" />}

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   BrandBox,
   BrandBoxTitle,
   BrandBoxSubtitle,
-  ButtonLink,
+  Button,
   Content,
   DividerWithText,
   Row,
@@ -20,25 +22,27 @@ class WelcomeRoute extends Component {
         </BrandBox>
         <Content spread centerY>
           <Row>
-            <ButtonLink
+            <Button
+              as={Link}
               spread
               to="/new-wallet"
               data-test-id="welcome__new-wallet__button"
             >
               Create new wallet
-            </ButtonLink>
+            </Button>
           </Row>
           <Row>
             <DividerWithText>or</DividerWithText>
           </Row>
           <Row>
-            <ButtonLink
+            <Button
+              as={Link}
               spread
               to="/import-password"
               data-test-id="welcome__import-wallet__button"
             >
               I already have wallet
-            </ButtonLink>
+            </Button>
           </Row>
         </Content>
       </Screen>
