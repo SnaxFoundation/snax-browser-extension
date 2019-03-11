@@ -1,8 +1,13 @@
 import snaxDomains from 'config/snaxDomains';
+import { config } from 'src/config';
 
 const isSnaxDomain = url => {
   if (!url) {
-    return false;
+    if (config.allowAllUnknownDomains) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   const match = url.match(
