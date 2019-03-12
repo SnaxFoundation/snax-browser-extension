@@ -1,6 +1,6 @@
 {
   "name": "snax-browser-extension",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "private": true,
   "dependencies": {
     "@snaxfoundation/snaxjs": "^20.0.0-beta5",
@@ -48,6 +48,7 @@
     "postcss-loader": "2.0.8",
     "promise": "8.0.1",
     "prop-types": "^15.6.2",
+    "query-string": "^6.3.0",
     "raf": "3.4.0",
     "react": "^16.8.2",
     "react-dev-utils": "^7.0.3",
@@ -69,6 +70,7 @@
     "write-file-webpack-plugin": "4.4.1"
   },
   "devDependencies": {
+    "babel-plugin-jsx-remove-data-test-id": "^2.0.0",
     "remote-redux-devtools": "^0.5.13",
     "webpack-cli": "^3.2.3"
   },

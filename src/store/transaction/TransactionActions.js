@@ -77,6 +77,10 @@ export class TransactionActions {
         const toId = await this.accountResolver.getIdByAccountName(to);
         const accountName = await this.accountResolver.getAccountNameById(toId);
 
+        if (!accountName) {
+          throw new Error('Recepient Twitter account does not exist');
+        }
+
         if (accountName.toLowerCase().trim() !== to.toLowerCase().trim()) {
           throw new Error('Can\'t resolve "to" account');
         }

@@ -1,3 +1,4 @@
+import qs from 'query-string';
 import React, { Component } from 'react';
 
 import {
@@ -10,17 +11,23 @@ import {
 } from '../components';
 
 class ErrorRoute extends Component {
+  handerGoBackToWallet = () => {
+    this.props.history.push('/wallet');
+  };
+
   render() {
+    const { message } = qs.parse(this.props.location.search);
+
     return (
       <Screen>
         <Content spread centerY>
-          <Error title="502">
-            <ParagraphBody2>error text</ParagraphBody2>
+          <Error title="">
+            <ParagraphBody2>{message}</ParagraphBody2>
           </Error>
         </Content>
-        {/* <ButtonRow>
-          <Button>Back to wallet</Button>
-        </ButtonRow> */}
+        <ButtonRow>
+          <Button onClick={this.handerGoBackToWallet}>Back to wallet</Button>
+        </ButtonRow>
       </Screen>
     );
   }
