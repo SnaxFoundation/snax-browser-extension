@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Inject } from 'src/context/steriotypes/Inject';
 import { ClipboardCopier } from 'src/services/misc/ClipboardCopier';
-import { ReduxContainer } from "src/utils/redux/ReduxContainer";
-import { WalletActions } from "src/store/wallet/WalletActions";
-import { WalletSelectors } from "src/store/wallet/WalletSelectors";
-import { NotificationActions } from "src/store/notifications/NotificationActions";
+import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
+import { WalletActions } from 'src/store/wallet/WalletActions';
+import { WalletSelectors } from 'src/store/wallet/WalletSelectors';
+import { NotificationActions } from 'src/store/notifications/NotificationActions';
 
 import {
   BrandBox,
@@ -35,9 +35,9 @@ class PrivateExportRoute extends Component {
     this.clipboardCopier.copy(privateKey);
 
     this.props.spawnSuccessNotification(
-      "Private key was successfully copied to your clipboard"
+      'Private key was successfully copied to your clipboard'
     );
-  }
+  };
 
   render() {
     return (
@@ -60,11 +60,16 @@ class PrivateExportRoute extends Component {
             icon={<IconDownload />}
             colorScheme="red"
             onClick={this.handleExport}
+            data-test-id="export-private__actions__handle-export"
           >
             I understand. Export.
           </ButtonWithIcon>
           <SecondaryInfoBox>
-            <Anchor spread to="/wallet">
+            <Anchor
+              spread
+              to="/wallet"
+              data-test-id="export-private__actions__back"
+            >
               Back
             </Anchor>
           </SecondaryInfoBox>

@@ -13,7 +13,7 @@ const Amount = styled.div`
 
 export const TransactionAmount = ({ amount, ...props }) => (
   <Wrapper {...props}>
-    <Amount>{amount}</Amount>
+    <Amount data-test-id={props['data-test-id']}>{amount}</Amount>
     {/*<ParagraphCaption>${parseFloat(amount) * 0.01} approximately</ParagraphCaption>*/}
   </Wrapper>
 );

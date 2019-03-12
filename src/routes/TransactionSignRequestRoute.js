@@ -28,7 +28,10 @@ class TransactionSignRequestRoute extends Component {
         <ScreenTitle>Transaction request</ScreenTitle>
         <Content spread>
           <Row>
-            <TransactionAmount amount={this.props.currentTransactionAmount} />
+            <TransactionAmount
+              amount={this.props.currentTransactionAmount}
+              data-test-id="transaction-confirm__view__amount"
+            />
           </Row>
           <Row>
             <TransactionRecipient
