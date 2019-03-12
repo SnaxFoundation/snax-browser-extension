@@ -69,6 +69,7 @@
     "write-file-webpack-plugin": "4.4.1"
   },
   "devDependencies": {
+    "babel-plugin-jsx-remove-data-test-id": "^2.0.0",
     "remote-redux-devtools": "^0.5.13",
     "webpack-cli": "^3.2.3"
   },
