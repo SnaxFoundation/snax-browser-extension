@@ -55,6 +55,10 @@ class BackgroundScript {
     chrome.tabs.onUpdated.addListener(() => {
       this.handleSnaxDomain();
     });
+
+    chrome.windows.onFocusChanged.addListener(() => {
+      this.handleSnaxDomain();
+    });
   }
 
   handlePopupRequests() {
@@ -108,8 +112,6 @@ class BackgroundScript {
 
           const value = this.holder.get(name);
           if (value == null) {
-            setBadge();
-
             resolve({
               name,
               data: this.holder.get(name),
