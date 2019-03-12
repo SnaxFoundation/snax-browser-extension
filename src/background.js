@@ -133,9 +133,18 @@ class BackgroundScript {
           chrome.runtime.onMessage.removeListener(onDiscardTransactionMessage);
           reject(new Error(message.error));
 
-          chrome.runtime.sendMessage({
-            closePopup: true,
-          });
+          if (message.closePopup) {
+            chrome.runtime.sendMessage({
+              closePopup: true,
+            });
+          }
+
+          if (message.openError) {
+            chrome.runtime.sendMessage({
+              openError: true,
+              error: message.error,
+            });
+          }
         }
       };
 

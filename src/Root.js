@@ -77,6 +77,14 @@ class Root extends React.Component {
         if (message.closePopup) {
           window.close();
         }
+
+        if (message.openError) {
+          if (this.state.loading || this.state.preparingTransaction) {
+            this.setState({ loading: false, preparingTransaction: false });
+          }
+
+          browserHistory.push(`/error?message=${message.error}`);
+        }
       });
     }
 
@@ -88,36 +96,40 @@ class Root extends React.Component {
         30000
       );
 
-      const preparedTransaction = await this.transactionActions.prepareTransaction(
-        transaction.id,
-        transaction.from,
-        transaction.to,
-        transaction.amount,
-        transaction.platform
-      )(this.state.store.dispatch);
+      try {
+        const preparedTransaction = await this.transactionActions.prepareTransaction(
+          transaction.id,
+          transaction.from,
+          transaction.to,
+          transaction.amount,
+          transaction.platform
+        )(this.state.store.dispatch);
 
-      clearTimeout(this.prepareTransactionTimeout);
+        clearTimeout(this.prepareTransactionTimeout);
 
-      this.setState({ preparingTransaction: false });
+        this.setState({ preparingTransaction: false });
 
-      if (!hasWallet) {
-        browserHistory.push('/new-wallet');
-        return;
+        if (!hasWallet) {
+          browserHistory.push('/new-wallet');
+          return;
+        }
+
+        if (!canUse) {
+          browserHistory.push('/password');
+          return;
+        }
+
+        if (canUse && shouldConfirm) {
+          browserHistory.push('/confirm-phrase');
+          return;
+        }
+
+        browserHistory.push('/transaction-sign-request');
+
+        return preparedTransaction;
+      } catch (error) {
+        this.handleOpenErrorRoute(error.message);
       }
-
-      if (!canUse) {
-        browserHistory.push('/password');
-        return;
-      }
-
-      if (canUse && shouldConfirm) {
-        browserHistory.push('/confirm-phrase');
-        return;
-      }
-
-      browserHistory.push('/transaction-sign-request');
-
-      return preparedTransaction;
     });
 
     if (this.isValidChromeRuntime()) {
@@ -149,6 +161,18 @@ class Root extends React.Component {
     }
   }
 
+  handleOpenErrorRoute = message => {
+    clearTimeout(this.prepareTransactionTimeout);
+
+    if (this.isValidChromeRuntime()) {
+      window.chrome.runtime.sendMessage({
+        cancelTransaction: true,
+        error: message,
+        openError: true,
+      });
+    }
+  };
+
   cancelTransaction = (message = 'Transaction has been canceled') => {
     clearTimeout(this.prepareTransactionTimeout);
 
@@ -156,6 +180,7 @@ class Root extends React.Component {
       window.chrome.runtime.sendMessage({
         cancelTransaction: true,
         error: message,
+        closePopup: true,
       });
     }
   };
