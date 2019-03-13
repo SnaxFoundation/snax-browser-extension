@@ -3,4 +3,5 @@ export default [
   'snax.one',
   'front.snax.one',
   'front-dev.snax.one',
+  'beta.snax.one',
 ];
