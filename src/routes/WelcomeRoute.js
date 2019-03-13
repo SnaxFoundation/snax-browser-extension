@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -10,8 +9,9 @@ import {
   Content,
   DividerWithText,
   Row,
-  Screen
-} from "../components";
+  Label,
+  Screen,
+} from '../components';
 
 class WelcomeRoute extends Component {
   render() {
@@ -19,7 +19,9 @@ class WelcomeRoute extends Component {
       <Screen>
         <BrandBox>
           <BrandBoxTitle>Snax</BrandBoxTitle>
-          <BrandBoxSubtitle>extension</BrandBoxSubtitle>
+          <BrandBoxSubtitle>
+            extension&nbsp;&nbsp;<Label>beta</Label>
+          </BrandBoxSubtitle>
         </BrandBox>
         <Content spread centerY>
           <Row>

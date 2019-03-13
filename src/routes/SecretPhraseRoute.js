@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import styled from 'styled-components';
 
 import { NotificationActions } from 'src/store/notifications/NotificationActions';
 import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
@@ -23,6 +24,11 @@ import { ClipboardCopier } from '../services/misc/ClipboardCopier';
 import { Inject } from '../context/steriotypes/Inject';
 import { SecretPhraseWrapper } from '../containers';
 
+const Emph = styled.strong`
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #f96060;
+`;
 @ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
 class SecretPhraseRoute extends Component {
   static propTypes = {
@@ -87,7 +93,7 @@ class SecretPhraseRoute extends Component {
     return (
       <Screen>
         <ScreenTitle>Secret phrase</ScreenTitle>
-        <Row>
+        <Row style={{ flexDirection: 'column' }}>
           <ParagraphBody>
             This 12 words will help your to restore your wallet. Save it
             somewhere safe and secure.
@@ -101,11 +107,17 @@ class SecretPhraseRoute extends Component {
         <Row className="text-align-center">
           <div>
             <ParagraphBody>
-              <strong>Do not lose it!</strong>
+              <Emph>Do not lose it!</Emph>
             </ParagraphBody>
             <ParagraphBody>
               Your key cannot be recovered if you lose it. Treat it like a bank
               account.
+            </ParagraphBody>
+            <ParagraphBody style={{ marginTop: '0.5em' }}>
+              <Emph>Warning!</Emph>
+            </ParagraphBody>
+            <ParagraphBody>
+              Your clipboard will be cleared after secret phrase confirmation!
             </ParagraphBody>
           </div>
         </Row>
