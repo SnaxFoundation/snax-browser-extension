@@ -11,11 +11,10 @@ import {
 } from '../components';
 
 class UnknownDomainRoute extends Component {
-  
   handleGoToWallet = () => {
-    const url = 'https://snax.one'
+    const url = 'https://beta.snax.one';
     window.open(url, '_blank');
-  }
+  };
 
   render() {
     return (
@@ -26,7 +25,9 @@ class UnknownDomainRoute extends Component {
         </BrandBox>
         <Content spread centerY>
           <Row>
-            <Button spread onClick={this.handleGoToWallet}>Go to my wallet</Button>
+            <Button spread onClick={this.handleGoToWallet}>
+              Go to my wallet
+            </Button>
           </Row>
           <Row>
             <ParagraphCaption style={{ textAlign: 'center', width: '100%' }}>

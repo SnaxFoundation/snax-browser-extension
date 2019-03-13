@@ -4,6 +4,7 @@ export * from './Button';
 export * from './dividers';
 export * from './Error';
 export * from './Icon';
+export * from './Label';
 export * from './layout';
 export * from './Loader';
 export * from './Screen';
