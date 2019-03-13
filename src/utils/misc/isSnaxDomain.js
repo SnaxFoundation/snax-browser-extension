@@ -1,7 +1,7 @@
 import snaxDomains from 'config/snaxDomains';
 import { config } from 'src/config';
 
-const isSnaxDomain = url => {
+export const isSnaxDomain = url => {
   if (!url) {
     if (config.allowAllUnknownDomains) {
       return true;
@@ -19,8 +19,4 @@ const isSnaxDomain = url => {
   }
 
   return false;
-};
-
-module.exports = {
-  isSnaxDomain,
 };
