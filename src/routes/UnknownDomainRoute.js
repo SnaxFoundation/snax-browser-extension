@@ -7,6 +7,7 @@ import {
   Content,
   ParagraphCaption,
   Row,
+  Label,
   Screen,
 } from '../components';
 
@@ -21,7 +22,9 @@ class UnknownDomainRoute extends Component {
       <Screen>
         <BrandBox>
           <BrandBoxTitle>Snax</BrandBoxTitle>
-          <BrandBoxSubtitle>extension</BrandBoxSubtitle>
+          <BrandBoxSubtitle>
+            extension&nbsp;&nbsp;<Label>beta</Label>
+          </BrandBoxSubtitle>
         </BrandBox>
         <Content spread centerY>
           <Row>
