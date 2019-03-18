@@ -81,7 +81,7 @@ export class TransactionActions {
         } catch (exception) {
           console.error(exception);
           throw new Error(
-            `Attempt to send tokens to ${to} failed. It may happen if recipient has protected twitter account. If he hasn't, try again.`
+            `Failed to send tokens to ${to}. It may happen if recipient has protected twitter account.`
           );
         }
 
