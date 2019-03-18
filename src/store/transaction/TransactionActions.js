@@ -74,11 +74,19 @@ export class TransactionActions {
       }
 
       if (platform === 'twitter') {
-        const toId = await this.accountResolver.getIdByAccountName(to);
-        const accountName = await this.accountResolver.getAccountNameById(toId);
+        let toId, accountName;
+        try {
+          toId = await this.accountResolver.getIdByAccountName(to);
+          accountName = await this.accountResolver.getAccountNameById(toId);
+        } catch (exception) {
+          console.error(exception);
+          throw new Error(
+            `Failed to send tokens to ${to}. It may happen if recipient has protected twitter account.`
+          );
+        }
 
         if (!accountName) {
-          throw new Error('Recepient Twitter account does not exist');
+          throw new Error('Recipient Twitter account does not exist');
         }
 
         if (accountName.toLowerCase().trim() !== to.toLowerCase().trim()) {
