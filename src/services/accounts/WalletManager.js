@@ -95,8 +95,9 @@ export class WalletManager {
     if (!wif) {
       return WalletExtractionResult.negative();
     }
+    const publicKey = await privateToPublic(wif);
 
-    const wallet = new WalletExtractionResult(new Wallet(wif));
+    const wallet = new WalletExtractionResult(new Wallet(publicKey, wif));
 
     return wallet;
   }
