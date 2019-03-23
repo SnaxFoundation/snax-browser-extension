@@ -1,7 +1,7 @@
-import { TimeoutError } from "src/utils/communication/errors/TimeoutError";
-import { AbstractMessage } from "src/utils/communication/messages/AbstractMessage";
-import { isMessageValid } from "src/utils/communication/CommunicationUtils";
-import { ExtensionMessaging } from "src/utils/communication/strategies/ExtensionMessaging";
+import { TimeoutError } from 'src/utils/communication/errors/TimeoutError';
+import { AbstractMessage } from 'src/utils/communication/messages/AbstractMessage';
+import { isMessageValid } from 'src/utils/communication/CommunicationUtils';
+import { ExtensionMessaging } from 'src/utils/communication/strategies/ExtensionMessaging';
 
 class Container {
   static TIMEOUT = 1000 * 60 * 5;
@@ -14,7 +14,7 @@ class Container {
     this.rejector = rejector;
 
     this.timeoutId = setTimeout(() => {
-      this.rejector(new TimeoutError("Timeout for message with id " + id));
+      this.rejector(new TimeoutError('Timeout for message with id ' + id));
       this.cleaner();
     }, Container.TIMEOUT);
   }
@@ -44,22 +44,10 @@ export class OutboundCommunicator {
     this._strategy = strategy.getOutbound();
 
     this._strategy.listen(msg => {
-      if (!isMessageValid(msg) || !msg) {
-        if (process.env.NODE_ENV === "development")
-          console.warn("Message has invalid format, please check", msg, this);
-      }
-
       if (!msg) return;
 
       if (!this._resolversMap.has(msg.id)) {
-        if (process.env.NODE_ENV === "development")
-          console.warn(
-            "Message with id " +
-              msg.id +
-              " had been reserved but handler was not found, it can be cause my timeout",
-            msg
-          );
-        return;
+        if (process.env.NODE_ENV === 'development') return;
       }
 
       this._resolversMap.get(msg.id).resolve(msg);
@@ -67,11 +55,6 @@ export class OutboundCommunicator {
   }
 
   send(message) {
-    if (!(message instanceof AbstractMessage)) {
-      if (process.env.NODE_ENV === "development")
-        console.warn("Message is not a instance if AbstractMessage", message);
-    }
-
     this._strategy.send(message);
 
     return new Promise((resolve, reject) => {
