@@ -56,6 +56,10 @@ export class WalletManager {
   }
 
   async tryCreateWalletByPrivateKey(wif) {
+    if (!isValidPrivate(wif)) {
+      return new WalletCreationResult(null, null);
+    }
+
     try {
       const publicKey = await privateToPublic(wif);
       return new WalletCreationResult(null, new Wallet(publicKey, wif));
