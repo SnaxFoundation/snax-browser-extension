@@ -11,8 +11,8 @@ import {
 } from '../components';
 
 class ErrorRoute extends Component {
-  handerGoBackToWallet = () => {
-    this.props.history.push('/wallet');
+  handerClosePopup = () => {
+    window.close();
   };
 
   render() {
@@ -26,7 +26,7 @@ class ErrorRoute extends Component {
           </Error>
         </Content>
         <ButtonRow>
-          <Button onClick={this.handerGoBackToWallet}>Back to wallet</Button>
+          <Button onClick={this.handerClosePopup}>Ok</Button>
         </ButtonRow>
       </Screen>
     );
