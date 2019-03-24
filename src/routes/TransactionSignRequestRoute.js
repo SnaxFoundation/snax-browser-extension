@@ -139,8 +139,9 @@ class TransactionSignRequestRoute extends Component {
         error === 'tx_net_usage_exceeded' ||
         error === 'tx_cpu_usage_exceeded'
       ) {
-        errorMessage =
-          'Seems you made a lot of transactions in the last 24 hours. Try again later.';
+        errorMessage = `Seems you made a lot of transactions in the last 24 hours. ${
+          this.props.currentTransactionError.json.error.what
+        }`;
       } else {
         errorMessage = 'Something wrong, try again';
       }
