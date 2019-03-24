@@ -13,15 +13,15 @@ class SuccessRoute extends Component {
   timeout = null;
 
   componentDidMount() {
-    this.timeout = setTimeout(() => this._handleBackToWallet(), 3000);
+    this.timeout = setTimeout(() => this._handleClosePopup(), 3000);
   }
 
   componentWillUnmount() {
     clearTimeout(this.timeout);
   }
 
-  _handleBackToWallet() {
-    this.props.history.push('/wallet');
+  _handleClosePopup() {
+    window.close();
   }
 
   render() {
@@ -33,7 +33,7 @@ class SuccessRoute extends Component {
           </Success>
         </Content>
         <ButtonRow>
-          <Button onClick={this._handleBackToWallet}>Back to wallet</Button>
+          <Button onClick={this._handleClosePopup}>Ok</Button>
         </ButtonRow>
       </Screen>
     );
