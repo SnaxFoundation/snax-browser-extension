@@ -20,14 +20,7 @@ export class PrivateSnaxProvider {
 
   async transfer(from, to, amount, platform) {
     let error = null;
-    console.log(
-      'Trying to send tokens from ' +
-        from +
-        ' to ' +
-        to +
-        ' in amount of ' +
-        amount
-    );
+
     try {
       const {
         wallet: { wif: privateKey },

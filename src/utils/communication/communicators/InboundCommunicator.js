@@ -1,5 +1,5 @@
-import { isMessageValid } from "src/utils/communication/CommunicationUtils";
-import { ExtensionMessaging } from "src/utils/communication/strategies/ExtensionMessaging";
+import { isMessageValid } from 'src/utils/communication/CommunicationUtils';
+import { ExtensionMessaging } from 'src/utils/communication/strategies/ExtensionMessaging';
 
 export class MessageHandlerContainer {
   MessageClass;
@@ -33,28 +33,11 @@ export class InboundCommunicator {
     strategy = new ExtensionMessaging(connectionName)
   ) {
     strategy.getInbound().listenAndAnswer(async msg => {
-      if (!isMessageValid(msg)) {
-        if (process.env.NODE_ENV === "development")
-          console.warn("Reserved invalid message", msg);
-      }
-
       if (!this.handlerContainersMap.has(msg.type)) {
-        if (process.env.NODE_ENV === "development")
-          console.warn(
-            "Message with type " +
-              msg.type +
-              " is reserved, but no handler defined ",
-            msg
-          );
         return;
       }
 
       const result = await this.handlerContainersMap.get(msg.type).handle(msg);
-
-      if (!isMessageValid(result)) {
-        if (process.env.NODE_ENV === "development")
-          console.warn("Trying to send invalid message", result, this);
-      }
 
       return result;
     });
@@ -64,7 +47,7 @@ export class InboundCommunicator {
     const type = MessageClass.getType();
 
     if (this.handlerContainersMap.has(type)) {
-      throw new Error("Handler for type " + type + " is already defined");
+      throw new Error('Handler for type ' + type + ' is already defined');
     }
 
     this.handlerContainersMap.set(
