@@ -1,19 +1,19 @@
 import {
   seedPrivate,
   privateToPublic,
-  isValidPrivate
-} from "@snaxfoundation/snaxjs-ecc";
-import bip39 from "bip39";
+  isValidPrivate,
+} from '@snaxfoundation/snaxjs-ecc';
+import bip39 from 'bip39';
 
-import { Inject } from "src/context/steriotypes/Inject";
-import { PasswordManager } from "src/services/accounts/PasswordManager";
-import { Singleton } from "src/context/steriotypes/Singleton";
-import { EncryptedStorage } from "../misc/EncryptedStorage";
+import { Inject } from 'src/context/steriotypes/Inject';
+import { PasswordManager } from 'src/services/accounts/PasswordManager';
+import { Singleton } from 'src/context/steriotypes/Singleton';
+import { EncryptedStorage } from '../misc/EncryptedStorage';
 
 class Wallet {
-  constructor(wif) {
-    this.publicKey = privateToPublic(wif);
+  constructor(publicKey, wif) {
     this.wif = wif;
+    this.publicKey = publicKey;
   }
 }
 
@@ -40,7 +40,7 @@ class WalletExtractionResult {
   }
 }
 
-const WIF_STORAGE_ITEM_NAME = "xf881x";
+const WIF_STORAGE_ITEM_NAME = 'xf881x';
 
 @Singleton
 export class WalletManager {
@@ -51,7 +51,21 @@ export class WalletManager {
   async tryCreateWalletByMnemonic(mnemonic) {
     const seed = bip39.mnemonicToSeedHex(mnemonic).toString();
     const wif = seedPrivate(seed);
-    return new WalletCreationResult(mnemonic, new Wallet(wif));
+    const publicKey = privateToPublic(wif);
+    return new WalletCreationResult(mnemonic, new Wallet(publicKey, wif));
+  }
+
+  async tryCreateWalletByPrivateKey(wif) {
+    if (!isValidPrivate(wif)) {
+      return new WalletCreationResult(null, null);
+    }
+
+    try {
+      const publicKey = await privateToPublic(wif);
+      return new WalletCreationResult(null, new Wallet(publicKey, wif));
+    } catch (error) {
+      return new WalletCreationResult(null, null);
+    }
   }
 
   async createMnemonic() {
@@ -85,8 +99,9 @@ export class WalletManager {
     if (!wif) {
       return WalletExtractionResult.negative();
     }
+    const publicKey = await privateToPublic(wif);
 
-    const wallet = new WalletExtractionResult(new Wallet(wif));
+    const wallet = new WalletExtractionResult(new Wallet(publicKey, wif));
 
     return wallet;
   }

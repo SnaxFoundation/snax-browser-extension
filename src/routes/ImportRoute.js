@@ -37,7 +37,7 @@ class ImportRoute extends Component {
   @Inject(ClipboardCopier) clipboardCopier;
 
   state = {
-    mnemonic: '',
+    mnemonicOrWif: '',
   };
 
   render() {
@@ -47,11 +47,11 @@ class ImportRoute extends Component {
         <Content spread centerY>
           <Row>
             <TextFieldWrapper>
-              <TextFieldLabel>Secret phrase</TextFieldLabel>
+              <TextFieldLabel>Secret phrase or private key</TextFieldLabel>
               <TextFieldMultiline
                 type="text"
-                placeholder="Enter your 12 word secret phrase to unlock wallet"
-                onChange={this.handleMnemonicChange}
+                placeholder="Enter your 12 word secret phrase or private key to unlock wallet"
+                onChange={this.handleMnemonicOrWifChange}
                 rows={3}
                 data-test-id="import-wallet__secret__input-text-field"
               />
@@ -61,7 +61,7 @@ class ImportRoute extends Component {
         <ButtonRow>
           <Button
             onClick={this.handleContinueClick}
-            disabled={!this.isMnemonicValid()}
+            // disabled={!this.isMnemonicValid()}
             spread
             data-test-id="import-wallet__action__continue"
           >
@@ -82,36 +82,43 @@ class ImportRoute extends Component {
     );
   }
 
-  handleMnemonicChange = e => {
+  handleMnemonicOrWifChange = e => {
     this.setState({
-      mnemonic: e.target.value,
+      mnemonicOrWif: e.target.value,
     });
   };
 
   handleContinueClick = async e => {
     e.preventDefault();
 
-    if (this.isMnemonicValid()) {
-      const result = await this.props.tryCreateWalletByMnemonic(
-        this.state.mnemonic
+    let result;
+
+    if (this.isMnemonic()) {
+      result = await this.props.tryCreateWalletByMnemonic(
+        this.state.mnemonicOrWif
       );
-      if (result.isCreationSucceed) {
-        this.props.setConfirmed();
-        this.clipboardCopier.clear();
-        const redirectUrl = this.props.isCurrentTransactionActive
-          ? '/transaction-sign-request'
-          : '/wallet';
-        this.props.history.push(redirectUrl);
-      } else {
-        this.props.spawnErrorNotification('Recovering failed');
-      }
+    } else {
+      result = await this.props.tryCreateWalletByPrivateKey(
+        this.state.mnemonicOrWif
+      );
+    }
+
+    if (result.isCreationSucceed) {
+      this.props.setConfirmed();
+      this.clipboardCopier.clear();
+      const redirectUrl = this.props.isCurrentTransactionActive
+        ? '/transaction-sign-request'
+        : '/wallet';
+      this.props.history.push(redirectUrl);
+    } else {
+      this.props.spawnErrorNotification('Recovering failed');
     }
   };
 
-  isMnemonicValid() {
+  isMnemonic() {
     return (
-      this.state.mnemonic &&
-      this.state.mnemonic
+      this.state.mnemonicOrWif &&
+      this.state.mnemonicOrWif
         .split(' ')
         .reduce(
           (count, word) =>
