@@ -111,17 +111,17 @@ class Root extends React.Component {
 
         if (!hasWallet) {
           browserHistory.push('/new-wallet');
-          return;
+          return preparedTransaction;
         }
 
         if (!canUse) {
           browserHistory.push('/password');
-          return;
+          return preparedTransaction;
         }
 
         if (canUse && shouldConfirm) {
           browserHistory.push('/confirm-phrase');
-          return;
+          return preparedTransaction;
         }
 
         browserHistory.push('/transaction-sign-request');

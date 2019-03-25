@@ -1,10 +1,10 @@
 {
-  "name": "Snax",
-  "short_name": "Snax",
-  "version": "0.2.22",
+  "name": "Snax.One",
+  "short_name": "Snax.One",
+  "version": "0.2.24",
   "manifest_version": 2,
   "author": "https://snax.one",
-  "description": "Snax browser extension",
+  "description": "Snax.One browser extension",
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
@@ -21,7 +21,7 @@
       "38": "icon32.png",
       "128": "icon128.png"
     },
-    "default_title": "Snax",
+    "default_title": "Snax.One",
     "default_popup": "index.html"
   },
   "content_scripts": [
