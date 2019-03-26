@@ -1,6 +1,6 @@
-import { Inject } from "src/context/steriotypes/Inject";
-import { Singleton } from "src/context/steriotypes/Singleton";
-import { PrivateTransactionInboundCommunicator } from "src/services/communication/privateTransaction/PrivateTransactionInboundCommunicator";
+import { Inject } from 'src/context/steriotypes/Inject';
+import { Singleton } from 'src/context/steriotypes/Singleton';
+import { PrivateTransactionInboundCommunicator } from 'src/services/communication/privateTransaction/PrivateTransactionInboundCommunicator';
 
 @Singleton
 export class TransactionManager {
@@ -25,7 +25,11 @@ export class TransactionManager {
   }
 
   confirmTransaction() {
-    this._currentResolver({ isRejectedByUser: false, isConfirmed: true });
+    this._currentResolver({
+      isRejectedByUser: false,
+      isConfirmed: true,
+      transaction: this._currentTransaction,
+    });
     this._clean();
   }
 
