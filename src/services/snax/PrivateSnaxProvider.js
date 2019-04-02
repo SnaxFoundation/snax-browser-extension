@@ -39,7 +39,7 @@ export class PrivateSnaxProvider {
             actions: [
               {
                 account: 'p.twitter',
-                name: 'transfertou',
+                name: 'transfersoc',
                 authorization: [
                   {
                     actor: from,
@@ -49,7 +49,7 @@ export class PrivateSnaxProvider {
                 data: {
                   from,
                   to,
-                  amount,
+                  quantity: amount,
                 },
               },
             ],
