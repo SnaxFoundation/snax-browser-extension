@@ -50,6 +50,7 @@ export class PrivateSnaxProvider {
                   from,
                   to,
                   quantity: amount,
+                  memo: '',
                 },
               },
             ],
