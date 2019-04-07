@@ -52,12 +52,12 @@ class WalletRoute extends Component {
       <Screen>
         <BrandBox>
           <BrandBoxTitle>Snax.One</BrandBoxTitle>
-          <BrandBoxSubtitle>wallet</BrandBoxSubtitle>
+          <BrandBoxSubtitle>My public key</BrandBoxSubtitle>
         </BrandBox>
         <Content spread centerY>
           <Row>
             <div>
-              <HeadingSmall>Wallet</HeadingSmall>
+              <HeadingSmall>Public key</HeadingSmall>
               <ParagraphBody className="word-break">
                 {this.props.publicKey}
               </ParagraphBody>
