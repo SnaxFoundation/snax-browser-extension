@@ -13,7 +13,7 @@ import {
 
 class UnknownDomainRoute extends Component {
   handleGoToWallet = () => {
-    const url = 'https://beta.snax.one';
+    const url = 'https://snax.one';
     window.open(url, '_blank');
   };
 
@@ -22,9 +22,6 @@ class UnknownDomainRoute extends Component {
       <Screen>
         <BrandBox>
           <BrandBoxTitle>Snax.One</BrandBoxTitle>
-          <BrandBoxSubtitle>
-            <Label>beta</Label>
-          </BrandBoxSubtitle>
         </BrandBox>
         <Content spread centerY>
           <Row>

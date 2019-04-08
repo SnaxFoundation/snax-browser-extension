@@ -1,5 +1,5 @@
 export const config = {
-  chainUrl: 'https://testnetcdn.snax.one',
+  chainUrl: 'https://cdn.snax.one',
   twitterUrl: 'https://twitter.com',
   allowAllUnknownDomains: false,
 };

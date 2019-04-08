@@ -7,7 +7,7 @@ import { config } from 'src/config';
 export class PrivateSnaxProvider {
   @Inject(WalletManager) walletManager;
 
-  rpc = new JsonRpc(config.chainUrl || 'https://testnetcdn.snax.one', {
+  rpc = new JsonRpc(config.chainUrl || 'https://cdn.snax.one', {
     fetch,
   });
 
