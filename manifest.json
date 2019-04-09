@@ -1,7 +1,7 @@
 {
   "name": "Snax.One",
   "short_name": "Snax.One",
-  "version": "0.2.27",
+  "version": "1.0.0",
   "manifest_version": 2,
   "author": "https://snax.one",
   "description": "Snax.One browser extension",
