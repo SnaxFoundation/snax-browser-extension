@@ -1,4 +1,4 @@
-## Snax browser extension 
+## Snax.One browser extension 
 
 ### Supported browsers
 
