@@ -4,4 +4,5 @@ export default [
   'front.snax.one',
   'front-dev.snax.one',
   'beta.snax.one',
+  'explorer.snax.one',
 ];
