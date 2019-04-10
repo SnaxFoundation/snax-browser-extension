@@ -1,8 +1,6 @@
 language: node_js
 node_js:
 - "10"
-
+install: true
 script:
 - curl --write-out '%{http_code}' --silent --output /dev/null -X POST -F token=$TOKEN -F ref=$TRAVIS_BRANCH -F "variables[BRANCH]=$TRAVIS_PULL_REQUEST_BRANCH" -F "variables[PULL_REQUEST]=$TRAVIS_PULL_REQUEST" $URL
-- yarn install
-- yarn test
