@@ -62,6 +62,35 @@ export class PrivateSnaxProvider {
         );
       }
 
+      if (platform === 'steemit') {
+        await api.transact(
+          {
+            actions: [
+              {
+                account: 'p.steemit',
+                name: 'transfersoc',
+                authorization: [
+                  {
+                    actor: from,
+                    permission: 'active',
+                  },
+                ],
+                data: {
+                  from,
+                  to,
+                  quantity: amount,
+                  memo: '',
+                },
+              },
+            ],
+          },
+          {
+            blocksBehind: 1,
+            expireSeconds: 30,
+          }
+        );
+      }
+
       if (platform === 'snax') {
         await api.transact(
           {

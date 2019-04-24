@@ -102,6 +102,20 @@ export class TransactionActions {
           amount,
           platform,
         };
+      } else if (platform === 'steemit') {
+        if (from.toLowerCase().trim() === to.toLowerCase().trim()) {
+          throw new Error("Can't send transaction to the self");
+        }
+
+        transaction = {
+          balance: currentBalance,
+          id,
+          from,
+          to,
+          displayName: to,
+          amount,
+          platform,
+        };
       } else if (platform === 'snax') {
         if (from.toLowerCase().trim() === to.toLowerCase().trim()) {
           throw new Error("Can't send transaction to the self");
