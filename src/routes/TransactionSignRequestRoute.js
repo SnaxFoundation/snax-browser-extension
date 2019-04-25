@@ -14,6 +14,7 @@ import {
 } from '../components';
 
 import { TransactionAmount, TransactionRecipient } from '../containers';
+import styleConstants from '../styles/style-constants';
 
 @ReduxContainer(TransactionSelectors, TransactionActions)
 class TransactionSignRequestRoute extends Component {
@@ -114,7 +115,12 @@ class TransactionSignRequestRoute extends Component {
   }
 
   _renderBalance() {
-    return <Row> Your balance is: {this.props.currentAccountBalance}</Row>;
+    return (
+      <Row style={{ color: styleConstants.textColor.medium }}>
+        {' '}
+        Your balance is: {this.props.currentAccountBalance}
+      </Row>
+    );
   }
 
   _handleConfirmClick = async () => {
