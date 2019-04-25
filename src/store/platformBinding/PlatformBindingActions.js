@@ -37,10 +37,10 @@ export class PlatformBindingActions {
       );
 
       if (result.isSucceed) {
-        dispatch(this._setTransactionAsSigned());
+        dispatch(this._setPlatformBindingAsSigned());
         this.transactionManager.confirmTransaction();
       } else {
-        dispatch(this._setTransactionAsFailed(result.error));
+        dispatch(this._setPlatformBindingAsFailed(result.error));
         this.transactionManager.failTransaction(result.error);
       }
     };
@@ -49,7 +49,7 @@ export class PlatformBindingActions {
   @Action
   discardTransaction() {
     return dispatch => {
-      dispatch(this._setTransactionAsDiscarded());
+      dispatch(this._setPlatformBindingAsDiscarded());
       this.transactionManager.discardTransaction();
     };
   }
@@ -70,7 +70,7 @@ export class PlatformBindingActions {
   }
 
   @Action(SET_PLATFORM_BINDING_AS_FAILED)
-  _setTransactionAsFailed(error) {
+  _setPlatformBindingAsFailed(error) {
     return {
       error,
     };
