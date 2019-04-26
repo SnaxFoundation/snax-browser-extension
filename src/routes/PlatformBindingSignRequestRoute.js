@@ -16,6 +16,7 @@ import {
   Screen,
   ScreenTitle,
   Tag,
+  ParagraphBody,
 } from '../components';
 import { PlatformBindingActions } from '../store/platformBinding/PlatformBindingActions';
 import { PlatformBindingSelectors } from '../store/platformBinding/PlatformBindingSelectors';
@@ -38,11 +39,32 @@ const Wrapper = styled.div`
   align-items: stretch;
 `;
 
-const Prefix = styled.span`
-  font-weight: ${styleConstants.fontWeight.bold};
-  letter-spacing: 0.1em;
-  font-size: 0.8em;
-  color: ${styleConstants.textColor.medium};
+const iconSize = '1.1em';
+
+export const PlatformWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  min-width: 0;
+  line-height: 1.1;
+  font-size: 24px;
+  margin-top: 5px;
+`;
+
+export const Icon = styled.div`
+  width: ${iconSize};
+  height: ${iconSize};
+  margin-right: 0.5em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Text = styled.div`
+  color: ${styleConstants.textColor.body};
+  line-height: 1.25;
+  word-break: break-word;
+  text-decoration: none;
 `;
 
 @ReduxContainer(PlatformBindingSelectors, PlatformBindingActions)
@@ -60,17 +82,17 @@ class PlatformBindingSignRequestRoute extends Component {
         <Content spread>
           <Row>
             <Wrapper spread>
-              <Prefix>Request to bind platform: </Prefix>
-              <Tag
-                text={currentPlatformToBind}
-                icon={iconMap[currentPlatformToBind]}
-                style={{
-                  backgroundColor: Color(
-                    styleConstants.brandColor[currentPlatformToBind] ||
-                      styleConstants.paletteBlueGrey[900]
-                  ).alpha(0.1),
-                }}
-              />
+              <ParagraphBody>You've requested to bind platform: </ParagraphBody>
+              <PlatformWrapper>
+                <Icon>{iconMap[currentPlatformToBind]}</Icon>
+                <Text
+                  style={{
+                    color: styleConstants.brandColor[currentPlatformToBind],
+                  }}
+                >
+                  {currentPlatformToBind}
+                </Text>
+              </PlatformWrapper>
               {this._renderErrorIfNeeded()}
               {this._renderResourcesErrorIfNeeded()}
             </Wrapper>
