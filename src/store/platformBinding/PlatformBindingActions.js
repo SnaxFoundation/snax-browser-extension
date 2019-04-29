@@ -7,6 +7,7 @@ import {
   SET_PLATFORM_BINDING_AS_DISCARDED,
   SET_PLATFORM_BINDING_AS_FAILED,
   SET_PLATFORM_BINDING_AS_FINISHED,
+  SET_PLATFORM_BINDING_AS_SIGNED,
   SET_PLATFORM_TO_BIND,
 } from './PlatformBindingConstants';
 import { TransactionManager } from '../../services/transaction/TransactionManager';
@@ -61,6 +62,11 @@ export class PlatformBindingActions {
 
   @Action(SET_PLATFORM_BINDING_AS_DISCARDED)
   _setPlatformBindingAsDiscarded() {
+    return null;
+  }
+
+  @Action(SET_PLATFORM_BINDING_AS_SIGNED)
+  _setPlatformBindingAsSigned() {
     return null;
   }
 

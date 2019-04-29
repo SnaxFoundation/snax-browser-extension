@@ -45,7 +45,7 @@ export class PrivateSnaxProvider {
           actions: [
             {
               account: platformAccount,
-              name: 'bind',
+              name: 'bindaccount',
               authorization: [
                 {
                   actor: account,
