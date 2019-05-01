@@ -43,6 +43,7 @@ export class PlatformBindingReducer {
     return {
       ...state,
       isSigned: true,
+      isSucceed: true,
     };
   }
 
@@ -58,6 +59,7 @@ export class PlatformBindingReducer {
   defaultState() {
     return {
       platform: null,
+      isSucceed: false,
       isSigned: false,
       isFinished: false,
       isDiscarded: false,
