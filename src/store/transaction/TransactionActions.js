@@ -76,8 +76,11 @@ export class TransactionActions {
       if (platform === 'twitter') {
         let toId, accountName;
         try {
-          toId = await this.accountResolver.getIdByAccountName(to);
-          accountName = await this.accountResolver.getAccountNameById(toId);
+          toId = await this.accountResolver.getIdByAccountName('twitter', to);
+          accountName = await this.accountResolver.getAccountNameById(
+            'twitter',
+            toId
+          );
         } catch (exception) {
           console.error(exception);
           throw new Error(
@@ -107,11 +110,35 @@ export class TransactionActions {
           throw new Error("Can't send transaction to the self");
         }
 
+        let toId, accountName;
+
+        try {
+          toId = await this.accountResolver.getIdByAccountName('steemit', to);
+          accountName = await this.accountResolver.getAccountNameById(
+            'steemit',
+            toId
+          );
+        } catch (exception) {
+          console.error(exception);
+          throw new Error(
+            `Failed to send tokens to ${to}. It may happen if recipient has protected twitter account.`
+          );
+        }
+
+        if (!accountName) {
+          throw new Error('Recipient Twitter account does not exist');
+        }
+
+        if (accountName.toLowerCase().trim() !== to.toLowerCase().trim()) {
+          throw new Error('Can\'t resolve "to" account');
+        }
+
+
         transaction = {
           balance: currentBalance,
           id,
           from,
-          to,
+          to: toId,
           displayName: to,
           amount,
           platform,
