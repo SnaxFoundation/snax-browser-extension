@@ -120,19 +120,15 @@ export class TransactionActions {
           );
         } catch (exception) {
           console.error(exception);
-          throw new Error(
-            `Failed to send tokens to ${to}. It may happen if recipient has protected twitter account.`
-          );
+          throw new Error(`Failed to send tokens to ${to}.`);
         }
 
-        if (!accountName) {
-          throw new Error('Recipient Twitter account does not exist');
+        if (
+          !accountName ||
+          accountName.toLowerCase().trim() !== to.toLowerCase().trim()
+        ) {
+          throw new Error('Recipient Steemit account does not exist');
         }
-
-        if (accountName.toLowerCase().trim() !== to.toLowerCase().trim()) {
-          throw new Error('Can\'t resolve "to" account');
-        }
-
 
         transaction = {
           balance: currentBalance,
