@@ -6,4 +6,4 @@ export * from './IconEyeClosed';
 export * from './IconLogOut';
 export * from './IconTwitter';
 export * from './IconSnax';
-export * from './IconSteemit';
+export * from './IconSteem';

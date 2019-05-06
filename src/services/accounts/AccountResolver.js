@@ -23,10 +23,10 @@ export class AccountResolver {
       const userPage = await response.text();
       const userName = this.extractNameFromPage(userPage);
       return userName;
-    } else if (platform === 'steemit') {
+    } else if (platform === 'steem') {
       const { rows } = await this.rpc.get_table_rows({
-        code: 'p.steemit',
-        scope: 'p.steemit',
+        code: 'p.steem',
+        scope: 'p.steem',
         table: 'pusers',
         limit: 1,
         lower_bound: id,
@@ -53,10 +53,10 @@ export class AccountResolver {
       const userPage = await response.text();
       const id = this.extractIdFromPage(userPage);
       return id;
-    } else if (platform === 'steemit') {
+    } else if (platform === 'steem') {
       const result = (await this.rpc.get_table_rows({
-        code: 'p.steemit',
-        scope: 'p.steemit',
+        code: 'p.steem',
+        scope: 'p.steem',
         table: 'pusers',
         limit: 1,
         index_position: 3,

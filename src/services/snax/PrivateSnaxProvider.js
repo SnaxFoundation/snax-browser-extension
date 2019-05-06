@@ -20,7 +20,7 @@ export class PrivateSnaxProvider {
 
   async bindPlatform(platform, account, salt) {
     const platformAccounts = {
-      steemit: 'p.steemit',
+      steem: 'p.steem',
       twitter: 'p.twitter',
     };
 
@@ -119,12 +119,12 @@ export class PrivateSnaxProvider {
         );
       }
 
-      if (platform === 'steemit') {
+      if (platform === 'steem') {
         await api.transact(
           {
             actions: [
               {
-                account: 'p.steemit',
+                account: 'p.steem',
                 name: 'transfersoc',
                 authorization: [
                   {

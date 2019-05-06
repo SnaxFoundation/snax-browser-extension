@@ -105,7 +105,7 @@ export class TransactionActions {
           amount,
           platform,
         };
-      } else if (platform === 'steemit') {
+      } else if (platform === 'steem') {
         if (from.toLowerCase().trim() === to.toLowerCase().trim()) {
           throw new Error("Can't send transaction to the self");
         }
@@ -113,9 +113,9 @@ export class TransactionActions {
         let toId, accountName;
 
         try {
-          toId = await this.accountResolver.getIdByAccountName('steemit', to);
+          toId = await this.accountResolver.getIdByAccountName('steem', to);
           accountName = await this.accountResolver.getAccountNameById(
-            'steemit',
+            'steem',
             toId
           );
         } catch (exception) {
@@ -127,7 +127,7 @@ export class TransactionActions {
           !accountName ||
           accountName.toLowerCase().trim() !== to.toLowerCase().trim()
         ) {
-          throw new Error('Recipient Steemit account does not exist');
+          throw new Error('Recipient Steem account does not exist');
         }
 
         transaction = {

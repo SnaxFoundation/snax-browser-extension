@@ -9,7 +9,7 @@ import {
   ButtonRow,
   Content,
   IconSnax,
-  IconSteemit,
+  IconSteem,
   IconTwitter,
   ParagraphError,
   Row,
@@ -27,9 +27,7 @@ const iconMap = {
     <IconTwitter color={styleConstants.brandColor.twitter} size="inherit" />
   ),
   snax: <IconSnax size="inherit" />,
-  steemit: (
-    <IconSteemit color={styleConstants.brandColor.steemit} size="inherit" />
-  ),
+  steem: <IconSteem color={styleConstants.brandColor.steem} size="inherit" />,
 };
 
 const Wrapper = styled.div`

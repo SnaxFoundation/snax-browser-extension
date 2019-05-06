@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from './Icon';
 
-export const IconSteemit = props => (
+export const IconSteem = props => (
   <Icon {...props}>
     <svg viewBox="0 0 55.6 56">
       <path

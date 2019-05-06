@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Color from 'color';
-import { Tag, IconTwitter, IconSnax, IconSteemit } from '../components';
+import { Tag, IconTwitter, IconSnax, IconSteem } from '../components';
 import styleConstants from '../styles/style-constants';
 
 const iconMap = {
@@ -9,9 +9,7 @@ const iconMap = {
     <IconTwitter color={styleConstants.brandColor.twitter} size="inherit" />
   ),
   snax: <IconSnax size="inherit" />,
-  steemit: (
-    <IconSteemit color={styleConstants.brandColor.steemit} size="inherit" />
-  ),
+  steem: <IconSteem color={styleConstants.brandColor.steem} size="inherit" />,
 };
 
 const Wrapper = styled.div`
