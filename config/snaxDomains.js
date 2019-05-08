@@ -5,4 +5,5 @@ export default [
   'front-dev.snax.one',
   'beta.snax.one',
   'explorer.snax.one',
+  'steem-dev.snax.one',
 ];

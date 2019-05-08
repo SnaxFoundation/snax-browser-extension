@@ -20,7 +20,7 @@ export class PrivateSnaxProvider {
 
   async bindPlatform(platform, account, salt) {
     const platformAccounts = {
-      steem: 'p.steem',
+      steem: 'p.steemit',
       twitter: 'p.twitter',
     };
 
@@ -124,7 +124,7 @@ export class PrivateSnaxProvider {
           {
             actions: [
               {
-                account: 'p.steem',
+                account: 'p.steemit',
                 name: 'transfersoc',
                 authorization: [
                   {

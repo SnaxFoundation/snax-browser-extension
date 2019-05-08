@@ -25,8 +25,8 @@ export class AccountResolver {
       return userName;
     } else if (platform === 'steem') {
       const { rows } = await this.rpc.get_table_rows({
-        code: 'p.steem',
-        scope: 'p.steem',
+        code: 'p.steemit',
+        scope: 'p.steemit',
         table: 'pusers',
         limit: 1,
         lower_bound: id,
@@ -55,8 +55,8 @@ export class AccountResolver {
       return id;
     } else if (platform === 'steem') {
       const result = (await this.rpc.get_table_rows({
-        code: 'p.steem',
-        scope: 'p.steem',
+        code: 'p.steemit',
+        scope: 'p.steemit',
         table: 'pusers',
         limit: 1,
         index_position: 3,
