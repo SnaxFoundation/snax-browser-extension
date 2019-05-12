@@ -76,8 +76,11 @@ export class TransactionActions {
       if (platform === 'twitter') {
         let toId, accountName;
         try {
-          toId = await this.accountResolver.getIdByAccountName(to);
-          accountName = await this.accountResolver.getAccountNameById(toId);
+          toId = await this.accountResolver.getIdByAccountName('twitter', to);
+          accountName = await this.accountResolver.getAccountNameById(
+            'twitter',
+            toId
+          );
         } catch (exception) {
           console.error(exception);
           throw new Error(
@@ -99,6 +102,40 @@ export class TransactionActions {
           from,
           to: toId,
           displayName: accountName,
+          amount,
+          platform,
+        };
+      } else if (platform === 'steem') {
+        if (from.toLowerCase().trim() === to.toLowerCase().trim()) {
+          throw new Error("Can't send transaction to the self");
+        }
+
+        let toId, accountName;
+
+        try {
+          toId = await this.accountResolver.getIdByAccountName('steem', to);
+          accountName = await this.accountResolver.getAccountNameById(
+            'steem',
+            toId
+          );
+        } catch (exception) {
+          console.error(exception);
+          throw new Error(`Failed to send tokens to ${to}.`);
+        }
+
+        if (
+          !accountName ||
+          accountName.toLowerCase().trim() !== to.toLowerCase().trim()
+        ) {
+          throw new Error('Recipient Steem account does not exist');
+        }
+
+        transaction = {
+          balance: currentBalance,
+          id,
+          from,
+          to: toId,
+          displayName: to,
           amount,
           platform,
         };

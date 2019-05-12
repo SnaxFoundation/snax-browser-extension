@@ -1,19 +1,21 @@
-import React from 'react';
-import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
+import React from 'react';
+
 import { Inject } from 'src/context/steriotypes/Inject';
-import SecretPhraseConfirmRoute from 'src/routes/SecretPhraseConfirmRoute';
-import { WalletManager } from 'src/services/accounts/WalletManager';
-import { getStore } from 'src/store/store';
-import { TransactionManager } from 'src/services/transaction/TransactionManager';
 import { TransactionActions } from 'src/store/transaction/TransactionActions';
+import { TransactionManager } from 'src/services/transaction/TransactionManager';
 import { WalletActions } from 'src/store/wallet/WalletActions';
+import { WalletManager } from 'src/services/accounts/WalletManager';
+import { clearBadge, getActiveTabUrlAsync } from 'src/utils/chrome';
+import { getStore } from 'src/store/store';
+import { isSnaxDomain } from 'src/utils/misc';
+import SecretPhraseConfirmRoute from 'src/routes/SecretPhraseConfirmRoute';
 
 import { App, Loader, SecondaryInfoBox, Anchor } from './components';
-import { VersionBox } from './containers';
 import { InjectResetStyle, InjectGlobalStyle } from './styles';
-
+import { PlatformBindingActions } from './store/platformBinding/PlatformBindingActions';
 import {
   UnknownDomainRoute,
   WelcomeRoute,
@@ -29,9 +31,8 @@ import {
   RestoreConfirmationRoute,
   SuccessRoute,
 } from './routes';
-
-import { clearBadge, getActiveTabUrlAsync } from 'src/utils/chrome';
-import { isSnaxDomain } from 'src/utils/misc';
+import { VersionBox } from './containers';
+import PlatformBindingSignRequestRoute from './routes/PlatformBindingSignRequestRoute';
 
 export const browserHistory = createBrowserHistory();
 
@@ -47,6 +48,8 @@ class Root extends React.Component {
   @Inject(TransactionManager) transactionManager;
 
   @Inject(TransactionActions) transactionActions;
+
+  @Inject(PlatformBindingActions) platformBindingActions;
 
   prepareTransactionTimeout = null;
 
@@ -97,13 +100,18 @@ class Root extends React.Component {
       );
 
       try {
-        const preparedTransaction = await this.transactionActions.prepareTransaction(
-          transaction.id,
-          transaction.from,
-          transaction.to,
-          transaction.amount,
-          transaction.platform
-        )(this.state.store.dispatch);
+        const preparedTransaction =
+          transaction.type === 'TRANSFER'
+            ? await this.transactionActions.prepareTransaction(
+                transaction.id,
+                transaction.from,
+                transaction.to,
+                transaction.amount,
+                transaction.platform
+              )(this.state.store.dispatch)
+            : await this.platformBindingActions.preparePlatformToBind(
+                transaction
+              )(this.state.store.dispatch);
 
         clearTimeout(this.prepareTransactionTimeout);
 
@@ -124,7 +132,11 @@ class Root extends React.Component {
           return preparedTransaction;
         }
 
-        browserHistory.push('/transaction-sign-request');
+        browserHistory.push(
+          transaction.type === 'TRANSFER'
+            ? '/transaction-sign-request'
+            : '/platform-binding-sign-request'
+        );
 
         return preparedTransaction;
       } catch (error) {
@@ -270,6 +282,10 @@ class Root extends React.Component {
               <Route
                 path="/transaction-sign-request"
                 component={TransactionSignRequestRoute}
+              />
+              <Route
+                path="/platform-binding-sign-request"
+                component={PlatformBindingSignRequestRoute}
               />
               <Route path="/transaction-success" component={SuccessRoute} />
               <Route path="*" render={() => <Redirect to="/" />} />

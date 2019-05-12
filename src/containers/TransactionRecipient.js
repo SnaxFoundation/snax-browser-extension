@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tag, IconTwitter, IconSnax } from '../components';
+import Color from 'color';
+import { Tag, IconTwitter, IconSnax, IconSteem } from '../components';
 import styleConstants from '../styles/style-constants';
 
 const iconMap = {
@@ -8,6 +9,7 @@ const iconMap = {
     <IconTwitter color={styleConstants.brandColor.twitter} size="inherit" />
   ),
   snax: <IconSnax size="inherit" />,
+  steem: <IconSteem color={styleConstants.brandColor.steem} size="inherit" />,
 };
 
 const Wrapper = styled.div`
@@ -29,6 +31,14 @@ const Prefix = styled.span`
 export const TransactionRecipient = ({ type, name, ...props }) => (
   <Wrapper {...props}>
     <Prefix>to: </Prefix>
-    <Tag text={name} icon={iconMap[type]} />
+    <Tag
+      text={name}
+      icon={iconMap[type]}
+      style={{
+        backgroundColor: Color(
+          styleConstants.brandColor[type] || styleConstants.paletteBlueGrey[900]
+        ).alpha(0.1),
+      }}
+    />
   </Wrapper>
 );

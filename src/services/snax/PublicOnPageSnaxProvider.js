@@ -27,6 +27,15 @@ export class PublicOnPageSnaxProvider {
     );
   }
 
+  bindPlatform(platform, account, salt) {
+    return this._transactionOutboundCommunicator.sendPlatformBindTransaction(
+      this._idFactory.getId(),
+      platform,
+      account,
+      salt
+    );
+  }
+
   getPublicKey() {
     return this._publicDataOutboundCommunicator.sendRequestDataMessage(
       this._idFactory.getId(),
