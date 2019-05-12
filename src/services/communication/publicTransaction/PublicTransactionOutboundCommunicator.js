@@ -11,7 +11,26 @@ export class PublicTransactionOutboundCommunicator extends OutboundCommunicator 
 
   sendTransaction(id, from, to, amount, platform) {
     return this.send(
-      new SendTransactionMessage({ id, from, to, amount, platform })
+      new SendTransactionMessage({
+        id,
+        from,
+        to,
+        amount,
+        platform,
+        type: 'TRANSFER',
+      })
+    );
+  }
+
+  sendPlatformBindTransaction(id, platform, account, salt) {
+    return this.send(
+      new SendTransactionMessage({
+        id,
+        platform,
+        account,
+        salt,
+        type: 'PLATFORM_BIND',
+      })
     );
   }
 }

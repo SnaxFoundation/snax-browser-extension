@@ -19,6 +19,8 @@ export default {
 
   brandColor: {
     twitter: '#1da1f2',
+    discord: '#738adb',
+    steem: '#5c9dd5',
   },
 
   colorBody: '#1f2532',

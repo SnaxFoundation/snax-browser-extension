@@ -18,6 +18,63 @@ export class PrivateSnaxProvider {
     );
   }
 
+  async bindPlatform(platform, account, salt) {
+    const platformAccounts = {
+      steem: 'p.steemit',
+      twitter: 'p.twitter',
+    };
+
+    let error = null;
+
+    const platformAccount = platformAccounts[platform];
+
+    try {
+      const {
+        wallet: { wif: privateKey },
+      } = await this.walletManager.getWallet();
+      const signatureProvider = new JsSignatureProvider([privateKey]);
+      const api = new Api({
+        rpc: this.rpc,
+        signatureProvider,
+        textDecoder: new TextDecoder(),
+        textEncoder: new TextEncoder(),
+      });
+
+      await api.transact(
+        {
+          actions: [
+            {
+              account: platformAccount,
+              name: 'bindaccount',
+              authorization: [
+                {
+                  actor: account,
+                  permission: 'active',
+                },
+              ],
+              data: {
+                account,
+                salt,
+              },
+            },
+          ],
+        },
+        {
+          blocksBehind: 1,
+          expireSeconds: 30,
+        }
+      );
+    } catch (e) {
+      error = e;
+    }
+
+    return {
+      isSucceed: !error,
+      isError: !!error,
+      error,
+    };
+  }
+
   async transfer(from, to, amount, platform) {
     let error = null;
 
@@ -39,6 +96,35 @@ export class PrivateSnaxProvider {
             actions: [
               {
                 account: 'p.twitter',
+                name: 'transfersoc',
+                authorization: [
+                  {
+                    actor: from,
+                    permission: 'active',
+                  },
+                ],
+                data: {
+                  from,
+                  to,
+                  quantity: amount,
+                  memo: '',
+                },
+              },
+            ],
+          },
+          {
+            blocksBehind: 1,
+            expireSeconds: 30,
+          }
+        );
+      }
+
+      if (platform === 'steem') {
+        await api.transact(
+          {
+            actions: [
+              {
+                account: 'p.steemit',
                 name: 'transfersoc',
                 authorization: [
                   {
