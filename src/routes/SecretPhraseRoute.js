@@ -113,12 +113,6 @@ class SecretPhraseRoute extends Component {
               Your key cannot be recovered if you lose it. Treat it like a bank
               account.
             </ParagraphBody>
-            <ParagraphBody style={{ marginTop: '0.5em' }}>
-              <Emph>Warning!</Emph>
-            </ParagraphBody>
-            <ParagraphBody>
-              Your clipboard will be cleared after secret phrase confirmation!
-            </ParagraphBody>
           </div>
         </Row>
         <ButtonRow>
