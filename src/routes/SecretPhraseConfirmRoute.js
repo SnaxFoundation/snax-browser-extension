@@ -122,7 +122,6 @@ class SecretPhraseConfirmRoute extends Component {
 
     if (await this.checkMnemonic()) {
       this.props.setConfirmed();
-      this.clipboardCopier.clear();
       this.props.history.push(redirectUrl);
     } else {
       this.props.spawnErrorNotification('Invalid mnemonic');
