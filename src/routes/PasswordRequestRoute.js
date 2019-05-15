@@ -63,7 +63,7 @@ class PasswordRequestRoute extends Component {
               to="/restore-confirmation"
               data-test-id="password-request__actions__restore-wallet"
             >
-              Restore wallet
+              Discard wallet
             </Anchor>
           </SecondaryInfoBox>
         </ButtonRow>

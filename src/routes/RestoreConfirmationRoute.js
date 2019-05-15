@@ -33,13 +33,12 @@ class RestoreConfirmationRoute extends Component {
   render() {
     return (
       <Screen>
-        <ScreenTitle>Restore key</ScreenTitle>
+        <ScreenTitle>Discard key</ScreenTitle>
         <Content spread centerY>
           <Row className="text-align-center">
             <div>
               <ParagraphBody2>
-                Are you sure you want to restore your key? Your current key will
-                be discarded.
+                Are you sure you want to discard your key?
               </ParagraphBody2>
               <ParagraphBody2>
                 To access your current wallet again you will need secret key and
@@ -55,7 +54,7 @@ class RestoreConfirmationRoute extends Component {
             onClick={this.restore}
             data-test-id="confirm-restore__actions__restore-wallet"
           >
-            Restore
+            Discard key
           </Button>
 
           <SecondaryInfoBox>
