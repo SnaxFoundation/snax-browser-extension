@@ -93,7 +93,6 @@ export class WalletActions {
       );
       dispatch(this.setConfirmed(false));
       if (result.isCreationSucceed) {
-        this.setBackgroundPublicKey(result.wallet.publicKey);
         dispatch(this._updatePublicKey(result.wallet.publicKey));
         this.encryptedStorage.setItem(WIF_STORAGE_ITEM_NAME, result.wallet.wif);
       }
@@ -137,10 +136,21 @@ export class WalletActions {
       }
       const result = await this.walletManager.getWallet();
       if (result.isExtractionSucceed) {
-        this.setBackgroundPublicKey(result.wallet.publicKey);
         dispatch(this._updatePublicKey(result.wallet.publicKey));
       }
       return result;
+    };
+  }
+
+  @ThunkAction
+  trySetBackgroundPublicKey() {
+    return async (dispatch, getState) => {
+      const confirmed = getState().wallet.confirmed;
+      const result = await this.walletManager.getWallet();
+      if (result.isExtractionSucceed && confirmed) {
+        this.setBackgroundPublicKey(result.wallet.publicKey);
+        dispatch(this._updatePublicKey(result.wallet.publicKey));
+      }
     };
   }
 
