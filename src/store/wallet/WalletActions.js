@@ -130,13 +130,17 @@ export class WalletActions {
 
   @ThunkAction
   tryExtractWalletFromStorage(password) {
-    return async dispatch => {
+    return async (dispatch, getState) => {
       if (password) {
         await this.passwordManager.setPassword(password);
       }
+      const confirmed = getState().wallet.confirmed;
       const result = await this.walletManager.getWallet();
       if (result.isExtractionSucceed) {
         dispatch(this._updatePublicKey(result.wallet.publicKey));
+        if (confirmed) {
+          this.setBackgroundPublicKey(result.wallet.publicKey);
+        }
       }
       return result;
     };
