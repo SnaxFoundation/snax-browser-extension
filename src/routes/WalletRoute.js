@@ -44,7 +44,7 @@ class WalletRoute extends Component {
   };
 
   handleExportKey = () => {
-    this.props.history.push('/private-export');
+    this.props.history.push('/private-export-confirm');
   };
 
   render() {

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import QRCode from 'qrcode.react';
-
 import { Inject } from 'src/context/steriotypes/Inject';
 import { ClipboardCopier } from 'src/services/misc/ClipboardCopier';
 import { ReduxContainer } from 'src/utils/redux/ReduxContainer';
@@ -25,36 +23,16 @@ import {
 } from '../components';
 
 @ReduxContainer(WalletSelectors, [NotificationActions, WalletActions])
-class PrivateExportRoute extends Component {
+class PrivateConfirmExportRoute extends Component {
   static propTypes = {
     spawnSuccessNotification: PropTypes.func.isRequired,
   };
 
-  state = {
-    privateKey: null,
-  };
-
-  componentDidMount() {
-    this.setPrivateKey();
-  }
-
-  async setPrivateKey() {
-    const privateKey = await this.props.getWifFromStorage();
-    this.setState({ privateKey });
-  }
-
-  @Inject(ClipboardCopier) clipboardCopier;
-
-  copyToClipboard = async () => {
-    this.clipboardCopier.copy(this.state.privateKey);
-    this.props.spawnSuccessNotification(
-      'Private key was successfully copied to your clipboard'
-    );
+  handleConfirmExport = async () => {
+    this.props.history.push('/private-export');
   };
 
   render() {
-    const { privateKey } = this.state;
-
     return (
       <Screen>
         <BrandBox>
@@ -63,22 +41,21 @@ class PrivateExportRoute extends Component {
         </BrandBox>
         <Content spread centerY>
           <Row>
-            {privateKey && <QRCode value={privateKey} />}
-            {/* <ParagraphBody2 style={{ textAlign: 'center', width: '100%' }}>
+            <ParagraphBody2 style={{ textAlign: 'center', width: '100%' }}>
               Warning! Don't export your private key, if you don't understand,
               what you are doing! Don't send your private key to anyone, you can
               lose all your tokens!
-            </ParagraphBody2> */}
+            </ParagraphBody2>
           </Row>
         </Content>
         <ButtonRow>
           <ButtonWithIcon
             icon={<IconDownload />}
             colorScheme="red"
-            onClick={this.copyToClipboard}
+            onClick={this.handleConfirmExport}
             data-test-id="export-private__actions__handle-export"
           >
-            Copy to clipboard
+            I understand. Export.
           </ButtonWithIcon>
           <SecondaryInfoBox>
             <Anchor
@@ -95,4 +72,4 @@ class PrivateExportRoute extends Component {
   }
 }
 
-export default PrivateExportRoute;
+export default PrivateConfirmExportRoute;
