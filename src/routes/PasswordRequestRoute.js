@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { PasswordValidator } from 'src/utils/validators/PasswordValidator';
 import { NotificationActions } from 'src/store/notifications/NotificationActions';
 import { TransactionSelectors } from 'src/store/transaction/TransactionSelectors';
 import { WalletActions } from 'src/store/wallet/WalletActions';
@@ -85,6 +86,14 @@ class PasswordRequestRoute extends Component {
 
   handleOpenWalletClick = async e => {
     e.preventDefault();
+
+    const result = new PasswordValidator(this.state.password);
+
+    if (!result.isValid) {
+      return this.props.spawnErrorNotification(
+        'Password can only contain 0-9, A-Z, a-z or special characters. Please check your password and try again.'
+      );
+    }
 
     if (this.isPasswordValid()) {
       let result;

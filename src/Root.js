@@ -107,7 +107,8 @@ class Root extends React.Component {
                 transaction.from,
                 transaction.to,
                 transaction.amount,
-                transaction.platform
+                transaction.platform,
+                transaction.memo
               )(this.state.store.dispatch)
             : await this.platformBindingActions.preparePlatformToBind(
                 transaction

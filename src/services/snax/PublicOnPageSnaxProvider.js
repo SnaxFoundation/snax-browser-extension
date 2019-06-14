@@ -17,13 +17,14 @@ export class PublicOnPageSnaxProvider {
     this._idFactory = new IdFactory('tx');
   }
 
-  transfer(from, to, amount, platform) {
+  transfer(from, to, amount, platform, memo = '') {
     return this._transactionOutboundCommunicator.sendTransaction(
       this._idFactory.getId(),
       from,
       to,
       amount,
-      platform
+      platform,
+      memo
     );
   }
 
