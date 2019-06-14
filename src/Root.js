@@ -27,7 +27,6 @@ import {
   PasswordRequestRoute,
   SignRequestRoute,
   TransactionSignRequestRoute,
-  PrivateConfirmExportRoute,
   PrivateExportRoute,
   RestoreConfirmationRoute,
   SuccessRoute,
@@ -279,10 +278,6 @@ class Root extends React.Component {
               <Route path="/error" component={ErrorRoute} />
               <Route path="/password" component={PasswordRequestRoute} />
               <Route path="/sign-request" component={SignRequestRoute} />
-              <Route
-                path="/private-export-confirm"
-                component={PrivateConfirmExportRoute}
-              />
               <Route path="/private-export" component={PrivateExportRoute} />
               <Route
                 path="/transaction-sign-request"
