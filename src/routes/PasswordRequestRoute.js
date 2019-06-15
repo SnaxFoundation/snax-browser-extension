@@ -87,7 +87,7 @@ class PasswordRequestRoute extends Component {
   handleOpenWalletClick = async e => {
     e.preventDefault();
 
-    const { isValid } = new PasswordValidator(this.state.passwordCandidate);
+    const { isValid } = new PasswordValidator(this.state.password);
 
     if (!isValid) {
       return this.props.spawnErrorNotification(
