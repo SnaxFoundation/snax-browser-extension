@@ -29,7 +29,8 @@ export class TransactionActions {
         transaction.from,
         transaction.to,
         transaction.amount,
-        transaction.platform
+        transaction.platform,
+        transaction.memo
       );
 
       if (result.isSucceed) {
@@ -51,7 +52,7 @@ export class TransactionActions {
   }
 
   @ThunkAction
-  prepareTransaction(id, from, to, amount, platform) {
+  prepareTransaction(id, from, to, amount, platform, memo) {
     return async dispatch => {
       let transaction;
 
@@ -104,6 +105,7 @@ export class TransactionActions {
           displayName: accountName,
           amount,
           platform,
+          memo,
         };
       } else if (platform === 'steem') {
         if (from.toLowerCase().trim() === to.toLowerCase().trim()) {
@@ -138,6 +140,7 @@ export class TransactionActions {
           displayName: to,
           amount,
           platform,
+          memo,
         };
       } else if (platform === 'snax') {
         if (from.toLowerCase().trim() === to.toLowerCase().trim()) {
@@ -152,6 +155,7 @@ export class TransactionActions {
           displayName: to,
           amount,
           platform,
+          memo,
         };
       } else {
         throw new Error(`Platform ${platform} is not supported`);
@@ -171,6 +175,7 @@ export class TransactionActions {
     displayName,
     amount,
     platform,
+    memo,
   }) {
     return {
       balance,
@@ -180,6 +185,7 @@ export class TransactionActions {
       amount,
       displayName,
       platform,
+      memo,
     };
   }
 

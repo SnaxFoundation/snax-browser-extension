@@ -9,7 +9,7 @@ export class PublicTransactionOutboundCommunicator extends OutboundCommunicator 
     super('PUBLIC_TRANSACTION', new PostMessaging());
   }
 
-  sendTransaction(id, from, to, amount, platform) {
+  sendTransaction(id, from, to, amount, platform, memo) {
     return this.send(
       new SendTransactionMessage({
         id,
@@ -17,6 +17,7 @@ export class PublicTransactionOutboundCommunicator extends OutboundCommunicator 
         to,
         amount,
         platform,
+        memo,
         type: 'TRANSFER',
       })
     );
