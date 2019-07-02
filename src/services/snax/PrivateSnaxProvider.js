@@ -75,7 +75,7 @@ export class PrivateSnaxProvider {
     };
   }
 
-  async transfer(from, to, amount, platform) {
+  async transfer(from, to, amount, platform, memo) {
     let error = null;
 
     try {
@@ -107,7 +107,7 @@ export class PrivateSnaxProvider {
                   from,
                   to,
                   quantity: amount,
-                  memo: '',
+                  memo,
                 },
               },
             ],
@@ -136,7 +136,7 @@ export class PrivateSnaxProvider {
                   from,
                   to,
                   quantity: amount,
-                  memo: '',
+                  memo,
                 },
               },
             ],
@@ -165,7 +165,7 @@ export class PrivateSnaxProvider {
                   from,
                   to,
                   quantity: amount,
-                  memo: '',
+                  memo,
                 },
               },
             ],
