@@ -1,5 +1,6 @@
 export * from './Icon';
 export * from './IconArrowBack';
+export * from './IconCopy';
 export * from './IconDownload';
 export * from './IconEyeOpened';
 export * from './IconEyeClosed';
