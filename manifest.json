@@ -1,7 +1,7 @@
 {
   "name": "Snax.One",
   "short_name": "Snax.One",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "manifest_version": 2,
   "author": "https://snax.one",
   "description": "Snax blockchain wallet",
@@ -44,7 +44,6 @@
     "clipboardWrite",
     "clipboardRead",
     "notifications",
-    "https://twitter.com/*",
     "https://snax.one/*",
     "https://*.snax.one/*"
   ]
