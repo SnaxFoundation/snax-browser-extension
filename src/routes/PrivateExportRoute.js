@@ -86,7 +86,7 @@ class PrivateExportRoute extends Component {
           {privateKey && (
             <>
               <Row style={{ flexDirection: 'column'}}>
-                <ParagraphCaption style={{ textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 0 }}>To export private code</ParagraphCaption>
+                <ParagraphCaption style={{ textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 0 }}>To export private key</ParagraphCaption>
                 <ParagraphBody2>Scan QR code</ParagraphBody2>
               </Row>
               <Row style={{ display: 'flex', justifyContent: 'center'}}>
