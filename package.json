@@ -1,6 +1,6 @@
 {
   "name": "snax-one-browser-extension",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.3.4",
