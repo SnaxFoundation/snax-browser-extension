@@ -1,5 +1,5 @@
 export const config = {
   chainUrl: 'https://cdn.snax.one',
-  twitterUrl: 'https://twitter.com',
+  twitterProxyUrl: 'https://snax.one/api/v2/twitter-proxy',
   allowAllUnknownDomains: false,
 };
