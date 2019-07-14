@@ -40,7 +40,6 @@
   "permissions": [
     "storage",
     "activeTab",
-    "webRequest",
     "clipboardWrite",
     "clipboardRead",
     "notifications",

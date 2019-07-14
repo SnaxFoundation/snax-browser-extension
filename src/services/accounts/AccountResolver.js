@@ -11,7 +11,7 @@ export class AccountResolver {
   async getAccountNameById(platform, id) {
     if (platform === 'twitter') {
       const response = await fetch(
-        `${config.twitterUrl}/intent/user?user_id=${id}`,
+        `${config.twitterProxyUrl}/account_by_id/${id}`,
         {
           credentials: 'omit',
         }
@@ -42,9 +42,12 @@ export class AccountResolver {
 
   async getIdByAccountName(platform, accountName) {
     if (platform === 'twitter') {
-      const response = await fetch(`${config.twitterUrl}/${accountName}`, {
-        credentials: 'omit',
-      });
+      const response = await fetch(
+        `${config.twitterProxyUrl}/account_by_name/${accountName}`,
+        {
+          credentials: 'omit',
+        }
+      );
 
       if (response.status !== 200) {
         return null;
