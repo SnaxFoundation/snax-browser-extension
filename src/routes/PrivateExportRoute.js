@@ -51,7 +51,7 @@ class PrivateExportRoute extends Component {
   copyToClipboard = async () => {
     this.clipboardCopier.copy(this.state.privateKey);
     this.props.spawnSuccessNotification(
-      'Private key was successfully copied to your clipboard.'
+      'Private key was successfully copied to your clipboard'
     );
   };
 
