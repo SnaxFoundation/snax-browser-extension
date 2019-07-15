@@ -82,24 +82,48 @@ class PrivateExportRoute extends Component {
             </ParagraphBody2>
           </Row>
         </Content>
-        <Content spread centerY style={{ textAlign: 'center', paddingBottom: 0 }}>
+        <Content
+          spread
+          centerY
+          style={{ textAlign: 'center', paddingBottom: 0 }}
+        >
           {privateKey && (
             <>
-              <Row style={{ flexDirection: 'column'}}>
-                <ParagraphCaption style={{ textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 0 }}>To export private code</ParagraphCaption>
+              <Row style={{ flexDirection: 'column' }}>
+                <ParagraphCaption
+                  style={{
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                    marginBottom: 0,
+                  }}
+                >
+                  To export private key
+                </ParagraphCaption>
                 <ParagraphBody2>Scan QR code</ParagraphBody2>
               </Row>
-              <Row style={{ display: 'flex', justifyContent: 'center'}}>
-                <div style={{ border: '5px solid #fff', width: 'auto', display: 'flex' }}>
+              <Row style={{ display: 'flex', justifyContent: 'center' }}>
+                <div
+                  style={{
+                    border: '5px solid #fff',
+                    width: 'auto',
+                    display: 'flex',
+                  }}
+                >
                   <QRCode value={privateKey} />
                 </div>
               </Row>
-              <Row style={{ justifyContent: 'center', marginTop: '15px', marginBottom: '-10px' }}>
+              <Row
+                style={{
+                  justifyContent: 'center',
+                  marginTop: '15px',
+                  marginBottom: '-10px',
+                }}
+              >
                 <ParagraphCaption>or</ParagraphCaption>
               </Row>
             </>
           )}
-          <Row style={{ justifyContent: 'center'}}>
+          <Row style={{ justifyContent: 'center' }}>
             <ButtonWithIcon
               icon={<IconCopy outlined />}
               colorScheme="flat"
