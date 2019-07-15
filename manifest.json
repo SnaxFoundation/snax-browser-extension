@@ -38,11 +38,9 @@
   ],
   "web_accessible_resources": ["injected.bundle.js"],
   "permissions": [
-    "storage",
     "activeTab",
     "clipboardWrite",
     "clipboardRead",
-    "notifications",
     "https://snax.one/*"
   ]
 }
