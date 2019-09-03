@@ -2,7 +2,7 @@
 
 ### Supported browsers
 
-- [Google Chrome](https://chrome.google.com/webstore/developer/stats/dolcmddbbplempeembpecnpllnbgjlal)
+- [Google Chrome](https://chrome.google.com/webstore/detail/snaxone/dolcmddbbplempeembpecnpllnbgjlal)
 - Firefox (WIP)
 
 ### Dependencies
